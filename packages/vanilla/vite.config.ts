@@ -32,7 +32,7 @@ export default defineConfig({
     server: {
         fs: {
             allow: [
-                path.resolve(__dirname, '../web/dist'),
+                path.resolve(__dirname, '../core-dojo/dist'),
                 path.resolve(__dirname, './'),
             ],
         },
