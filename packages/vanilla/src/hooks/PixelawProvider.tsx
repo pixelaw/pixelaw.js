@@ -1,9 +1,8 @@
-import { PixelawCore, type CoreStatus, type App } from "pixelaw-web"
 import worldsConfig from "@/config/worlds.json"
-
-// import useSettingStore from "@/hooks/SettingStore.ts"
-import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
 import {DEFAULT_WORLD} from "@/global/constants.ts";
+import { type App, type CoreStatus, PixelawCore } from "@pixelaw/core"
+import { DojoEngine } from "@pixelaw/core-dojo"
+import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
 
 export type IPixelawContext = {
     // world: string
@@ -49,6 +48,7 @@ export const PixelawProvider = ({ children }: { children: ReactNode }) => {
         if (worldConfig && pixelawCore) {
             console.log("loading provider")
 
+            pixelawCore.registerEngine(DojoEngine)
             pixelawCore.loadWorld(worldConfig).catch((error) => {
                 console.error("Failed to load world:", error)
                 setContextValues((prev) => ({

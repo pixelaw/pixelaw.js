@@ -5,7 +5,7 @@ import styles from "./MenuBar.module.css"
 
 // import { useAccount } from "@starknet-react/core"
 // import { type Connector, useConnect } from "@starknet-react/core"
-import { DojoEngine } from "pixelaw-web"
+import { DojoEngine } from "@pixelaw/core-dojo"
 
 const MenuBar: React.FC = () => {
     const navigate = useNavigate()

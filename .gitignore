@@ -2,7 +2,7 @@ node_modules
 docs
 .idea
 .env
-
+dist
 .DS_Store
 
 lerna-debug.log

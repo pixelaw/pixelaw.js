@@ -3585,7 +3585,7 @@ var DojoEngine = class {
     const result = new DojoInteraction();
     if (!app) return result;
     if (!app.plugin) {
-      const pixelAction = pixel.action ? pixel.action : "interact";
+      const pixelAction = pixel?.action ? pixel.action : "interact";
       const contractName = `${app.name}_actions`;
       const position = { x: pixel.x, y: pixel.y };
       const params = getParamsDef(this.dojoSetup.manifest, contractName, pixelAction, false);

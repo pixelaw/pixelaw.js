@@ -1,15 +1,15 @@
 import Apps from "@/components/GamePage/Apps/Apps.tsx"
 import SimpleColorPicker from "@/components/GamePage/ColorPicker/SimpleColorPicker.tsx"
 import { DEFAULT_WORLD } from "@/global/constants.ts"
+import {clearDomChildren} from "@/global/utils.ts";
 import { usePixelawProvider } from "@/hooks/PixelawProvider.tsx"
 import useSettingStore from "@/hooks/SettingStore.ts"
+import {type Coordinate, MAX_DIMENSION } from "@pixelaw/core"
 import { useEffect, useMemo, useRef } from "react"
 import { useLocation } from "react-router-dom"
 import { create } from "zustand/index"
 import styles from "./GamePage.module.css"
 import dialogStyles from "./dialog.css"
-import {type Coordinate, MAX_DIMENSION } from "pixelaw-web"
-import {clearDomChildren} from "@/global/utils.ts";
 
 const ZOOM_PRESETS = { tile: 100, pixel: 7000 }
 const DEFAULT_ZOOM = ZOOM_PRESETS.pixel

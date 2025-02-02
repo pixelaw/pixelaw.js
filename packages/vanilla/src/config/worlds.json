@@ -1,6 +1,6 @@
 {
     "local-empty": {
-        "engine": "dojo",
+        "engine": "dojoengine",
         "description": "Local empty world",
         "config": {
             "serverUrl": "http://127.0.0.1:3000",
@@ -48,7 +48,7 @@
         }
     },
     "local-populated": {
-        "engine": "dojo",
+        "engine": "dojoengine",
         "description": "Local populated world",
         "config": {
             "serverUrl": "http://127.0.0.1:3000",
@@ -67,7 +67,7 @@
         }
     },
     "sepolia": {
-        "engine": "dojo",
+        "engine": "dojoengine",
         "description": "Sepolia: https://sepolia.pixelaw.xyz",
         "config": {
             "serverUrl": "https://sepolia.pixelaw.xyz",
@@ -86,7 +86,7 @@
         }
     },
     "dev": {
-        "engine": "dojo",
+        "engine": "dojoengine",
         "description": "Dev server: https://dev.pixelaw.xyz",
         "config": {
             "serverUrl": "https://dev.pixelaw.xyz",

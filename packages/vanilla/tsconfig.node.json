@@ -20,6 +20,8 @@
         "noFallthroughCasesInSwitch": true,
         "noUncheckedSideEffectImports": true,
         "paths": {
+            "@pixelaw/core": ["../core/src"],
+            "@pixelaw/core-dojo": ["../core-dojo/src"],
             "@/*": [
                 "src/*"
             ]

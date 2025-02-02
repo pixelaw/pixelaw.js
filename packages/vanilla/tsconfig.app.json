@@ -28,6 +28,8 @@
         "noUncheckedSideEffectImports": true,
         "baseUrl": ".",
         "paths": {
+            "@pixelaw/core": ["../core/src"],
+            "@pixelaw/core-dojo": ["../core-dojo/src"],
             "@/*": [
                 "src/*"
             ]

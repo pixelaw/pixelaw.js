@@ -77,9 +77,10 @@ export class PixelawCore {
 
     public handleInteraction(coordinate: Coordinate): Interaction {
         const pixel = this.pixelStore.getPixel(coordinate)
+        // FIXME Handle empty pixel
+
         return this.engine.handleInteraction(this.app, pixel, this.color)
     }
-    // TODO url stuff here, not in GamePage
 
     private updateStatus(newStatus: CoreStatus) {
         this.status = newStatus

@@ -43,9 +43,5 @@
     "tsup": "^8.3.6",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
-  },
-  "resolutions": {
-    "starknet": "6.21.0",
-    "@starknet-react/core": "3.6.2"
   }
 }

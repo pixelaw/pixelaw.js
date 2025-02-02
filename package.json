@@ -8,7 +8,7 @@
     "prettier": "pnpx prettier --write packages examples",
     "release": "pnpm prettier && pnpm build && pnpm -F './packages/**' publish -r --force",
     "docs": "npx typedoc --out docs",
-    "prepare": "husky install"
+    "prepare_NOPE": "husky install"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

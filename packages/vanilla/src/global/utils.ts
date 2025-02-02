@@ -1,5 +1,5 @@
 import type { Position } from "@/global/types.ts"
-import { type Bounds, type Coordinate, MAX_DIMENSION } from "pixelaw-web"
+import { type Bounds, type Coordinate, MAX_DIMENSION } from "@pixelaw/core"
 import { shortString } from "starknet"
 
 export const clearDomChildren = (element: HTMLElement) => {

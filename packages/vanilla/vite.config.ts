@@ -1,15 +1,13 @@
-import {defineConfig} from 'vite';
-import react from '@vitejs/plugin-react';
-import graphqlLoader from "vite-plugin-graphql-loader";
-import wasm from "vite-plugin-wasm";
-import topLevelAwait from "vite-plugin-top-level-await";
-import {viteEnvs} from 'vite-envs'
 import path from 'node:path';
+import react from '@vitejs/plugin-react';
+import {defineConfig} from 'vite';
+import {viteEnvs} from 'vite-envs'
+import topLevelAwait from "vite-plugin-top-level-await";
+import wasm from "vite-plugin-wasm";
 
 export default defineConfig({
     plugins: [
         react(),
-        graphqlLoader(),
         wasm(),
         topLevelAwait(),
         viteEnvs({

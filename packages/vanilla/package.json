@@ -3,7 +3,6 @@
     "private": true,
     "version": "0.5.3",
     "type": "module",
-    "packageManager": "yarn@1.22.19",
     "license": "MIT",
     "scripts": {
         "experiments": "tsx  src/scripts/experiments.ts",
@@ -29,10 +28,12 @@
         "@dojoengine/state": "^1.0.4-alpha.3.1.2",
         "@dojoengine/torii-client": "^1.0.4-alpha.3.1.2",
         "@dojoengine/utils": "^1.0.4-alpha.3.1.2",
+        "@pixelaw/core": "workspace:*",
+        "@pixelaw/core-dojo": "workspace:*",
+        "@pixelaw/vanilla": "link:",
         "@react-hook/resize-observer": "^2.0.2",
         "@starknet-react/chains": "^3.1.1",
         "@starknet-react/core": "^3.6.3",
-        "@types/upng-js": "^2.1.5",
         "autoprefixer": "^10.4.20",
         "browserify-zlib": "^0.2.0",
         "dotenv": "^16.4.7",
@@ -52,9 +53,11 @@
         "zustand": "^5.0.2"
     },
     "devDependencies": {
+        "@types/node": "^22.13.0",
         "@biomejs/biome": "1.9.4",
         "@types/react": "^19.0.2",
         "@types/react-dom": "^19.0.2",
+        "@types/upng-js": "^2.1.5",
         "@vitejs/plugin-react": "^4.3.4",
         "@vitest/coverage-v8": "^2.1.8",
         "globals": "^15.14.0",
