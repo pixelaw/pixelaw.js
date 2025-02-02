@@ -1,0 +1,52 @@
+{
+  "name": "@pixelaw/core-mud",
+  "private": true,
+  "version": "0.5.3",
+  "type": "module",
+  "license": "MIT",
+  "main2": "src/index.ts",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsup",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "upgrade_dojo": "yarn add @dojoengine/core @dojoengine/create-burner @dojoengine/react @dojoengine/recs @dojoengine/state @dojoengine/torii-client @dojoengine/utils @dojoengine/sdk @cartridge/connector",
+    "check": "biome check --apply ."
+  },
+  "dependencies": {
+    "@cartridge/connector": "^0.6.0",
+    "@dojoengine/core": "^1.0.12",
+    "@dojoengine/create-burner": "^1.0.12",
+    "@dojoengine/react": "^1.0.12",
+    "@dojoengine/recs": "^2.0.13",
+    "@dojoengine/sdk": "^1.0.12",
+    "@dojoengine/state": "^1.0.12",
+    "@dojoengine/torii-client": "^1.0.12",
+    "@dojoengine/utils": "^1.0.12",
+    "@starknet-react/core": "3.6.2",
+    "@types/upng-js": "^2.1.5",
+    "autoprefixer": "^10.4.20",
+    "browserify-zlib": "^0.2.0",
+    "dotenv": "^16.4.7",
+    "idb-keyval": "^6.2.1",
+    "immer": "^10.1.1",
+    "mitt": "^3.0.1",
+    "pngjs3": "^6.1.1",
+    "starknet": "6.21.0",
+    "starknetkit": "^2.6.1",
+    "upng-js": "^2.1.0",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "esbuild-plugin-alias": "^0.2.1",
+    "globals": "^15.14.0",
+    "tsup": "^8.3.6",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "resolutions": {
+    "starknet": "6.21.0",
+    "@starknet-react/core": "3.6.2"
+  }
+}

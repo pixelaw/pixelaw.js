@@ -1,0 +1,40 @@
+.dialog {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 300px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.label {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.checkbox {
+    margin-right: 10px;
+}
+
+.button {
+    background-color: #007bff;
+    border: 1px;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    text-align: center;
+}
+
+.cancel-button {
+    background-color: #6c757d;
+}
+
+.button:hover {
+    opacity: 0.9;
+}

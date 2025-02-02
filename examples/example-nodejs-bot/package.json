@@ -1,0 +1,19 @@
+{
+    "name": "example-nodejs-bot",
+    "module": "index.ts",
+    "version": "0.0.0",
+    "type": "module",
+    "main": "dist/src/server.js",
+    "devDependencies": {
+
+    },
+    "dependencies": {
+        "@pixelaw/core": "workspace:*"
+
+    },
+    "scripts": {
+        "build": "tsc",
+        "serve": "tsc && node dist/src/index.js",
+        "test": "echo \"Error: no test specified\""
+    }
+}
