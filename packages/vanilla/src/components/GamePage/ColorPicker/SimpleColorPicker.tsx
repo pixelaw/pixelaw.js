@@ -1,4 +1,4 @@
-import { usePixelawProvider } from "@/hooks/PixelawProvider.tsx"
+import { usePixelawProvider } from "../../../../../react-dojo/src/hooks/PixelawProvider.tsx"
 import styles from "./SimpleColorPicker.module.css"
 
 const colors = [

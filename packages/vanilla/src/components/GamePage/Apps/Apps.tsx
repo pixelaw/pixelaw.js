@@ -1,6 +1,6 @@
 import App from "@/components/GamePage/App/App.tsx"
+import {usePixelawProvider} from "../../../../../react-dojo/src/hooks/PixelawProvider.tsx";
 import styles from "./Apps.module.css"
-import {usePixelawProvider} from "@/hooks/PixelawProvider.tsx";
 
 
 

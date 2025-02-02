@@ -1,14 +1,9 @@
-import worldsConfig from "@/config/worlds.json"
-import {DEFAULT_WORLD} from "@/global/constants.ts";
-import { type App, type CoreStatus, PixelawCore } from "@pixelaw/core"
+import { type App, type CoreStatus, PixelawCore, type WorldConfig } from "@pixelaw/core"
 import { DojoEngine } from "@pixelaw/core-dojo"
 import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
 
-export type IPixelawContext = {
-    // world: string
-    // worldConfig: WorldConfig
-    // walletType: "" | "argent" | "braavos" | "burner" | "controller" | undefined
 
+export type IPixelawContext = {
     pixelawCore: PixelawCore
     coreStatus: CoreStatus
     app: typeof App | null
@@ -18,8 +13,8 @@ export type IPixelawContext = {
 export const PixelawContext = createContext<IPixelawContext | undefined>(undefined)
 
 
-export const PixelawProvider = ({ children }: { children: ReactNode }) => {
-    // const { setWallet, setWorld, worldConfig, world } = useSettingStore()
+export const PixelawProvider = ({ children, worldConfig }: { children: ReactNode, worldConfig: WorldConfig }) => {
+
     const [pixelawCore] = useState(() => new PixelawCore()) // Initialize PixelawCore
 
     const [contextValues, setContextValues] = useState<IPixelawContext>({
@@ -43,7 +38,6 @@ export const PixelawProvider = ({ children }: { children: ReactNode }) => {
                 app: newApp,
             }))
         }
-        const worldConfig = worldsConfig[DEFAULT_WORLD]
 
         if (worldConfig && pixelawCore) {
             console.log("loading provider")

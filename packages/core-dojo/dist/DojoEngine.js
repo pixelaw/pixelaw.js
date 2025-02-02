@@ -3613,6 +3613,8 @@ var DojoEngine = class {
     }
     return result;
   }
+  async setWallet(wallet) {
+  }
 };
 export {
   DojoEngine

@@ -137,9 +137,9 @@ export interface Engine {
     tileStore: TileStore
     appStore: AppStore
     status: EngineStatus
-    // TODO walletConnectors generic type??
 
     init(engineConfig: unknown): Promise<void>
+    setWallet(wallet: unknown): Promise<void>
     handleInteraction(app: App, pixel: Pixel, color: number): Interaction
 }
 

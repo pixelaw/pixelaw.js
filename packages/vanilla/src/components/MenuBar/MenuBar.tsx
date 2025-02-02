@@ -1,6 +1,6 @@
-import { usePixelawProvider } from "@/hooks/PixelawProvider.tsx"
 import type React from "react"
 import { useLocation, useNavigate } from "react-router-dom"
+import { usePixelawProvider } from "../../../../react-dojo/src/hooks/PixelawProvider.tsx"
 import styles from "./MenuBar.module.css"
 
 // import { useAccount } from "@starknet-react/core"

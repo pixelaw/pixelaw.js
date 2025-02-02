@@ -7,7 +7,7 @@ interface ControllerDetailsProps {
     connector: ControllerConnector
 }
 
-const ControllerDetails: React.FC<ControllerDetailsProps> = ({ connector }) => {
+export const ControllerDetails: React.FC<ControllerDetailsProps> = ({ connector }) => {
     const [username, setUsername] = useState<string>("")
 
     useEffect(() => {

@@ -98,4 +98,8 @@ export class DojoEngine implements Engine {
 
         return result
     }
+
+    async setWallet(wallet: unknown){
+
+    }
 }

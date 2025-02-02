@@ -1,6 +1,7 @@
-import ControllerDetails from "@/components/Wallet/ControllerDetails.tsx"
-import { usePixelawProvider } from "@/hooks/PixelawProvider.tsx"
+import { usePixelawProvider } from "../../hooks/PixelawProvider"
+import ControllerDetails from "../ControllerDetails/ControllerDetails"
 
+import type ControllerConnector from "@cartridge/connector/controller";
 import type {DojoEngine} from "@pixelaw/core-dojo"
 import { type Connector, InjectedConnector, useAccount, useConnect, useDisconnect } from "@starknet-react/core"
 import { useEffect, useState } from "react"
@@ -10,8 +11,7 @@ import { ArgentMobileConnector, isInArgentMobileAppBrowser } from "starknetkit/a
 import { WebWalletConnector } from "starknetkit/webwallet"
 import styles from "./StarknetWallet.module.css"
 
-const StarknetWallet = () => {
-    // const { setWallet } = useSettingStore()
+export const StarknetWallet = () => {
     const { connectAsync } = useConnect()
     const { disconnectAsync } = useDisconnect()
     const { connector: currentConnector, account: currentAccount, status } = useAccount()
@@ -31,6 +31,11 @@ const StarknetWallet = () => {
             console.error("Error activating connector:", error)
         }
     }
+
+    const setWallet = (id: any) => {
+        // TODO
+    }
+
     useEffect(() => {
         const connectors = isInArgentMobileAppBrowser()
             ? [
