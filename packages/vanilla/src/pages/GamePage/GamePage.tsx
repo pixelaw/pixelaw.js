@@ -4,10 +4,10 @@ import { DEFAULT_WORLD } from "@/global/constants.ts"
 import {clearDomChildren} from "@/global/utils.ts";
 import useSettingStore from "@/hooks/SettingStore.ts"
 import {type Coordinate, MAX_DIMENSION } from "@pixelaw/core"
+import { usePixelawProvider } from "@pixelaw/react-dojo"
 import { useEffect, useMemo, useRef } from "react"
 import { useLocation } from "react-router-dom"
 import { create } from "zustand/index"
-import { usePixelawProvider } from "../../../../react-dojo/src/hooks/PixelawProvider.tsx"
 import styles from "./GamePage.module.css"
 import dialogStyles from "./dialog.css"
 

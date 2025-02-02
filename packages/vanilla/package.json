@@ -30,6 +30,7 @@
         "@dojoengine/utils": "^1.0.4-alpha.3.1.2",
         "@pixelaw/core": "workspace:*",
         "@pixelaw/core-dojo": "workspace:*",
+        "@pixelaw/react-dojo": "workspace:*",
         "@pixelaw/vanilla": "link:",
         "@react-hook/resize-observer": "^2.0.2",
         "@starknet-react/chains": "^3.1.1",

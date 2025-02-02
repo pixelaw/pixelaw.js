@@ -4,8 +4,8 @@ import GamePage from "@/pages/GamePage/GamePage.tsx"
 import SettingsPage from "@/pages/SettingsPage.tsx"
 import WalletSelectorPage from "@/pages/WalletSelectorPage.tsx"
 import WorldSelectorPage from "@/pages/WorldSelectorPage.tsx"
+import { usePixelawProvider } from "@pixelaw/react-dojo"
 import { Route, Routes } from "react-router-dom"
-import { usePixelawProvider } from "../../react-dojo/src/hooks/PixelawProvider.tsx"
 import styles from "./Main.module.css"
 
 function Main() {

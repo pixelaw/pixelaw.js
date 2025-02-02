@@ -6,7 +6,7 @@ import { type ReactNode, createContext, useContext, useEffect, useState } from "
 export type IPixelawContext = {
     pixelawCore: PixelawCore
     coreStatus: CoreStatus
-    app: typeof App | null
+    app: App | null
     setApp: (app: App) => void
 }
 
@@ -52,7 +52,7 @@ export const PixelawProvider = ({ children, worldConfig }: { children: ReactNode
                 }))
             })
         }
-        const logger = (type, e) => console.log(type, e)
+        const logger = (type: any, e: any) => console.log(type, e)
 
         // pixelawCore.events.on("*", logger)
         pixelawCore.events.on("statusChange", handleStatusChange)
@@ -67,8 +67,7 @@ export const PixelawProvider = ({ children, worldConfig }: { children: ReactNode
     return <PixelawContext.Provider value={contextValues}>{children}</PixelawContext.Provider>
 }
 
-export const
-     usePixelawProvider = (): IPixelawContext => {
+export const usePixelawProvider = (): IPixelawContext => {
     const context = useContext(PixelawContext)
     if (!context) throw new Error("usePixelawProvider can only be used within a PixelawProvider")
     return context
