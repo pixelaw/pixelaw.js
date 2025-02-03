@@ -5,7 +5,7 @@ export const WalletSelectorPage = () => {
     const { engine } = usePixelawProvider()
 
     if (engine!.constructor.name === "DojoEngine") {
-        return <StarknetWalletSelectorPage></StarknetWalletSelectorPage>
+        return <StarknetWalletSelectorPage />
     }
     return (
         <div>

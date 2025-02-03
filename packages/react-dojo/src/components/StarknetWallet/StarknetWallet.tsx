@@ -22,77 +22,62 @@ export const StarknetWallet = () => {
     const { controllerConnector, burnerConnector } = engine.dojoSetup || {}
 
     const navigate = useNavigate()
+
     const handleConnectorSelection = async (connector: Connector | null) => {
         try {
-            await activateConnector(connector)
-            // navigate("/")
+            if (currentConnector) await disconnectAsync()
+            if (connector) {
+                await connectAsync({ connector })
+                // navigate("/")
+            }
         } catch (error) {
             console.error("Error activating connector:", error)
         }
     }
 
     useEffect(() => {
-        const connectors = isInArgentMobileAppBrowser()
-            ? [
-                  ArgentMobileConnector.init({
-                      options: {
-                          url: typeof window !== "undefined" ? window.location.href : "",
-                          dappName: "PixeLAW",
-                          chainId: constants.NetworkName.SN_SEPOLIA,
-                      },
-                  }),
-              ]
-            : [
-                  new InjectedConnector({ options: { id: "argentX" } }),
-                  new InjectedConnector({ options: { id: "braavos" } }),
-                  ArgentMobileConnector.init({
-                      options: {
-                          url: typeof window !== "undefined" ? window.location.href : "",
-                          dappName: "PixeLAW",
-                          chainId: constants.NetworkName.SN_MAIN,
-                      },
-                  }),
-                  new WebWalletConnector({ url: "https://web.argent.xyz" }),
-              ]
-
-        if (controllerConnector) {
-            connectors.push(controllerConnector)
-        }
-
-        if (burnerConnector) {
-            connectors.push(burnerConnector as unknown as Connector)
-        }
+        const connectors = [
+            ...(isInArgentMobileAppBrowser()
+                ? [
+                      ArgentMobileConnector.init({
+                          options: {
+                              url: window?.location.href || "",
+                              dappName: "PixeLAW",
+                              chainId: constants.NetworkName.SN_SEPOLIA,
+                          },
+                      }),
+                  ]
+                : [
+                      new InjectedConnector({ options: { id: "argentX" } }),
+                      new InjectedConnector({ options: { id: "braavos" } }),
+                      ArgentMobileConnector.init({
+                          options: {
+                              url: window?.location.href || "",
+                              dappName: "PixeLAW",
+                              chainId: constants.NetworkName.SN_MAIN,
+                          },
+                      }),
+                      new WebWalletConnector({ url: "https://web.argent.xyz" }),
+                  ]),
+            controllerConnector,
+            burnerConnector as Connector,
+        ].filter(Boolean)
 
         setAvailableConnectors(connectors)
     }, [controllerConnector, burnerConnector])
 
-    const activateConnector = async (newConnector: Connector | null) => {
-        try {
-            if (currentConnector) {
-                await disconnectAsync()
-            }
-            if (newConnector) {
-                connectAsync({ connector: newConnector })
-            }
-            // navigate("/")
-        } catch (error) {
-            console.error("Activation failed:", error)
-        }
-    }
-
     useEffect(() => {
-        if (currentConnector) {
+        if (currentAccount) {
+            console.log("engine.setAccount(currentAccount)")
             engine.setAccount(currentAccount)
         }
-    }, [currentConnector])
+    }, [currentAccount, engine])
 
     return (
         <div className={styles.inner}>
             <h1>Current Wallet</h1>
-            {currentConnector && currentConnector.id === "controller" ? (
+            {currentConnector?.id === "controller" && (
                 <ControllerDetails connector={currentConnector as ControllerConnector} />
-            ) : (
-                ""
             )}
             <p>
                 {currentConnector ? currentConnector.id : "none"} {status}{" "}
@@ -102,23 +87,19 @@ export const StarknetWallet = () => {
             <h1>Wallet Selector</h1>
             <ul className={styles.settingsList}>
                 <li key="">
-                    <button
-                        type={"button"}
-                        className={styles.menuButton}
-                        onClick={() => handleConnectorSelection(null)}
-                    >
+                    <button type="button" className={styles.menuButton} onClick={() => handleConnectorSelection(null)}>
                         None
                     </button>
                 </li>
-                {Object.entries(availableConnectors).map(([, availConnector]) => (
+                {availableConnectors.map((availConnector) => (
                     <li key={availConnector.id}>
                         <button
-                            type={"button"}
+                            type="button"
                             className={styles.menuButton}
                             onClick={() => handleConnectorSelection(availConnector)}
-                            disabled={currentConnector && currentConnector.id === availConnector.id}
+                            disabled={currentConnector?.id === availConnector.id}
                         >
-                            {currentConnector && currentConnector.id === availConnector.id
+                            {currentConnector?.id === availConnector.id
                                 ? `${availConnector.id} (Connected)`
                                 : `Connect to ${availConnector.id}`}
                         </button>
