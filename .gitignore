@@ -1,8 +1,7 @@
-node_modules
-docs
-.idea
-.env
-dist
+**/dist/
+**/.env/
+**/.idea/
+**/node_modules/
 .DS_Store
 
 lerna-debug.log
