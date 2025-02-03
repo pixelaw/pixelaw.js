@@ -1,7 +1,7 @@
 import {  PixelawCore  } from "@pixelaw/core"
 import type {App,CoreStatus, Engine,WorldConfig} from "@pixelaw/core";
-import {DojoEngine} from "@pixelaw/core-dojo";
-import {MudEngine} from "@pixelaw/core-mud";
+
+import type {EngineConstructor} from "@pixelaw/core/src";
 import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
 
 
@@ -15,7 +15,7 @@ export type IPixelawContext = {
 export const PixelawContext = createContext<IPixelawContext | undefined>(undefined)
 
 
-export const PixelawProvider = ({ children, worldConfig }: { children: ReactNode, worldConfig: WorldConfig, engines: Engine[] }) => {
+export const PixelawProvider = ({ children, worldConfig, engines }: { children: ReactNode, worldConfig: WorldConfig, engines: EngineConstructor<Engine>[] }) => {
 
     const [pixelawCore] = useState(() => new PixelawCore()) // Initialize PixelawCore
 
@@ -44,8 +44,7 @@ export const PixelawProvider = ({ children, worldConfig }: { children: ReactNode
         if (worldConfig && pixelawCore) {
             console.log("loading provider")
 
-            pixelawCore.registerEngines([DojoEngine, MudEngine])
-
+            pixelawCore.registerEngines(engines)
             pixelawCore.loadWorld(worldConfig).catch((error) => {
                 console.error("Failed to load world:", error)
                 setContextValues((prev) => ({
