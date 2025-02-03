@@ -4,8 +4,9 @@
   "version": "0.5.3",
   "type": "module",
   "license": "MIT",
-  "main2": "src/index.ts",
+  "source": "src/index.ts",
   "main": "dist/index.js",
+  "author": "thiscaspar",
   "scripts": {
     "build": "tsup src/index.ts",
     "lint": "biome lint .",

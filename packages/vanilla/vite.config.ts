@@ -1,5 +1,4 @@
 import path from 'node:path';
-import dynamicImportVars from '@rollup/plugin-dynamic-import-vars';
 import react from '@vitejs/plugin-react';
 import {defineConfig} from 'vite';
 import {viteEnvs} from 'vite-envs'
@@ -33,11 +32,7 @@ export default defineConfig({
                 main: path.resolve(__dirname, 'index.html'), // Ensure index.html is included
             },
             external: ['src/scripts/**'],
-            plugins: [
-                dynamicImportVars({
-                    // Options if needed
-                }),
-            ],
+
         }
     },
     server: {

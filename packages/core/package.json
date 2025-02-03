@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.5.3",
   "type": "module",
+  "author": "thiscaspar",
   "license": "MIT",
   "source": "src/index.ts",
   "main": "dist/index.js",
