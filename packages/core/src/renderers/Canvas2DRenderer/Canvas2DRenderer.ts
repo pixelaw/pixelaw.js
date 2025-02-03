@@ -1,4 +1,4 @@
-import type { Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore } from "@/types.ts"
+import type { Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore } from "../../types.ts"
 import { ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE } from "./constants.ts"
 import { drawGrid } from "./drawGrid.ts"
 import { drawOutline } from "./drawOutline.ts"

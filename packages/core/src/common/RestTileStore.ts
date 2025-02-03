@@ -1,4 +1,5 @@
-import {  calculateTileBounds, getWrappedTileCoordinate } from "@/renderers/Canvas2DRenderer/utils.ts"
+import { get as getIdb, keys, set as setIdb } from "idb-keyval"
+import {  calculateTileBounds, getWrappedTileCoordinate } from "../renderers/Canvas2DRenderer/utils.ts"
 import {
     type Bounds,
     DEFAULT_SCALEFACTOR,
@@ -7,9 +8,8 @@ import {
     type Tile,
     type TileStore,
     type Tileset,
-} from "@/types.ts"
-import {areBoundsEqual} from "@/utils.ts";
-import { get as getIdb, keys, set as setIdb } from "idb-keyval"
+} from "../types.ts"
+import {areBoundsEqual} from "../utils.ts";
 
 type State = { [key: string]: HTMLImageElement | undefined | "" }
 

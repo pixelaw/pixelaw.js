@@ -8,7 +8,7 @@ import {
     MAX_DIMENSION,
     Pixel,
     TILESIZE,
-} from "@/types.ts"
+} from "../../types.ts"
 
 export const MAX_VIEW_SIZE = 1_000_000
 

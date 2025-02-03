@@ -45,8 +45,10 @@ class DojoSqlPixelStore implements PixelStore {
 
     constructor(sdk: SDK<SchemaType>) {
         this.sdk = sdk
-        const workerUrl = new URL("./DojoSqlPixelStore.webworker.js", import.meta.url)
-
+        // TODO the url probably doesnt work when deployed, this is for local vite only
+        const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url)
+        console.log("import.meta.url", import.meta.url)
+        console.log({workerUrl})
         this.worker = new Worker(workerUrl, { type: "module" })
         this.worker.onmessage = this.handleRefreshWorker.bind(this)
         this.subscribe()

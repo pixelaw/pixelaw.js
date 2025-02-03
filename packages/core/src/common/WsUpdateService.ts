@@ -1,6 +1,6 @@
-import {  calculateTileBounds } from "@/renderers/Canvas2DRenderer/utils.ts"
-import { type Bounds, TILESIZE, type UpdateService } from "@/types.ts"
-import {areBoundsEqual} from "@/utils.ts";
+import {  calculateTileBounds } from "../renderers/Canvas2DRenderer/utils.ts"
+import { type Bounds, TILESIZE, type UpdateService } from "../types.ts"
+import {areBoundsEqual} from "../utils.ts";
 
 type Message = {
     cmd: string

@@ -8,24 +8,6 @@ export const clearDomChildren = (element: HTMLElement) => {
     }
 };
 
-const handleCellClick = (cell?: Coordinate) => {
-    const interaction = pixelawCore.getInteraction(cell);
-
-    // Clear existing children using the helper function
-    if (dialogContainerRef.current) {
-        clearChildren(dialogContainerRef.current);
-    }
-
-    // It is possible the interaction has no dialog, like with "paint"
-    if (interaction.dialog) {
-        // Append the new dialog
-        dialogContainerRef.current.appendChild(interaction.dialog);
-
-        interaction.dialog.showModal();
-    }
-
-    setClickedCell(cell);
-};
 
 
 /*

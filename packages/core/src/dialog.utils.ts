@@ -1,4 +1,4 @@
-import type { Param } from "@/types.ts"
+import type { Param } from "./types.ts"
 
 function formElementForParam(param: Param): HTMLElement {
     switch (param.type) {

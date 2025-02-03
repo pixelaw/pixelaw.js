@@ -17,6 +17,9 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
+            "@pixelaw/core": path.resolve(__dirname, '../core/src'),
+            "@pixelaw/core-dojo": path.resolve(__dirname, "../core-dojo/src"),
+            "@pixelaw/react-dojo": path.resolve(__dirname, "../react-dojo/src"),
             '@': path.resolve(__dirname, './src'),
         },
     },
@@ -33,6 +36,7 @@ export default defineConfig({
         fs: {
             allow: [
                 path.resolve(__dirname, '../core-dojo/dist'),
+                path.resolve(__dirname, '../core-dojo/src'),
                 path.resolve(__dirname, './'),
             ],
         },

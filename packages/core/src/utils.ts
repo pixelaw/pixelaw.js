@@ -1,4 +1,4 @@
-import type {Bounds} from "@/types.ts";
+import type {Bounds} from "./types.ts";
 
 export function areBoundsEqual(boundsA: Bounds, boundsB: Bounds): boolean {
     // Compare top-left coordinates
