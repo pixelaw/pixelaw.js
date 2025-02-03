@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@starknet-react/chains':
+      specifier: ^3.1.0
+      version: 3.1.2
     '@starknet-react/core':
       specifier: ^3.6.2
       version: 3.7.2
@@ -277,6 +280,9 @@ importers:
       '@pixelaw/react':
         specifier: workspace:*
         version: link:../react
+      '@starknet-react/chains':
+        specifier: 'catalog:'
+        version: 3.1.2
       '@starknet-react/core':
         specifier: 'catalog:'
         version: 3.7.2(get-starknet-core@4.0.0)(react@18.3.1)(starknet@6.21.0(encoding@0.1.13))(typescript@5.7.3)

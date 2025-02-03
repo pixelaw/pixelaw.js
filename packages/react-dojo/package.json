@@ -36,6 +36,7 @@
         "@pixelaw/react": "workspace:*",
         "@pixelaw/core-dojo": "workspace:*",
         "@starknet-react/core": "catalog:",
+        "@starknet-react/chains": "catalog:",
         "postcss": "^8.4.49",
         "react-router-dom": "^7.1.0",
         "starknetkit": "^2.6.1"

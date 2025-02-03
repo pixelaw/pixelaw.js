@@ -1,14 +1,13 @@
-import { usePixelawProvider } from "@pixelaw/react"
-import ControllerDetails from "../ControllerDetails/ControllerDetails"
-
 import type ControllerConnector from "@cartridge/connector/controller";
 import type {DojoEngine} from "@pixelaw/core-dojo"
+import { usePixelawProvider } from "@pixelaw/react"
 import { type Connector, InjectedConnector, useAccount, useConnect, useDisconnect } from "@starknet-react/core"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { constants } from "starknet"
 import { ArgentMobileConnector, isInArgentMobileAppBrowser } from "starknetkit/argentMobile"
 import { WebWalletConnector } from "starknetkit/webwallet"
+import ControllerDetails from "../ControllerDetails/ControllerDetails"
 import styles from "./StarknetWallet.module.css"
 
 export const StarknetWallet = () => {

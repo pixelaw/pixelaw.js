@@ -1,1 +1,1 @@
-# "Vanilla" implementation of PixelAW
+# PixelAW.JS

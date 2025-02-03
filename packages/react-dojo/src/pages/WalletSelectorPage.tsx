@@ -1,8 +1,9 @@
-import {StarknetWallet} from "@pixelaw/react-dojo";
+
 import { mainnet } from "@starknet-react/chains"
 import { StarknetConfig, publicProvider } from "@starknet-react/core"
+import StarknetWallet from "../components/StarknetWallet/StarknetWallet";
 
-const WalletSelectorPage = () => {
+export const WalletSelectorPage = () => {
     return (
         <StarknetConfig chains={[mainnet]} provider={publicProvider()} connectors={[]}>
         <StarknetWallet/>
@@ -10,4 +11,3 @@ const WalletSelectorPage = () => {
     )
 }
 
-export default WalletSelectorPage
