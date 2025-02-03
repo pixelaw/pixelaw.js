@@ -4,7 +4,7 @@ import GamePage from "@/pages/GamePage/GamePage.tsx"
 import SettingsPage from "@/pages/SettingsPage.tsx"
 import WalletSelectorPage from "@/pages/WalletSelectorPage.tsx"
 import WorldSelectorPage from "@/pages/WorldSelectorPage.tsx"
-import { usePixelawProvider } from "@pixelaw/react-dojo"
+import { usePixelawProvider } from "@pixelaw/react"
 import { Route, Routes } from "react-router-dom"
 import styles from "./Main.module.css"
 
@@ -35,6 +35,7 @@ function Main() {
 
     if (coreStatus === "error") {
         document.title = "PixeLAW: Error"
+        const clientError = "TODO ERROR"
         const errorMessage = `${clientError}`
         return (
             <div className={styles.errorContainer}>

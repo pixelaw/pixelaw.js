@@ -3205,7 +3205,9 @@ var DojoSqlPixelStore = class _DojoSqlPixelStore {
   worker;
   constructor(sdk) {
     this.sdk = sdk;
-    const workerUrl = new URL("./DojoSqlPixelStore.webworker.js", import.meta.url);
+    const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url);
+    console.log("import.meta.url", import.meta.url);
+    console.log({ workerUrl });
     this.worker = new Worker(workerUrl, { type: "module" });
     this.worker.onmessage = this.handleRefreshWorker.bind(this);
     this.subscribe();

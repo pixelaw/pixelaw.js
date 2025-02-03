@@ -8,6 +8,7 @@ packages=(
   "packages/core"
   "packages/core-dojo"
   "packages/core-mud"
+  "packages/react"
   "packages/react-dojo"
   "packages/vanilla"
 

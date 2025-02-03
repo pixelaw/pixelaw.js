@@ -1,4 +1,5 @@
 import path from 'node:path';
+import dynamicImportVars from '@rollup/plugin-dynamic-import-vars';
 import react from '@vitejs/plugin-react';
 import {defineConfig} from 'vite';
 import {viteEnvs} from 'vite-envs'
@@ -19,6 +20,8 @@ export default defineConfig({
         alias: {
             "@pixelaw/core": path.resolve(__dirname, '../core/src'),
             "@pixelaw/core-dojo": path.resolve(__dirname, "../core-dojo/src"),
+            "@pixelaw/core-mud": path.resolve(__dirname, "../core-mud/src"),
+            "@pixelaw/react": path.resolve(__dirname, "../react/src"),
             "@pixelaw/react-dojo": path.resolve(__dirname, "../react-dojo/src"),
             '@': path.resolve(__dirname, './src'),
         },
@@ -29,7 +32,12 @@ export default defineConfig({
             input: {
                 main: path.resolve(__dirname, 'index.html'), // Ensure index.html is included
             },
-            external: ['src/scripts/**']
+            external: ['src/scripts/**'],
+            plugins: [
+                dynamicImportVars({
+                    // Options if needed
+                }),
+            ],
         }
     },
     server: {

@@ -4,7 +4,7 @@ import { DEFAULT_WORLD } from "@/global/constants.ts"
 import {clearDomChildren} from "@/global/utils.ts";
 import useSettingStore from "@/hooks/SettingStore.ts"
 import {type Coordinate, MAX_DIMENSION } from "@pixelaw/core"
-import { usePixelawProvider } from "@pixelaw/react-dojo"
+import { usePixelawProvider } from "@pixelaw/react"
 import { useEffect, useMemo, useRef } from "react"
 import { useLocation } from "react-router-dom"
 import { create } from "zustand/index"

@@ -1,4 +1,4 @@
-import { usePixelawProvider } from "../../hooks/PixelawProvider"
+import { usePixelawProvider } from "@pixelaw/react"
 import ControllerDetails from "../ControllerDetails/ControllerDetails"
 
 import type ControllerConnector from "@cartridge/connector/controller";

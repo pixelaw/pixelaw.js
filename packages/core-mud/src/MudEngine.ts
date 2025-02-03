@@ -1,9 +1,10 @@
-import type { MudConfig, PixelStore } from "@/types.ts"
+import type {  App, AppStore,  Engine, EngineStatus, Interaction, Pixel, PixelStore, TileStore, UpdateService} from "@pixelaw/core"
 
-import { DojoInteraction } from "@/engines/dojo/DojoInteraction.ts"
-import type { App, DojoConfig, EngineStatus, Interaction, Pixel } from "@/types.ts"
-import type { Engine } from "@/types.ts"
-import type { AppStore, TileStore, UpdateService } from "@/types.ts"
+
+
+export type MudConfig  = {
+    todo: number
+}
 
 export class MudEngine implements Engine {
     pixelStore: PixelStore = null!
@@ -11,15 +12,20 @@ export class MudEngine implements Engine {
     appStore: AppStore = null!
     updateService: UpdateService = null!
     status: EngineStatus = "uninitialized"
-    config: DojoConfig = null!
+    config: MudConfig = null!
 
     async init(config: MudConfig) {
-        console.log("ooppp mud", config, this.constructor.name)
+        console.log("MudEngine init", config, this.constructor.name)
     }
+    async setWallet(wallet: unknown){
 
+    }
     // biome-ignore lint/correctness/noUnusedVariables: TODO
     handleInteraction(app: App, pixel: Pixel): Interaction {
-        return new DojoInteraction()
+        return {
+            dialog: null,
+            action: ()=>{}
+        }
         // TODO app has plugin
         // TODO determine function
         // TODO determine arguments

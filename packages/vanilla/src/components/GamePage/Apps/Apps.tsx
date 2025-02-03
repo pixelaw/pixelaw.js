@@ -1,5 +1,5 @@
 import App from "@/components/GamePage/App/App.tsx"
-import { usePixelawProvider } from "@pixelaw/react-dojo"
+import { usePixelawProvider } from "@pixelaw/react"
 import styles from "./Apps.module.css"
 
 

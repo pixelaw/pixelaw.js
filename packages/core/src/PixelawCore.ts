@@ -23,8 +23,10 @@ export class PixelawCore {
     // TODO add Query(string) manager that allows safe read/write to the zoom/world etc.
     // TODO Wallets?
 
-    registerEngine(engine: EngineConstructor<Engine>) {
-        this.engines.add(engine)
+    registerEngines(engines: EngineConstructor<Engine>[]) {
+        for (const engine of engines) {
+            this.engines.add(engine);
+        }
     }
 
     async loadWorld(worldConfig: WorldConfig) {
@@ -40,11 +42,11 @@ export class PixelawCore {
             return engine.name.toLowerCase() === worldConfig.engine
         })
 
-        if (!engineClass) {
+            if (!engineClass) {
             throw new Error(`Unsupported engine: ${worldConfig.engine}`)
-        }
+            }
 
-        this.engine = new engineClass()
+            this.engine = new engineClass()
 
         this.updateStatus("initializing")
 

@@ -2,7 +2,7 @@ import Main from "@/Main.tsx"
 import React from "react"
 import ReactDOM from "react-dom/client"
 import "@/index.css"
-import { PixelawProvider } from "@pixelaw/react-dojo"
+import { PixelawProvider } from "@pixelaw/react"
 import { BrowserRouter } from "react-router-dom"
 
 import worldsConfig from "@/config/worlds.json"

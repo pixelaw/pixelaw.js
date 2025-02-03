@@ -1,4 +1,4 @@
-import { usePixelawProvider } from "@pixelaw/react-dojo"
+import { usePixelawProvider } from "@pixelaw/react"
 import type React from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import styles from "./MenuBar.module.css"
@@ -10,7 +10,7 @@ import { DojoEngine } from "@pixelaw/core-dojo"
 const MenuBar: React.FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const { world, pixelawCore: {engine} } = usePixelawProvider()
+    const { pixelawCore: {engine} } = usePixelawProvider()
     // const { address } = useAccount()
     // const { connectAsync, connectors } = useConnect()
 
@@ -62,7 +62,7 @@ const MenuBar: React.FC = () => {
                     Wallet
                 </button>
                 <button type={"button"} className={styles.menuButton} onClick={toggleWorldSelector}>
-                    World ({world})
+                    World ()
                 </button>
                 <button type={"button"} className={styles.menuButton} onClick={toggleSettings}>
                     Settings

@@ -1,7 +1,7 @@
 {
-    "name": "@pixelaw/react-dojo",
+    "name": "@pixelaw/react",
     "version": "0.5.0",
-    "description": "pixelaw: React components and hooks for use with dojo",
+    "description": "pixelaw: React components and hooks",
     "author": "thiscaspar",
     "license": "MIT",
     "source": "src/index.ts",
@@ -13,8 +13,7 @@
     },
     "peerDependencies": {
         "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "starknet": "catalog:"
+        "react-dom": "^18.2.0"
     },
     "exports": {
         ".": {
@@ -31,13 +30,9 @@
         "typescript": "^5.6.2"
     },
     "dependencies": {
-        "@cartridge/connector": "^0.5.5",
         "@pixelaw/core": "workspace:*",
-        "@pixelaw/react": "workspace:*",
         "@pixelaw/core-dojo": "workspace:*",
-        "@starknet-react/core": "catalog:",
         "postcss": "^8.4.49",
-        "react-router-dom": "^7.1.0",
-        "starknetkit": "^2.6.1"
+        "react-router-dom": "^7.1.0"
     }
 }
