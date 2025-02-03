@@ -1,10 +1,9 @@
-
-import type { App, Coordinate, Interaction, Pixel, PixelStore } from "./types.ts"
-import type { CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfig } from "./types.ts"
+import type {App, Coordinate, Interaction, Pixel, PixelStore} from "./types.ts"
+import type {CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfig} from "./types.ts"
 
 import mitt from "mitt"
-import { Canvas2DRenderer } from "./renderers"
-import type { AppStore, TileStore } from "./types.ts"
+import {Canvas2DRenderer} from "./renderers"
+import type {AppStore, TileStore} from "./types.ts"
 
 
 export class PixelawCore {
@@ -22,6 +21,9 @@ export class PixelawCore {
 
     // TODO add Query(string) manager that allows safe read/write to the zoom/world etc.
     // TODO Wallets?
+    public getEngine(): string | null {
+        return this.engine ? this.engine.constructor.name : null;
+    }
 
     registerEngines(engines: EngineConstructor<Engine>[]) {
         for (const engine of engines) {
@@ -42,11 +44,11 @@ export class PixelawCore {
             return engine.name.toLowerCase() === worldConfig.engine
         })
 
-            if (!engineClass) {
+        if (!engineClass) {
             throw new Error(`Unsupported engine: ${worldConfig.engine}`)
-            }
+        }
 
-            this.engine = new engineClass()
+        this.engine = new engineClass()
 
         this.updateStatus("initializing")
 
@@ -59,6 +61,7 @@ export class PixelawCore {
         this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore)
 
         this.updateStatus("ready")
+        this.events.emit("engineChanged", this.engine)
     }
 
     public getApp(): App | null {
@@ -98,4 +101,6 @@ export class PixelawCore {
         this.color = newColor
         this.events.emit("colorChange", newColor)
     }
+
+
 }

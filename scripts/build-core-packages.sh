@@ -7,17 +7,14 @@ set -e
 packages=(
   "packages/core"
   "packages/core-dojo"
-  "packages/core-mud"
   "packages/react"
   "packages/react-dojo"
-  "packages/vanilla"
 
 )
 
 # Iterate over each package directory and run the build command
 for package in "${packages[@]}"; do
   echo "Building $package..."
-  pnpm --dir "$package" install
   pnpm --dir "$package" build
 
 #  # Run tests only for non-wasm packages, non-torii-client packages, and create-dojo

@@ -1,13 +1,11 @@
-
 import { mainnet } from "@starknet-react/chains"
 import { StarknetConfig, publicProvider } from "@starknet-react/core"
-import StarknetWallet from "../components/StarknetWallet/StarknetWallet";
+import StarknetWallet from "../components/StarknetWallet/StarknetWallet"
 
-export const WalletSelectorPage = () => {
+export const StarknetWalletSelectorPage = () => {
     return (
         <StarknetConfig chains={[mainnet]} provider={publicProvider()} connectors={[]}>
-        <StarknetWallet/>
+            <StarknetWallet />
         </StarknetConfig>
     )
 }
-

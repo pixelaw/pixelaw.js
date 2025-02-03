@@ -1,5 +1,5 @@
-import type ControllerConnector from "@cartridge/connector/controller";
-import type {DojoEngine} from "@pixelaw/core-dojo"
+import type ControllerConnector from "@cartridge/connector/controller"
+import type { DojoEngine } from "@pixelaw/core-dojo"
 import { usePixelawProvider } from "@pixelaw/react"
 import { type Connector, InjectedConnector, useAccount, useConnect, useDisconnect } from "@starknet-react/core"
 import { useEffect, useState } from "react"
@@ -25,39 +25,35 @@ export const StarknetWallet = () => {
     const handleConnectorSelection = async (connector: Connector | null) => {
         try {
             await activateConnector(connector)
-            navigate("/")
+            // navigate("/")
         } catch (error) {
             console.error("Error activating connector:", error)
         }
     }
 
-    const setWallet = (id: any) => {
-        // TODO
-    }
-
     useEffect(() => {
         const connectors = isInArgentMobileAppBrowser()
             ? [
-                ArgentMobileConnector.init({
-                    options: {
-                        url: typeof window !== "undefined" ? window.location.href : "",
-                        dappName: "PixeLAW",
-                        chainId: constants.NetworkName.SN_SEPOLIA,
-                    },
-                }),
-            ]
+                  ArgentMobileConnector.init({
+                      options: {
+                          url: typeof window !== "undefined" ? window.location.href : "",
+                          dappName: "PixeLAW",
+                          chainId: constants.NetworkName.SN_SEPOLIA,
+                      },
+                  }),
+              ]
             : [
-                new InjectedConnector({ options: { id: "argentX" } }),
-                new InjectedConnector({ options: { id: "braavos" } }),
-                ArgentMobileConnector.init({
-                    options: {
-                        url: typeof window !== "undefined" ? window.location.href : "",
-                        dappName: "PixeLAW",
-                        chainId: constants.NetworkName.SN_MAIN,
-                    },
-                }),
-                new WebWalletConnector({ url: "https://web.argent.xyz" }),
-            ]
+                  new InjectedConnector({ options: { id: "argentX" } }),
+                  new InjectedConnector({ options: { id: "braavos" } }),
+                  ArgentMobileConnector.init({
+                      options: {
+                          url: typeof window !== "undefined" ? window.location.href : "",
+                          dappName: "PixeLAW",
+                          chainId: constants.NetworkName.SN_MAIN,
+                      },
+                  }),
+                  new WebWalletConnector({ url: "https://web.argent.xyz" }),
+              ]
 
         if (controllerConnector) {
             connectors.push(controllerConnector)
@@ -76,12 +72,9 @@ export const StarknetWallet = () => {
                 await disconnectAsync()
             }
             if (newConnector) {
-                await connectAsync({ connector: newConnector })
-                setWallet(newConnector.id)
-            } else {
-                setWallet("")
+                connectAsync({ connector: newConnector })
             }
-            navigate("/")
+            // navigate("/")
         } catch (error) {
             console.error("Activation failed:", error)
         }
@@ -89,9 +82,9 @@ export const StarknetWallet = () => {
 
     useEffect(() => {
         if (currentConnector) {
-            setWallet(currentConnector.id)
+            engine.setAccount(currentAccount)
         }
-    }, [currentConnector, setWallet])
+    }, [currentConnector])
 
     return (
         <div className={styles.inner}>

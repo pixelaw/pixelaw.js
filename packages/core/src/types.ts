@@ -59,16 +59,6 @@ export interface TileStore {
     cacheUpdated: number
 }
 
-//  @dev TODO this is just a sketch
-export interface EngineAction {
-    execute: () => void
-}
-
-export interface Interact {
-    execute: () => void
-}
-
-//  @dev TODO this is just a sketch
 export interface Interaction {
     action: (params: Param[]) => void
     dialog: HTMLDialogElement | null
@@ -118,6 +108,7 @@ export type PixelCoreEvents = {
     cellHovered: Coordinate | undefined
     centerChanged: Coordinate
     worldViewChanged: Bounds
+    engineChanged: Engine
     zoomChanged: number
     statusChange: CoreStatus
     pixelStoreUpdated: number
@@ -139,7 +130,7 @@ export interface Engine {
     status: EngineStatus
 
     init(engineConfig: unknown): Promise<void>
-    setWallet(wallet: unknown): Promise<void>
+    setAccount(account: unknown): void
     handleInteraction(app: App, pixel: Pixel, color: number): Interaction
 }
 
@@ -153,14 +144,6 @@ export interface WalletConfig {
     profileUrl?: string
     url?: string
 }
-
-// biome-ignore lint/complexity/noBannedTypes: TODO impl
-// export type MudConfig = {}
-
-
-// export type EngineConfig = DojoConfig | MudConfig
-
-
 
 export type WorldConfig = {
     engine: string
@@ -181,6 +164,4 @@ export interface PixelStore {
     setPixel: (key: string, pixel: Pixel) => void
     setPixels: (pixels: { key: string; pixel: Pixel }[]) => void
     unload?: () => Promise<void>
-    // updateCache: () => void
-    // cacheUpdated: number
 }

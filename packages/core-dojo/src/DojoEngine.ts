@@ -1,14 +1,13 @@
-import {NAMESPACE, RestTileStore, WsUpdateService, createDialog} from "@pixelaw/core"
-import type { App,  Engine, EngineStatus, Pixel, PixelStore, Position} from "@pixelaw/core"
+import { NAMESPACE, RestTileStore, WsUpdateService, createDialog } from "@pixelaw/core"
+import type { App, Engine, EngineStatus, Pixel, PixelStore, Position } from "@pixelaw/core"
 import { type DojoStuff, dojoInit } from "./DojoEngine.init.ts"
 import { DojoInteraction } from "./DojoInteraction.ts"
 import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
 import { schema } from "./generated/models.gen.ts"
 import getParamsDef, { generateDojoCall } from "./utils/paramsDef.ts"
- 
-import type {DojoConfig} from "@/types.ts";
+
+import type { DojoConfig } from "@/types.ts"
 import type { AppStore, TileStore, UpdateService } from "@pixelaw/core"
-import type { Connector } from "@starknet-react/core"
 import type { Account } from "starknet"
 import { DojoAppStore } from "./DojoAppStore.ts"
 
@@ -71,6 +70,7 @@ export class DojoEngine implements Engine {
                     position,
                     color,
                 )
+                console.log("acc", this.account)
                 this.dojoSetup.provider
                     .execute(this.account!, dojoCall, NAMESPACE, {})
                     .then((res) => {
@@ -99,7 +99,8 @@ export class DojoEngine implements Engine {
         return result
     }
 
-    async setWallet(wallet: unknown){
-
+    setAccount(account: unknown | null) {
+        console.log({ account })
+        this.account = account as Account
     }
 }

@@ -11,9 +11,8 @@ export default defineConfig({
     minify: false,
     splitting: false,
     loader: {
-        ".graphql": "text",
     },
-    dts: true, // Enable declaration file generation
+    dts: true,
     format: ["esm"],
     watch: process.env.WATCH === "true",
     clean: true,
