@@ -1,7 +1,6 @@
-
 import type { SDK } from "@dojoengine/sdk"
 import { MAX_DIMENSION, type PixelStore, type PixelStoreEvents } from "@pixelaw/core"
-import { type Bounds, type Coordinate, type Pixel, areBoundsEqual, makeString } from  "@pixelaw/core"
+import { type Bounds, type Coordinate, type Pixel, areBoundsEqual, makeString } from "@pixelaw/core"
 import mitt from "mitt"
 import type { SchemaType } from "./generated/models.gen.ts"
 import { SUBSCRIPTION_QUERY, getQueryBounds } from "./utils/querybuilder.ts"
@@ -48,7 +47,7 @@ class DojoSqlPixelStore implements PixelStore {
         // TODO the url probably doesnt work when deployed, this is for local vite only
         const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url)
         console.log("import.meta.url", import.meta.url)
-        console.log({workerUrl})
+        console.log({ workerUrl })
         this.worker = new Worker(workerUrl, { type: "module" })
         this.worker.onmessage = this.handleRefreshWorker.bind(this)
         this.subscribe()
@@ -76,6 +75,7 @@ class DojoSqlPixelStore implements PixelStore {
                         const key = `${p?.x}_${p?.y}`
                         this.setPixel(key, p as Pixel)
                     }
+                    console.log("callback")
                     this.cacheUpdated = Date.now()
                 },
             })

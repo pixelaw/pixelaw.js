@@ -1,8 +1,16 @@
-import type {  App, AppStore,  Engine, EngineStatus, Interaction, Pixel, PixelStore, TileStore, UpdateService} from "@pixelaw/core"
+import type {
+    App,
+    AppStore,
+    Engine,
+    EngineStatus,
+    Interaction,
+    Pixel,
+    PixelStore,
+    TileStore,
+    UpdateService,
+} from "@pixelaw/core"
 
-
-
-export type MudConfig  = {
+export type MudConfig = {
     todo: number
 }
 
@@ -17,14 +25,12 @@ export class MudEngine implements Engine {
     async init(config: MudConfig) {
         console.log("MudEngine init", config, this.constructor.name)
     }
-    async setWallet(wallet: unknown){
-
-    }
+    async setAccount(wallet: unknown) {}
     // biome-ignore lint/correctness/noUnusedVariables: TODO
     handleInteraction(app: App, pixel: Pixel): Interaction {
         return {
             dialog: null,
-            action: ()=>{}
+            action: () => {},
         }
         // TODO app has plugin
         // TODO determine function
