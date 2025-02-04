@@ -76,6 +76,7 @@ export class PixelawCore {
     }
 
     public setColor(newColor: number | null) {
+        console.log(newColor)
         this.updateColor(newColor)
     }
 

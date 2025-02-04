@@ -1,9 +1,9 @@
 import Apps from "@/components/GamePage/Apps/Apps.tsx"
 import SimpleColorPicker from "@/components/GamePage/ColorPicker/SimpleColorPicker.tsx"
 import { DEFAULT_WORLD } from "@/global/constants.ts"
-import {clearDomChildren} from "@/global/utils.ts";
+import { clearDomChildren, hexRGBtoNumber } from "@/global/utils.ts"
 import useSettingStore from "@/hooks/SettingStore.ts"
-import {type Coordinate, MAX_DIMENSION } from "@pixelaw/core"
+import { type Coordinate, MAX_DIMENSION } from "@pixelaw/core"
 import { usePixelawProvider } from "@pixelaw/react"
 import { useEffect, useMemo, useRef } from "react"
 import { useLocation } from "react-router-dom"
@@ -52,7 +52,7 @@ const GamePage: React.FC = () => {
     const { pixelawCore, coreStatus } = usePixelawProvider()
     const { viewPort: renderer } = pixelawCore
     const rendererContainerRef = useRef<HTMLDivElement | null>(null)
-    const dialogContainerRef = useRef<HTMLDivElement | null>(null);
+    const dialogContainerRef = useRef<HTMLDivElement | null>(null)
 
     // v TODO move below to Core
     const location = useLocation()
@@ -93,7 +93,6 @@ const GamePage: React.FC = () => {
             if (zoomInQuery) setZoom(zoomInQuery)
             if (colorInQuery) setColor(colorInQuery)
             if (worldInQuery) setWorld(worldInQuery)
-
         }
     }, [setSelectedApp, setCenter, setZoom, setColor, location.search, setWorld])
 
@@ -113,6 +112,8 @@ const GamePage: React.FC = () => {
             }
         }
         updateURL()
+
+        pixelawCore.setColor(hexRGBtoNumber(color))
     }, [selectedApp, center, zoom, color, world])
 
     // ^ TODO move Above to Core
@@ -129,22 +130,21 @@ const GamePage: React.FC = () => {
             setHoveredCell(cell)
         }
         const handleCellClick = (cell?: Coordinate) => {
-            if(!dialogContainerRef || !dialogContainerRef.current) return
+            if (!dialogContainerRef || !dialogContainerRef.current) return
 
             setClickedCell(cell)
             const interaction = pixelawCore.handleInteraction(cell)
 
             // Clear existing children (dialogs)
-            clearDomChildren(dialogContainerRef.current);
+            clearDomChildren(dialogContainerRef.current)
 
             // It is possible the interaction has no dialog, like with "paint"
             // In this case, the onchain action is immediately performed
-            if(interaction.dialog){
+            if (interaction.dialog) {
                 // Append the new dialog
-                dialogContainerRef.current.appendChild(interaction.dialog);
+                dialogContainerRef.current.appendChild(interaction.dialog)
 
-                interaction.dialog.showModal();
-
+                interaction.dialog.showModal()
             }
         }
 
@@ -189,7 +189,6 @@ const GamePage: React.FC = () => {
                     <p>Dialog content goes here.</p>
                 </dialog>
             </div>
-
         </>
     )
 

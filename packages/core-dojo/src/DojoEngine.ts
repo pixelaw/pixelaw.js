@@ -71,6 +71,7 @@ export class DojoEngine implements Engine {
                     color,
                 )
                 console.log("acc", this.account)
+                console.log("dojoCall", dojoCall)
                 this.dojoSetup.provider
                     .execute(this.account!, dojoCall, NAMESPACE, {})
                     .then((res) => {
