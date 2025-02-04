@@ -3,7 +3,7 @@ import type { DojoEngine } from "@pixelaw/core-dojo"
 import { usePixelawProvider } from "@pixelaw/react"
 import { type Connector, InjectedConnector, useAccount, useConnect, useDisconnect } from "@starknet-react/core"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 import { constants } from "starknet"
 import { ArgentMobileConnector, isInArgentMobileAppBrowser } from "starknetkit/argentMobile"
 import { WebWalletConnector } from "starknetkit/webwallet"
@@ -21,7 +21,7 @@ export const StarknetWallet = () => {
     const engine = pixelawCore.engine as DojoEngine
     const { controllerConnector, burnerConnector } = engine.dojoSetup || {}
 
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     const handleConnectorSelection = async (connector: Connector | null) => {
         try {
@@ -36,7 +36,7 @@ export const StarknetWallet = () => {
     }
 
     useEffect(() => {
-        const connectors = [
+        const connectors: Connector[] = [
             ...(isInArgentMobileAppBrowser()
                 ? [
                       ArgentMobileConnector.init({
@@ -61,7 +61,7 @@ export const StarknetWallet = () => {
                   ]),
             controllerConnector,
             burnerConnector as Connector,
-        ].filter(Boolean)
+        ].filter((connector): connector is Connector => connector != null)
 
         setAvailableConnectors(connectors)
     }, [controllerConnector, burnerConnector])
