@@ -124,6 +124,7 @@ async function setupBurnerConnector(
 ): Promise<BurnerConnector | null> {
     const cacheKey = JSON.stringify({ rpcProvider, burnerConfig: worldConfig.wallets?.burner })
     if (burnerConnectorCache.has(cacheKey)) {
+        console.log("burnerConnectorCache hit")
         return burnerConnectorCache.get(cacheKey) || null
     }
 

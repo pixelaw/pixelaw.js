@@ -44,7 +44,7 @@ export class DojoEngine implements Engine {
         }
     }
 
-    handleInteraction(app: App, pixel: Pixel, color: number): DojoInteraction {
+    handleInteraction(app: App, pixel: Pixel | undefined, color: number): DojoInteraction {
         const result = new DojoInteraction()
 
         // TODO maybe we want to do more if no app?

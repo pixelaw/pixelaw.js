@@ -1,10 +1,9 @@
-import type {App, Coordinate, Interaction, Pixel, PixelStore} from "./types.ts"
-import type {CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfig} from "./types.ts"
+import type { App, Coordinate, Interaction, Pixel, PixelStore } from "./types.ts"
+import type { CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfig } from "./types.ts"
 
 import mitt from "mitt"
-import {Canvas2DRenderer} from "./renderers"
-import type {AppStore, TileStore} from "./types.ts"
-
+import { Canvas2DRenderer } from "./renderers"
+import type { AppStore, TileStore } from "./types.ts"
 
 export class PixelawCore {
     status: CoreStatus = "uninitialized"
@@ -22,12 +21,12 @@ export class PixelawCore {
     // TODO add Query(string) manager that allows safe read/write to the zoom/world etc.
     // TODO Wallets?
     public getEngine(): string | null {
-        return this.engine ? this.engine.constructor.name : null;
+        return this.engine ? this.engine.constructor.name : null
     }
 
     registerEngines(engines: EngineConstructor<Engine>[]) {
         for (const engine of engines) {
-            this.engines.add(engine);
+            this.engines.add(engine)
         }
     }
 
@@ -40,7 +39,7 @@ export class PixelawCore {
         this.updateStatus("loadConfig")
         this.worldConfig = worldConfig
 
-        const engineClass = Array.from(this.engines).find(engine => {
+        const engineClass = Array.from(this.engines).find((engine) => {
             return engine.name.toLowerCase() === worldConfig.engine
         })
 
@@ -81,8 +80,7 @@ export class PixelawCore {
     }
 
     public handleInteraction(coordinate: Coordinate): Interaction {
-        const pixel = this.pixelStore.getPixel(coordinate)
-        // FIXME Handle empty pixel
+        const pixel = this.pixelStore.getPixel(coordinate) ?? ({ x: coordinate[0], y: coordinate[1] } as Pixel)
 
         return this.engine.handleInteraction(this.app, pixel, this.color)
     }
@@ -101,6 +99,4 @@ export class PixelawCore {
         this.color = newColor
         this.events.emit("colorChange", newColor)
     }
-
-
 }
