@@ -34,11 +34,14 @@ export class DojoEngine implements Engine {
             // Setup PixelStore
             this.pixelStore = new DojoSqlPixelStore(this.dojoSetup!.sdk!)
 
+
             // Setup UpdateService
             this.updateService = new WsUpdateService(config.serverUrl)
 
+
             // Setup TileStore
             this.tileStore = new RestTileStore(config.serverUrl)
+
         } catch (error) {
             console.error("Dojo init error:", error)
         }

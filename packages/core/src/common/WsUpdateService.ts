@@ -27,8 +27,7 @@ export class WsUpdateService implements UpdateService {
 
     private initializeSocket(url: string): void {
         if (!this.socket) {
-            this.socket = new WebSocket(`${url}/tiles`)
-
+            this.socket = new WebSocket(`${url.replace("https", "wss")}/tiles`)
             this.socket.onerror = () => {
                 console.log("err")
             }

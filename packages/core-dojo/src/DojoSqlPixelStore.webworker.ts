@@ -5,7 +5,7 @@ self.onmessage = async (event) => {
 
     try {
         const result: Record<string, any> = {}
-        const response = await fetch(`http://localhost:8080/sql?query=${query}`)
+        const response = await fetch(`/torii/sql?query=${query}`)
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`)
         }

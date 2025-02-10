@@ -31,6 +31,11 @@ export class Canvas2DRenderer {
     private pixelCoreEvents: Emitter<PixelCoreEvents>
     private isRendering = false
 
+
+    private initialPinchDistance: number | null = null;
+    private initialZoom: number = this.zoom;
+
+
     constructor(pixelCoreEvents: Emitter<PixelCoreEvents>, tileStore: TileStore, pixelStore: PixelStore) {
         this.canvas = document.createElement("canvas")
         this.context = this.canvas.getContext("2d")
@@ -88,6 +93,12 @@ export class Canvas2DRenderer {
         this.canvas.addEventListener("mouseup", this.handleMouseUp.bind(this))
         this.canvas.addEventListener("wheel", this.handleWheel.bind(this), { passive: false })
         this.canvas.addEventListener("mouseleave", this.handleMouseLeave.bind(this), { passive: false })
+
+        // Add touch event listeners for mobile support
+        this.canvas.addEventListener("touchstart", this.handleTouchStart.bind(this), { passive: false })
+        this.canvas.addEventListener("touchmove", this.handleTouchMove.bind(this), { passive: false })
+        this.canvas.addEventListener("touchend", this.handleTouchEnd.bind(this), { passive: false })
+
     }
 
     private handleMouseDown(event: MouseEvent) {
@@ -187,6 +198,42 @@ export class Canvas2DRenderer {
 
         this.worldOffset = [this.worldOffset[0] + cellDiffX, this.worldOffset[1] + cellDiffY]
         this.requestRender()
+    }
+
+
+    private handleTouchStart(event: TouchEvent) {
+        if (event.touches.length === 2) {
+            event.preventDefault();
+            const [touch1, touch2] = event.touches;
+            this.initialPinchDistance = Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+            );
+            this.initialZoom = this.zoom;
+        }
+    }
+
+    private handleTouchMove(event: TouchEvent) {
+        if (event.touches.length === 2 && this.initialPinchDistance !== null) {
+            event.preventDefault();
+            const [touch1, touch2] = event.touches;
+            const currentDistance = Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+            );
+
+            const scaleFactor = currentDistance / this.initialPinchDistance;
+            const newZoom = Math.round(this.initialZoom * scaleFactor);
+
+            this.setZoom(Math.min(Math.max(newZoom, ZOOM_MIN), ZOOM_MAX));
+            this.requestRender();
+        }
+    }
+
+    private handleTouchEnd(event: TouchEvent) {
+        if (event.touches.length < 2) {
+            this.initialPinchDistance = null;
+        }
     }
 
     private render() {

@@ -10,7 +10,7 @@ import { Account, RpcProvider, shortString } from "starknet"
 import type { SchemaType } from "./generated/models.gen.ts"
 import { getControllerConnector } from "./utils/controller.ts"
 import baseManifest from "./utils/manifest.js"
-import { felt252ToString, felt252ToUnicode, formatAddress, getAbi } from "./utils/utils.ts"
+import {felt252ToString, felt252ToUnicode, formatAddress, getAbi} from "./utils/utils.ts"
 
 export type DojoStuff = {
     apps: App[]
@@ -44,10 +44,17 @@ export async function dojoInit(worldConfig: DojoConfig, schema: SchemaType): Pro
     }
 
     const sdk = await init<SchemaType>(sdkSetup, schema)
+
     const { apps, manifest } = await fetchAppsAndManifest(worldConfig)
+
+
     const provider = new DojoProvider(manifest, worldConfig.rpcUrl)
+
     const controllerConnector = setupControllerConnector(manifest, worldConfig)
+
+
     const burnerConnector = await setupBurnerConnector(provider, worldConfig)
+
 
     return {
         sdk,
@@ -63,7 +70,7 @@ async function fetchAppsAndManifest(worldConfig: DojoConfig): Promise<{ apps: Ap
     try {
         const query = "SELECT internal_entity_id, name, system, action, icon FROM 'pixelaw-App';"
 
-        const response = await fetch(`http://localhost:8080/sql?query=${query}`)
+        const response = await fetch(`/torii/sql?query=${query}`)
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`)
         }
@@ -144,10 +151,13 @@ async function setupBurnerConnector(
             } as unknown as BurnerManagerOptions)
 
             await manager.init()
+
             if (manager.list().length === 0) {
                 try {
+
                     await manager.create()
                 } catch (e) {
+
                     console.error(e)
                 }
             }
