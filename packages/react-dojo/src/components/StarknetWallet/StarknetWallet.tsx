@@ -9,7 +9,7 @@ import { WebWalletConnector } from "starknetkit/webwallet"
 import ControllerDetails from "../ControllerDetails/ControllerDetails"
 import styles from "./StarknetWallet.module.css"
 
-// import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 export const StarknetWallet = () => {
     const { connectAsync } = useConnect()
@@ -22,14 +22,13 @@ export const StarknetWallet = () => {
     const engine = pixelawCore.engine as DojoEngine
     const { controllerConnector, burnerConnector } = engine.dojoSetup || {}
 
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
 
     const handleConnectorSelection = async (connector: Connector | null) => {
         try {
             if (currentConnector) await disconnectAsync()
             if (connector) {
                 await connectAsync({ connector })
-                // navigate("/")
             }
         } catch (error) {
             console.error("Error activating connector:", error)
@@ -69,9 +68,10 @@ export const StarknetWallet = () => {
 
     useEffect(() => {
         if (currentConnector && currentAccount) {
-            // engine.setAccount(currentAccount)
+
             const wallet = new DojoWallet(currentConnector.id,  currentAccount)
             pixelawCore.setWallet(wallet)
+            navigate("/")
         }
     }, [currentConnector,currentAccount, engine])
 
