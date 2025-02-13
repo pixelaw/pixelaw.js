@@ -1,4 +1,4 @@
-import type {Coordinate, Interaction, Pixel, PixelStore, WorldsRegistry} from "./types.ts"
+import type {Coordinate, CoreDefaults, Interaction, Pixel, PixelStore, WorldsRegistry} from "./types.ts"
 import type { CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfig } from "./types.ts"
 
 import mitt from "mitt"
@@ -41,7 +41,7 @@ export class PixelawCore {
         return this.engine ? this.engine.constructor.name : null
     }
 
-    public async loadWorld(world: string) {
+    public async loadWorld(world: string, coreDefaults?: CoreDefaults) {
 
         if(!this.worldsRegistry.hasOwnProperty(world)) throw Error(`World ${world} does not exist in registry`)
 
@@ -70,12 +70,15 @@ export class PixelawCore {
         this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore)
 
         // Setting defaults
-        if(worldConfig.defaults) {
-            this.setApp(worldConfig.defaults.app)
-            this.setColor(worldConfig.defaults.color)
-            this.setCenter(worldConfig.defaults.center as Coordinate)
-            this.setZoom(worldConfig.defaults.zoom)
+        const defaults = coreDefaults ?? worldConfig.defaults;
+        if (defaults) {
+            this.setApp(defaults.app);
+            this.setColor(defaults.color);
+            this.setCenter(defaults.center as Coordinate);
+            this.setZoom(defaults.zoom);
         }
+
+
         this.setWorld(world)
 
         this.worldConfig = worldConfig

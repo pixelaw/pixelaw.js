@@ -1,59 +1,78 @@
 import { PixelawCore } from "@pixelaw/core"
 import type { App, CoreStatus, Engine } from "@pixelaw/core"
 
-import type {EngineConstructor, WorldsRegistry} from "@pixelaw/core/src"
+import type { Coordinate, EngineConstructor, WorldsRegistry } from "@pixelaw/core/src"
 import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
 
 export type IPixelawContext = {
     pixelawCore: PixelawCore
     coreStatus: CoreStatus
-    app: App | null
+    app: string | null
     engine: Engine | null
     world: string
-    setApp: (app: App) => void
-    setWorld: (world:string) => void
+    color: number
+    center: Coordinate
+    zoom: number
+    setApp: (app: string) => void
+    setWorld: (world: string) => void
+    setColor: (color: number) => void
+    setCenter: (center: Coordinate) => void
+    setZoom: (zoom: number) => void
 }
 
 export const PixelawContext = createContext<IPixelawContext | undefined>(undefined)
 
 export const PixelawProvider = ({
-    children,
-    worldsRegistry,
-    world,
-    engines,
-}: { children: ReactNode; worldsRegistry: WorldsRegistry; world: string, engines: EngineConstructor<Engine>[] }) => {
+                                    children,
+                                    worldsRegistry,
+                                    world,
+                                    engines,
+                                    coreDefaults,
+                                }: { children: ReactNode; worldsRegistry: WorldsRegistry; world: string, engines: EngineConstructor<Engine>[] ,coreDefaults?: CoreDefaults}) => {
 
-    const [pixelawCore] = useState(() => new PixelawCore(engines, worldsRegistry)) // Initialize PixelawCore instance
+    const [pixelawCore] = useState(() => new PixelawCore(engines, worldsRegistry))
 
     const [contextValues, setContextValues] = useState<IPixelawContext>({
         pixelawCore,
         coreStatus: "uninitialized",
-        app: null,
+        app: pixelawCore.getApp(),
         engine: null,
-        world: world,
+        world: pixelawCore.getWorld(),
+        color: pixelawCore.getColor(),
+        center: pixelawCore.getCenter(),
+        zoom: pixelawCore.getZoom(),
         setApp: (app: App) => {
             pixelawCore.setApp(app)
         },
-        setWorld: (world:string) => {
+        setWorld: (world: string) => {
             pixelawCore.loadWorld(world)
+        },
+        setColor: (color: number) => {
+            pixelawCore.setColor(color)
+        },
+        setCenter: (center: Coordinate) => {
+            pixelawCore.setCenter(center)
+        },
+        setZoom: (zoom: number) => {
+            pixelawCore.setZoom(zoom)
         },
     })
 
-    // Loading
     useEffect(() => {
         const handlers = {
             statusChanged: (newStatus: CoreStatus) => setContextValues(prev => ({ ...prev, coreStatus: newStatus })),
             appChanged: (newApp: App | null) => setContextValues(prev => ({ ...prev, app: newApp })),
             engineChanged: (newEngine: Engine | null) => setContextValues(prev => ({ ...prev, engine: newEngine })),
-            worldChanged: (newWorld: string) => setContextValues(prev => ({ ...prev, world:newWorld })),
+            worldChanged: (newWorld: string) => setContextValues(prev => ({ ...prev, world: newWorld })),
+            colorChanged: (newColor: number) => setContextValues(prev => ({ ...prev, color: newColor })),
+            centerChanged: (newCenter: Coordinate) => setContextValues(prev => ({ ...prev, center: newCenter })),
+            zoomChanged: (newZoom: number) => setContextValues(prev => ({ ...prev, zoom: newZoom })),
         }
-
-
 
         if (pixelawCore) {
             console.log("loading provider")
 
-            pixelawCore.loadWorld(world).catch((error) => {
+            pixelawCore.loadWorld(world, coreDefaults).catch((error) => {
                 console.error("Failed to load world:", error)
                 setContextValues((prev) => ({
                     ...prev,
@@ -63,8 +82,6 @@ export const PixelawProvider = ({
             })
         }
 
-        const logger = (type: any, e: any) => console.log(type, e)
-
         for (const [event, handler] of Object.entries(handlers)) {
             pixelawCore.events.on(event, handler)
         }
@@ -73,7 +90,6 @@ export const PixelawProvider = ({
             for (const [event, handler] of Object.entries(handlers)) {
                 pixelawCore.events.off(event, handler)
             }
-            pixelawCore.events.off("*", logger)
         }
     }, [pixelawCore, world])
 
