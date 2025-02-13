@@ -32,7 +32,7 @@ export class DojoEngine implements Engine {
             this.appStore = new DojoAppStore(this.dojoSetup)
 
             // Setup PixelStore
-            this.pixelStore = new DojoSqlPixelStore(this.dojoSetup!.sdk!)
+            this.pixelStore = new DojoSqlPixelStore(this.config.toriiUrl, this.dojoSetup!.sdk!)
 
 
             // Setup UpdateService

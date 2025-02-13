@@ -47,14 +47,11 @@ export async function dojoInit(worldConfig: DojoConfig, schema: SchemaType): Pro
 
     const { apps, manifest } = await fetchAppsAndManifest(worldConfig)
 
-
     const provider = new DojoProvider(manifest, worldConfig.rpcUrl)
 
     const controllerConnector = setupControllerConnector(manifest, worldConfig)
 
-
     const burnerConnector = await setupBurnerConnector(provider, worldConfig)
-
 
     return {
         sdk,
@@ -70,7 +67,7 @@ async function fetchAppsAndManifest(worldConfig: DojoConfig): Promise<{ apps: Ap
     try {
         const query = "SELECT internal_entity_id, name, system, action, icon FROM 'pixelaw-App';"
 
-        const response = await fetch(`/torii/sql?query=${query}`)
+        const response = await fetch(`${worldConfig.toriiUrl}/sql?query=${query}`)
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`)
         }

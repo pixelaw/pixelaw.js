@@ -1,4 +1,4 @@
-import type { App, Coordinate, Interaction, Pixel, PixelStore } from "./types.ts"
+import type {Coordinate, Interaction, Pixel, PixelStore, WorldsRegistry} from "./types.ts"
 import type { CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfig } from "./types.ts"
 
 import mitt from "mitt"
@@ -14,9 +14,26 @@ export class PixelawCore {
     appStore: AppStore = null!
     viewPort: Canvas2DRenderer = null!
     events = mitt<PixelCoreEvents>()
-    private app: App | null = null
+
+    private worldsRegistry: WorldsRegistry
+
+    private app: string | null = null
     private color = 0
+    private zoom = 1
+    private center: Coordinate = [0, 0]
+    private world: string
+
     private engines: Set<EngineConstructor<Engine>> = new Set()
+
+
+    constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry) {
+        for (const engine of engines) {
+            this.engines.add(engine)
+        }
+
+        this.worldsRegistry = worldsRegistry
+        console.log({worldsRegistry})
+    }
 
     // TODO add Query(string) manager that allows safe read/write to the zoom/world etc.
     // TODO Wallets?
@@ -24,20 +41,12 @@ export class PixelawCore {
         return this.engine ? this.engine.constructor.name : null
     }
 
-    registerEngines(engines: EngineConstructor<Engine>[]) {
-        for (const engine of engines) {
-            this.engines.add(engine)
-        }
-    }
+    public async loadWorld(world: string) {
 
-    async loadWorld(worldConfig: WorldConfig) {
-        if (this.worldConfig && JSON.stringify(this.worldConfig) === JSON.stringify(worldConfig)) {
-            console.log("Configuration already loaded.")
-            return
-        }
+        if(!this.worldsRegistry.hasOwnProperty(world)) throw Error(`World ${world} does not exist in registry`)
 
-        this.updateStatus("loadConfig")
-        this.worldConfig = worldConfig
+        this.setStatus("loadConfig")
+        const worldConfig = this.worldsRegistry[world]
 
         const engineClass = Array.from(this.engines).find((engine) => {
             return engine.name.toLowerCase() === worldConfig.engine
@@ -49,9 +58,10 @@ export class PixelawCore {
 
         this.engine = new engineClass()
 
-        this.updateStatus("initializing")
+        this.setStatus("initializing")
 
         await this.engine.init(worldConfig.config)
+
 
         this.pixelStore = this.engine.pixelStore
         this.tileStore = this.engine.tileStore
@@ -59,16 +69,45 @@ export class PixelawCore {
 
         this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore)
 
-        this.updateStatus("ready")
+        // Setting defaults
+        if(worldConfig.defaults) {
+            this.setApp(worldConfig.defaults.app)
+            this.setColor(worldConfig.defaults.color)
+            this.setCenter(worldConfig.defaults.center as Coordinate)
+            this.setZoom(worldConfig.defaults.zoom)
+        }
+        this.setWorld(world)
+
+        this.worldConfig = worldConfig
+
+        console.log("HERE")
+        this.setStatus("ready")
         this.events.emit("engineChanged", this.engine)
     }
 
-    public getApp(): App | null {
+    private setStatus(newStatus: CoreStatus) {
+        this.status = newStatus
+        this.events.emit("statusChanged", newStatus)
+    }
+
+
+
+    public getWorldsRegistry(): WorldsRegistry  {
+        return this.worldsRegistry
+    }
+
+    public getApp(): string | null {
         return this.app
     }
 
-    public setApp(newApp: App | null) {
-        this.updateApp(newApp)
+    public setApp(newApp: string | null) {
+        this.app = newApp
+        this.events.emit("appChanged", newApp)
+    }
+
+    private setWorld(newWorld: string | null) {
+        this.world = newWorld
+        this.events.emit("worldChanged", newWorld)
     }
 
     public getColor(): number | null {
@@ -76,28 +115,36 @@ export class PixelawCore {
     }
 
     public setColor(newColor: number | null) {
-        console.log(newColor)
-        this.updateColor(newColor)
+        this.color = newColor
+        this.events.emit("colorChanged", newColor)
+    }
+
+    public getZoom(): number {
+        return this.zoom
+    }
+
+    public setZoom(newZoom: number) {
+        this.zoom = newZoom
+        this.events.emit("zoomChanged", newZoom)
+    }
+
+    public getCenter(): Coordinate {
+        return this.center
+    }
+
+    public setCenter(newCenter: Coordinate) {
+        this.center = newCenter
+        this.events.emit("centerChanged", newCenter)
+    }
+
+    public getWorld(): string | undefined {
+        return this.world
     }
 
     public handleInteraction(coordinate: Coordinate): Interaction {
         const pixel = this.pixelStore.getPixel(coordinate) ?? ({ x: coordinate[0], y: coordinate[1] } as Pixel)
-
-        return this.engine.handleInteraction(this.app, pixel, this.color)
+        const app = this.appStore.getByName(this.app)
+        return this.engine.handleInteraction(app, pixel, this.color)
     }
 
-    private updateStatus(newStatus: CoreStatus) {
-        this.status = newStatus
-        this.events.emit("statusChange", newStatus)
-    }
-
-    private updateApp(newApp: App) {
-        this.app = newApp
-        this.events.emit("appChange", newApp)
-    }
-
-    private updateColor(newColor: number) {
-        this.color = newColor
-        this.events.emit("colorChange", newColor)
-    }
 }

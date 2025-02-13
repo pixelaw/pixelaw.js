@@ -68,6 +68,7 @@ export class Canvas2DRenderer {
     }
 
     private subscribeToEvents() {
+        if(!this.pixelStore) throw new Error("PixelStore not initialized")
         // TODO decide on whether pixelstore cacheupdated goes to a global event bus or not
         this.pixelStore.eventEmitter.on("cacheUpdated", (timestamp: number) => {
             console.log(`cacheUpdated at: ${timestamp}`)

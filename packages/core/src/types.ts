@@ -109,16 +109,17 @@ export type PixelCoreEvents = {
     centerChanged: Coordinate
     worldViewChanged: Bounds
     engineChanged: Engine
-    zoomChanged: number
-    statusChange: CoreStatus
+    statusChanged: CoreStatus
     pixelStoreUpdated: number
     tileStoreUpdated: number
     appStoreUpdated: number
     userScrolled: { bounds: Bounds }
     userZoomed: { bounds: Bounds }
     cacheUpdated: number
-    appChange: App | null
-    colorChange: number
+    appChanged: string | null
+    worldChanged: string | null
+    colorChanged: number
+    zoomChanged: number
 }
 
 export type EngineStatus = "ready" | "loading" | "error" | "uninitialized"
@@ -145,10 +146,20 @@ export interface WalletConfig {
     url?: string
 }
 
+export type WorldsRegistry = Record<string, WorldConfig>;
+
 export type WorldConfig = {
     engine: string
     description: string
+    defaults?: CoreDefaults
     config: unknown
+}
+
+export type CoreDefaults = {
+    app: string
+    color: number
+    center: number[]    // same as Coordinate
+    zoom: number
 }
 
 export type PixelStoreEvents = {

@@ -41,21 +41,22 @@ class DojoSqlPixelStore implements PixelStore {
     private isSubscribed = false
     private sdk: SDK<SchemaType>
     private worker: Worker
+    private toriiUrl: string
 
-    constructor(sdk: SDK<SchemaType>) {
+    constructor(toriiUrl:string, sdk: SDK<SchemaType>) {
         this.sdk = sdk
-        // TODO the url probably doesnt work when deployed, this is for local vite only
+        this.toriiUrl = toriiUrl
         const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url)
-        console.log("import.meta.url", import.meta.url)
-        console.log({ workerUrl })
+        // console.log("import.meta.url", import.meta.url)
+        // console.log({ workerUrl })
         this.worker = new Worker(workerUrl, { type: "module" })
         this.worker.onmessage = this.handleRefreshWorker.bind(this)
         this.subscribe()
     }
 
-    public static getInstance(sdk: SDK<SchemaType>): DojoSqlPixelStore {
+    public static getInstance(toriiUrl:string, sdk: SDK<SchemaType>): DojoSqlPixelStore {
         if (!DojoSqlPixelStore.instance) {
-            DojoSqlPixelStore.instance = new DojoSqlPixelStore(sdk)
+            DojoSqlPixelStore.instance = new DojoSqlPixelStore(toriiUrl, sdk)
         }
         return DojoSqlPixelStore.instance
     }
@@ -112,7 +113,7 @@ class DojoSqlPixelStore implements PixelStore {
 
         const query = encodeURIComponent(q)
 
-        this.worker.postMessage({ query })
+        this.worker.postMessage({ query, toriiUrl: this.toriiUrl })
     }
 
     public prepare(newBounds: Bounds): void {

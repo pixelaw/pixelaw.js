@@ -1,7 +1,7 @@
 import { PixelawCore } from "@pixelaw/core"
-import type { App, CoreStatus, Engine, WorldConfig } from "@pixelaw/core"
+import type { App, CoreStatus, Engine } from "@pixelaw/core"
 
-import type { EngineConstructor } from "@pixelaw/core/src"
+import type {EngineConstructor, WorldsRegistry} from "@pixelaw/core/src"
 import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
 
 export type IPixelawContext = {
@@ -9,54 +9,51 @@ export type IPixelawContext = {
     coreStatus: CoreStatus
     app: App | null
     engine: Engine | null
+    world: string
     setApp: (app: App) => void
+    setWorld: (world:string) => void
 }
 
 export const PixelawContext = createContext<IPixelawContext | undefined>(undefined)
 
 export const PixelawProvider = ({
     children,
-    worldConfig,
+    worldsRegistry,
+    world,
     engines,
-}: { children: ReactNode; worldConfig: WorldConfig; engines: EngineConstructor<Engine>[] }) => {
-    const [pixelawCore] = useState(() => new PixelawCore()) // Initialize PixelawCore
+}: { children: ReactNode; worldsRegistry: WorldsRegistry; world: string, engines: EngineConstructor<Engine>[] }) => {
+
+    const [pixelawCore] = useState(() => new PixelawCore(engines, worldsRegistry)) // Initialize PixelawCore instance
 
     const [contextValues, setContextValues] = useState<IPixelawContext>({
         pixelawCore,
         coreStatus: "uninitialized",
         app: null,
         engine: null,
+        world: world,
         setApp: (app: App) => {
             pixelawCore.setApp(app)
+        },
+        setWorld: (world:string) => {
+            pixelawCore.loadWorld(world)
         },
     })
 
     // Loading
     useEffect(() => {
-        const handleStatusChange = (newStatus: CoreStatus) => {
-            setContextValues((prev) => ({
-                ...prev,
-                coreStatus: newStatus,
-            }))
-        }
-        const handleAppChange = (newApp: App | null) => {
-            setContextValues((prev) => ({
-                ...prev,
-                app: newApp,
-            }))
-        }
-        const handleEngineChange = (newEngine: Engine | null) => {
-            setContextValues((prev) => ({
-                ...prev,
-                engine: newEngine,
-            }))
+        const handlers = {
+            statusChanged: (newStatus: CoreStatus) => setContextValues(prev => ({ ...prev, coreStatus: newStatus })),
+            appChanged: (newApp: App | null) => setContextValues(prev => ({ ...prev, app: newApp })),
+            engineChanged: (newEngine: Engine | null) => setContextValues(prev => ({ ...prev, engine: newEngine })),
+            worldChanged: (newWorld: string) => setContextValues(prev => ({ ...prev, world:newWorld })),
         }
 
-        if (worldConfig && pixelawCore) {
+
+
+        if (pixelawCore) {
             console.log("loading provider")
 
-            pixelawCore.registerEngines(engines)
-            pixelawCore.loadWorld(worldConfig).catch((error) => {
+            pixelawCore.loadWorld(world).catch((error) => {
                 console.error("Failed to load world:", error)
                 setContextValues((prev) => ({
                     ...prev,
@@ -65,19 +62,20 @@ export const PixelawProvider = ({
                 }))
             })
         }
+
         const logger = (type: any, e: any) => console.log(type, e)
 
-        // pixelawCore.events.on("*", logger)
-        pixelawCore.events.on("engineChanged", handleEngineChange)
-        pixelawCore.events.on("statusChange", handleStatusChange)
-        pixelawCore.events.on("appChange", handleAppChange)
+        for (const [event, handler] of Object.entries(handlers)) {
+            pixelawCore.events.on(event, handler)
+        }
+
         return () => {
-            pixelawCore.events.on("engineChanged", handleEngineChange)
-            pixelawCore.events.off("statusChange", handleStatusChange)
-            pixelawCore.events.off("appChange", handleAppChange)
+            for (const [event, handler] of Object.entries(handlers)) {
+                pixelawCore.events.off(event, handler)
+            }
             pixelawCore.events.off("*", logger)
         }
-    }, [pixelawCore])
+    }, [pixelawCore, world])
 
     return <PixelawContext.Provider value={contextValues}>{children}</PixelawContext.Provider>
 }
