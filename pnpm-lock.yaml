@@ -1869,13 +1869,6 @@ packages:
       react: ^18.0
       starknet: ^6.11.0
 
-  '@starknet-react/core@3.7.2':
-    resolution: {integrity: sha512-5l6IlXqYzbnInVPwL2VdSwmIiaNnTjm4iYnEGSSVUUPyklHr3bdXaZoILJWcIQ0NaF2ebhNhoKYL8GDHiSKTPw==}
-    peerDependencies:
-      get-starknet-core: ^4.0.0
-      react: ^18.0
-      starknet: ^6.11.0
-
   '@swc/core-darwin-arm64@1.10.12':
     resolution: {integrity: sha512-pOANQegUTAriW7jq3SSMZGM5l89yLVMs48R0F2UG6UZsH04SiViCnDctOGlA/Sa++25C+rL9MGMYM1jDLylBbg==}
     engines: {node: '>=10'}
@@ -6222,7 +6215,7 @@ snapshots:
     dependencies:
       '@dojoengine/core': 1.0.13(encoding@0.1.13)(typescript@5.7.3)
       '@scure/bip32': 1.6.2
-      '@starknet-react/core': 3.7.2(get-starknet-core@4.0.0)(react@19.0.0)(starknet@6.21.0(encoding@0.1.13))(typescript@5.7.3)
+      '@starknet-react/core': 3.6.2(get-starknet-core@4.0.0)(react@19.0.0)(starknet@6.21.0(encoding@0.1.13))(typescript@5.7.3)
       encoding: 0.1.13
       get-starknet-core: 4.0.0
       js-cookie: 3.0.5
@@ -7406,23 +7399,6 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@starknet-react/core@3.7.2(get-starknet-core@4.0.0)(react@19.0.0)(starknet@6.21.0(encoding@0.1.13))(typescript@5.7.3)':
-    dependencies:
-      '@starknet-io/types-js': 0.7.10
-      '@starknet-react/chains': 3.1.2
-      '@tanstack/react-query': 5.66.0(react@19.0.0)
-      abi-wan-kanabi: 2.2.4
-      eventemitter3: 5.0.1
-      get-starknet-core: 4.0.0
-      react: 19.0.0
-      starknet: 6.21.0(encoding@0.1.13)
-      viem: 2.22.17(typescript@5.7.3)(zod@3.24.1)
-      zod: 3.24.1
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-
   '@swc/core-darwin-arm64@1.10.12':
     optional: true
 
@@ -8083,6 +8059,14 @@ snapshots:
       picocolors: 1.1.1
       postcss: 8.5.1
       postcss-value-parser: 4.2.0
+
+  axios@1.7.9:
+    dependencies:
+      follow-redirects: 1.15.9
+      form-data: 4.0.1
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
 
   axios@1.7.9(debug@4.4.0):
     dependencies:
@@ -8883,6 +8867,8 @@ snapshots:
       path-exists: 4.0.0
 
   flat@5.0.2: {}
+
+  follow-redirects@1.15.9: {}
 
   follow-redirects@1.15.9(debug@4.4.0):
     optionalDependencies:
@@ -10031,7 +10017,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.2
       '@zkochan/js-yaml': 0.0.7
-      axios: 1.7.9(debug@4.4.0)
+      axios: 1.7.9
       chalk: 4.1.0
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
