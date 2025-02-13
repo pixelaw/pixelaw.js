@@ -71,9 +71,12 @@ class DojoSqlPixelStore implements PixelStore {
                     if (response.error) {
                         console.error("Error setting up entity sync:", response.error)
                     } else if (response.data && response.data[0].entityId !== "0x0") {
+                        console.log("cb", JSON.stringify(response.data))
                         const p = response.data[0].models.pixelaw.Pixel
                         const key = `${p?.x}_${p?.y}`
                         this.setPixel(key, p as Pixel)
+                        this.eventEmitter.emit("cacheUpdated", Date.now())
+
                     }
                     console.log("callback")
                     this.cacheUpdated = Date.now()
