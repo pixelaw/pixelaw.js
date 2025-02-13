@@ -1,4 +1,5 @@
 import type mitt from "mitt"
+import type {PixelawCore} from "./PixelawCore.ts";
 
 export type Pixel = {
     action: string
@@ -109,6 +110,7 @@ export type PixelCoreEvents = {
     worldViewChanged: Bounds
     engineChanged: Engine
     statusChanged: CoreStatus
+    walletChanged: Wallet
     pixelStoreUpdated: number
     tileStoreUpdated: number
     appStoreUpdated: number
@@ -130,11 +132,11 @@ export interface Engine {
     status: EngineStatus
 
     init(engineConfig: unknown): Promise<void>
-    setAccount(account: unknown): void
+    // setAccount(account: unknown): void
     handleInteraction(app: App, pixel: Pixel, color: number): Interaction
 }
 
-export type EngineConstructor<T extends Engine> = new () => T
+export type EngineConstructor<T extends Engine> = new (core: PixelawCore) => T
 
 export interface WalletConfig {
     masterAddress?: string
@@ -174,4 +176,11 @@ export interface PixelStore {
     setPixel: (key: string, pixel: Pixel) => void
     setPixels: (pixels: { key: string; pixel: Pixel }[]) => void
     unload?: () => Promise<void>
+}
+
+export interface Wallet {
+    id: string
+    address: string;
+    chainId: string
+    getAccount: () => unknown
 }

@@ -9,6 +9,7 @@ import type {
     TileStore,
     UpdateService,
 } from "@pixelaw/core"
+import type {PixelawCore} from "@pixelaw/core/src";
 
 export type MudConfig = {
     todo: number
@@ -21,7 +22,11 @@ export class MudEngine implements Engine {
     updateService: UpdateService = null!
     status: EngineStatus = "uninitialized"
     config: MudConfig = null!
+    core: PixelawCore
 
+    constructor(core: PixelawCore) {
+        this.core = core
+    }
     async init(config: MudConfig) {
         console.log("MudEngine init", config, this.constructor.name)
     }

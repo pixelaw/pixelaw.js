@@ -1,4 +1,13 @@
-import type {Coordinate, CoreDefaults, Interaction, Pixel, PixelStore, WorldsRegistry} from "./types.ts"
+import type {
+    Coordinate,
+    CoreDefaults,
+    Interaction,
+    Pixel,
+    PixelStore,
+    UpdateService,
+    Wallet,
+    WorldsRegistry
+} from "./types.ts"
 import type { CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfig } from "./types.ts"
 
 import mitt from "mitt"
@@ -12,18 +21,18 @@ export class PixelawCore {
     pixelStore: PixelStore = null!
     tileStore: TileStore = null!
     appStore: AppStore = null!
+    updateService: UpdateService = null!
     viewPort: Canvas2DRenderer = null!
     events = mitt<PixelCoreEvents>()
 
     private worldsRegistry: WorldsRegistry
-
     private app: string | null = null
     private color = 0
     private zoom = 1
     private center: Coordinate = [0, 0]
     private world: string
     private engines: Set<EngineConstructor<Engine>> = new Set()
-
+    private wallet: Wallet | null =  null
 
     constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry) {
         for (const engine of engines) {
@@ -31,17 +40,35 @@ export class PixelawCore {
         }
 
         this.worldsRegistry = worldsRegistry
-        console.log({worldsRegistry})
     }
 
-    // TODO Wallets?
+    // TODO Wallets/persistence?
+    /*
+    Wallet can be identified as string: "walletname-network-account"
+    Engine has a list of supported wallets, and worldConfig can have custom wallet config/def (mainly for burner)
+
+    Core can only contain definition/code for wallets that don't need browser/react
+    But a reference to a StarknetProvider is okay
+    Or we can abstract the Provider so the Core only knows of a Wallet it can call execute on?
+
+     */
+
+    public getWallet():  Wallet | null{
+        return this.wallet
+    }
+
+    public setWallet(wallet: Wallet | null){
+        this.wallet = wallet
+        this.events.emit("walletChanged", wallet)
+    }
+
     public getEngine(): string | null {
         return this.engine ? this.engine.constructor.name : null
     }
 
     public async loadWorld(world: string, coreDefaults?: CoreDefaults) {
 
-        if(!this.worldsRegistry.hasOwnProperty(world)) throw Error(`World ${world} does not exist in registry`)
+        if(!Object.prototype.hasOwnProperty.call(this.worldsRegistry, world)) throw Error(`World ${world} does not exist in registry`)
 
         this.setStatus("loadConfig")
         const worldConfig = this.worldsRegistry[world]
@@ -54,16 +81,12 @@ export class PixelawCore {
             throw new Error(`Unsupported engine: ${worldConfig.engine}`)
         }
 
-        this.engine = new engineClass()
+        this.engine = new engineClass(this)
 
         this.setStatus("initializing")
 
         await this.engine.init(worldConfig.config)
 
-
-        this.pixelStore = this.engine.pixelStore
-        this.tileStore = this.engine.tileStore
-        this.appStore = this.engine.appStore
 
         this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore)
 
@@ -89,8 +112,6 @@ export class PixelawCore {
         this.status = newStatus
         this.events.emit("statusChanged", newStatus)
     }
-
-
 
     public getWorldsRegistry(): WorldsRegistry  {
         return this.worldsRegistry

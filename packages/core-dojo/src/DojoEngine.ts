@@ -1,4 +1,4 @@
-import { NAMESPACE, RestTileStore, WsUpdateService, createDialog } from "@pixelaw/core"
+import {NAMESPACE, type PixelawCore, RestTileStore, WsUpdateService, createDialog } from "@pixelaw/core"
 import type { App, Engine, EngineStatus, Pixel, PixelStore, Position } from "@pixelaw/core"
 import { type DojoStuff, dojoInit } from "./DojoEngine.init.ts"
 import { DojoInteraction } from "./DojoInteraction.ts"
@@ -6,6 +6,7 @@ import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
 import { schema } from "./generated/models.gen.ts"
 import getParamsDef, { generateDojoCall } from "./utils/paramsDef.ts"
 
+import type {DojoWallet} from "@/DojoWallet.ts";
 import type { DojoConfig } from "@/types.ts"
 import type { AppStore, TileStore, UpdateService } from "@pixelaw/core"
 import type { Account } from "starknet"
@@ -20,6 +21,11 @@ export class DojoEngine implements Engine {
     config: DojoConfig = null!
     dojoSetup: DojoStuff | null = null
     account: Account | null = null
+    core: PixelawCore
+
+    constructor(core: PixelawCore) {
+        this.core = core
+    }
 
     async init(config: DojoConfig) {
         this.config = config
@@ -29,18 +35,18 @@ export class DojoEngine implements Engine {
             this.status = this.dojoSetup ? "ready" : "error"
 
             // Setup AppStore
-            this.appStore = new DojoAppStore(this.dojoSetup)
+            this.core.appStore = new DojoAppStore(this.dojoSetup)
 
             // Setup PixelStore
-            this.pixelStore = new DojoSqlPixelStore(this.config.toriiUrl, this.dojoSetup!.sdk!)
+            this.core.pixelStore = new DojoSqlPixelStore(this.config.toriiUrl, this.dojoSetup!.sdk!)
 
 
             // Setup UpdateService
-            this.updateService = new WsUpdateService(config.serverUrl)
+            this.core.updateService = new WsUpdateService(config.serverUrl)
 
 
             // Setup TileStore
-            this.tileStore = new RestTileStore(config.serverUrl)
+            this.core.tileStore = new RestTileStore(config.serverUrl)
 
         } catch (error) {
             console.error("Dojo init error:", error)
@@ -73,10 +79,12 @@ export class DojoEngine implements Engine {
                     position,
                     color,
                 )
-                console.log("acc", this.account)
+                const wallet = this.core.getWallet() as DojoWallet
+                const account = wallet.getAccount()
+                console.log("acc", account)
                 console.log("dojoCall", dojoCall)
                 this.dojoSetup.provider
-                    .execute(this.account!, dojoCall, NAMESPACE, {})
+                    .execute(account!, dojoCall, NAMESPACE, {})
                     .then((res) => {
                         console.log("dojocall after exec", res)
                         // TODO animate "flickering" of the pixel that was modified?
@@ -103,8 +111,8 @@ export class DojoEngine implements Engine {
         return result
     }
 
-    setAccount(account: unknown | null) {
-        console.log({ account })
-        this.account = account as Account
-    }
+    // setAccount(account: unknown | null) {
+    //     console.log({ account })
+    //     this.account = account as Account
+    // }
 }

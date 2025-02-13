@@ -13,8 +13,3 @@ export interface DojoConfig {
     world: string
 }
 
-export interface DojoWorldConfig {
-    engine: "dojo"
-    description: string
-    config: DojoConfig
-}

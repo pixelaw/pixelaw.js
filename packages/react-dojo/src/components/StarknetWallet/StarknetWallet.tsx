@@ -1,14 +1,15 @@
 import type ControllerConnector from "@cartridge/connector/controller"
-import type { DojoEngine } from "@pixelaw/core-dojo"
+import { type DojoEngine, DojoWallet } from "@pixelaw/core-dojo"
 import { usePixelawProvider } from "@pixelaw/react"
 import { type Connector, InjectedConnector, useAccount, useConnect, useDisconnect } from "@starknet-react/core"
 import { useEffect, useState } from "react"
-// import { useNavigate } from "react-router-dom"
 import { constants } from "starknet"
 import { ArgentMobileConnector, isInArgentMobileAppBrowser } from "starknetkit/argentMobile"
 import { WebWalletConnector } from "starknetkit/webwallet"
 import ControllerDetails from "../ControllerDetails/ControllerDetails"
 import styles from "./StarknetWallet.module.css"
+
+// import { useNavigate } from "react-router-dom"
 
 export const StarknetWallet = () => {
     const { connectAsync } = useConnect()
@@ -67,11 +68,12 @@ export const StarknetWallet = () => {
     }, [controllerConnector, burnerConnector])
 
     useEffect(() => {
-        if (currentAccount) {
-            console.log("engine.setAccount(currentAccount)")
-            engine.setAccount(currentAccount)
+        if (currentConnector && currentAccount) {
+            // engine.setAccount(currentAccount)
+            const wallet = new DojoWallet(currentConnector.id,  currentAccount)
+            pixelawCore.setWallet(wallet)
         }
-    }, [currentAccount, engine])
+    }, [currentConnector,currentAccount, engine])
 
     return (
         <div className={styles.inner}>
