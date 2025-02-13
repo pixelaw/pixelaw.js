@@ -22,7 +22,6 @@ export class PixelawCore {
     private zoom = 1
     private center: Coordinate = [0, 0]
     private world: string
-
     private engines: Set<EngineConstructor<Engine>> = new Set()
 
 
@@ -35,7 +34,6 @@ export class PixelawCore {
         console.log({worldsRegistry})
     }
 
-    // TODO add Query(string) manager that allows safe read/write to the zoom/world etc.
     // TODO Wallets?
     public getEngine(): string | null {
         return this.engine ? this.engine.constructor.name : null
@@ -69,7 +67,7 @@ export class PixelawCore {
 
         this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore)
 
-        // Setting defaults
+        // Setting defaults if provided
         const defaults = coreDefaults ?? worldConfig.defaults;
         if (defaults) {
             this.setApp(defaults.app);
@@ -83,7 +81,6 @@ export class PixelawCore {
 
         this.worldConfig = worldConfig
 
-        console.log("HERE")
         this.setStatus("ready")
         this.events.emit("engineChanged", this.engine)
     }
