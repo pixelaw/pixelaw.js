@@ -1,8 +1,6 @@
-import { PixelawCore } from "@pixelaw/core"
-import type { App, CoreStatus, Engine } from "@pixelaw/core"
-
-import type { Coordinate, EngineConstructor, WorldsRegistry } from "@pixelaw/core/src"
-import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
+import {PixelawCore} from "@pixelaw/core"
+import type {App, Coordinate, CoreDefaults, CoreStatus, Engine, EngineConstructor, WorldsRegistry} from "@pixelaw/core"
+import {type ReactNode, createContext, useContext, useEffect, useState} from "react"
 
 export type IPixelawContext = {
     pixelawCore: PixelawCore
@@ -22,13 +20,13 @@ export type IPixelawContext = {
 
 export const PixelawContext = createContext<IPixelawContext | undefined>(undefined)
 
-export const PixelawProvider = ({
-                                    children,
-                                    worldsRegistry,
-                                    world,
-                                    engines,
-                                    coreDefaults,
-                                }: { children: ReactNode; worldsRegistry: WorldsRegistry; world: string, engines: EngineConstructor<Engine>[] ,coreDefaults?: CoreDefaults}) => {
+export const PixelawProvider = ({children, worldsRegistry, world, engines, coreDefaults,}: {
+    children: ReactNode;
+    worldsRegistry: WorldsRegistry;
+    world: string,
+    engines: EngineConstructor<Engine>[],
+    coreDefaults?: CoreDefaults
+}) => {
 
     const [pixelawCore] = useState(() => new PixelawCore(engines, worldsRegistry))
 
@@ -60,13 +58,13 @@ export const PixelawProvider = ({
 
     useEffect(() => {
         const handlers = {
-            statusChanged: (newStatus: CoreStatus) => setContextValues(prev => ({ ...prev, coreStatus: newStatus })),
-            appChanged: (newApp: App | null) => setContextValues(prev => ({ ...prev, app: newApp })),
-            engineChanged: (newEngine: Engine | null) => setContextValues(prev => ({ ...prev, engine: newEngine })),
-            worldChanged: (newWorld: string) => setContextValues(prev => ({ ...prev, world: newWorld })),
-            colorChanged: (newColor: number) => setContextValues(prev => ({ ...prev, color: newColor })),
-            centerChanged: (newCenter: Coordinate) => setContextValues(prev => ({ ...prev, center: newCenter })),
-            zoomChanged: (newZoom: number) => setContextValues(prev => ({ ...prev, zoom: newZoom })),
+            statusChanged: (newStatus: CoreStatus) => setContextValues(prev => ({...prev, coreStatus: newStatus})),
+            appChanged: (newApp: App | null) => setContextValues(prev => ({...prev, app: newApp})),
+            engineChanged: (newEngine: Engine | null) => setContextValues(prev => ({...prev, engine: newEngine})),
+            worldChanged: (newWorld: string) => setContextValues(prev => ({...prev, world: newWorld})),
+            colorChanged: (newColor: number) => setContextValues(prev => ({...prev, color: newColor})),
+            centerChanged: (newCenter: Coordinate) => setContextValues(prev => ({...prev, center: newCenter})),
+            zoomChanged: (newZoom: number) => setContextValues(prev => ({...prev, zoom: newZoom})),
         }
 
         if (pixelawCore) {
