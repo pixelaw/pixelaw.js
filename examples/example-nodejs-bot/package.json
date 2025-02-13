@@ -8,7 +8,8 @@
 
     },
     "dependencies": {
-        "@pixelaw/core": "workspace:*"
+        "@pixelaw/core": "workspace:*",
+        "@pixelaw/core-dojo": "workspace:*"
 
     },
     "scripts": {
