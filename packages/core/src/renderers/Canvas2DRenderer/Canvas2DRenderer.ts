@@ -202,7 +202,11 @@ export class Canvas2DRenderer {
 
 
     private handleTouchStart(event: TouchEvent) {
-        if (event.touches.length === 2) {
+
+         if (event.touches.length === 1) {
+             this.handleMouseDown(event.touches[0])
+         }else
+         if (event.touches.length === 2) {
             event.preventDefault();
             const [touch1, touch2] = event.touches;
             this.initialPinchDistance = Math.hypot(
@@ -214,7 +218,10 @@ export class Canvas2DRenderer {
     }
 
     private handleTouchMove(event: TouchEvent) {
-        if (event.touches.length === 2 && this.initialPinchDistance !== null) {
+
+        if (event.touches.length === 1) {
+            this.handleMouseMove(event.touches[0] as unknown as MouseEvent)
+        } else if (event.touches.length === 2 && this.initialPinchDistance !== null) {
             event.preventDefault();
             const [touch1, touch2] = event.touches;
             const currentDistance = Math.hypot(
@@ -223,18 +230,43 @@ export class Canvas2DRenderer {
             );
 
             const scaleFactor = currentDistance / this.initialPinchDistance;
-            const newZoom = Math.round(this.initialZoom * scaleFactor);
+            let newZoom = Math.round(this.initialZoom * scaleFactor);
 
-            this.setZoom(Math.min(Math.max(newZoom, ZOOM_MIN), ZOOM_MAX));
+            // Ensure the new zoom level does not exceed ZOOM_MAX
+            newZoom = Math.min(Math.max(newZoom, ZOOM_MIN), ZOOM_MAX);
+
+            // Calculate the midpoint between the two touch points
+            const rect = this.canvas.getBoundingClientRect();
+            const midX = (touch1.clientX + touch2.clientX) / 2 - rect.left;
+            const midY = (touch1.clientY + touch2.clientY) / 2 - rect.top;
+
+            // Calculate mouse cells before and after zoom
+            const mouseCellBeforeZoom = cellForPosition(this.zoom, this.pixelOffset, [midX, midY]);
+            const mouseCellAfterZoom = cellForPosition(newZoom, this.pixelOffset, [midX, midY]);
+
+            const cellDiffX = mouseCellAfterZoom[0] - mouseCellBeforeZoom[0];
+            const cellDiffY = mouseCellAfterZoom[1] - mouseCellBeforeZoom[1];
+
+            this.setZoom(newZoom);
+            this.worldOffset = [this.worldOffset[0] + cellDiffX, this.worldOffset[1] + cellDiffY];
             this.requestRender();
         }
     }
 
+
+
     private handleTouchEnd(event: TouchEvent) {
-        if (event.touches.length < 2) {
+
+        if (event.touches.length === 0) {
+            // Reset pinch-related variables when all touches are lifted
             this.initialPinchDistance = null;
+            this.initialZoom = this.zoom;
+        } else if (event.touches.length === 1) {
+            // Handle as a mouse up event if there's still one touch remaining
+            this.handleMouseUp(event.touches[0] as unknown as MouseEvent);
         }
     }
+
 
     private render() {
         if (!this.context || !this.bufferContext) return
