@@ -11,8 +11,10 @@ import type {
 import type { CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfig } from "./types.ts"
 
 import mitt from "mitt"
+import { type Storage, createStorage, prefixStorage } from "unstorage";
 import { Canvas2DRenderer } from "./renderers"
 import type { AppStore, TileStore } from "./types.ts"
+
 
 export class PixelawCore {
     status: CoreStatus = "uninitialized"
@@ -33,13 +35,16 @@ export class PixelawCore {
     private world: string
     private engines: Set<EngineConstructor<Engine>> = new Set()
     private wallet: Wallet | null =  null
+    private storage: Storage
 
-    constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry) {
+    constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry, storage: Storage = undefined) {
         for (const engine of engines) {
             this.engines.add(engine)
         }
 
         this.worldsRegistry = worldsRegistry
+
+        this.storage = storage ?? createStorage() // Use a default storage if none is provided
     }
 
     // TODO Wallets/persistence?
@@ -60,6 +65,15 @@ export class PixelawCore {
     public setWallet(wallet: Wallet | null){
         this.wallet = wallet
         this.events.emit("walletChanged", wallet)
+
+        if(!wallet) return
+
+
+        this.storage.setItem(this.getStorageKey("wallet"),"")
+    }
+
+    private getStorageKey(key: string): string {
+        return `${this.world}-${this.wallet.id}-${key}`
     }
 
     public getEngine(): string | null {

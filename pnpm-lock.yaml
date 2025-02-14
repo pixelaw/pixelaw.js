@@ -78,6 +78,9 @@ importers:
       pngjs3:
         specifier: ^6.1.1
         version: 6.1.1
+      unstorage:
+        specifier: ^1.14.4
+        version: 1.14.4(idb-keyval@6.2.1)
       upng-js:
         specifier: ^2.1.0
         version: 2.1.0
