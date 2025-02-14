@@ -44,19 +44,9 @@ export class PixelawCore {
 
         this.worldsRegistry = worldsRegistry
 
-        this.storage = storage ?? createStorage() // Use a default storage if none is provided
+        // Use a default storage if none is provided, this means Core will never remember wallets, world and such
+        this.storage = storage ?? createStorage()
     }
-
-    // TODO Wallets/persistence?
-    /*
-    Wallet can be identified as string: "walletname-network-account"
-    Engine has a list of supported wallets, and worldConfig can have custom wallet config/def (mainly for burner)
-
-    Core can only contain definition/code for wallets that don't need browser/react
-    But a reference to a StarknetProvider is okay
-    Or we can abstract the Provider so the Core only knows of a Wallet it can call execute on?
-
-     */
 
     public getWallet():  Wallet | null{
         return this.wallet
@@ -66,19 +56,30 @@ export class PixelawCore {
         this.wallet = wallet
         this.events.emit("walletChanged", wallet)
 
-        if(!wallet) return
+        this.storage.setItem(this.getStorageKey("wallet"),wallet)
 
-
-        this.storage.setItem(this.getStorageKey("wallet"),"")
     }
 
-    private getStorageKey(key: string): string {
-        return `${this.world}-${this.wallet.id}-${key}`
-    }
 
     public getEngine(): string | null {
         return this.engine ? this.engine.constructor.name : null
     }
+
+    private async getStorageDefaults(): Promise<CoreDefaults | undefined> {
+        // Use Promise.all to fetch all items concurrently, improving time efficiency
+        const [app, color, center, zoom] = await Promise.all([
+            this.storage.getItem(this.getStorageKey("app")),
+            this.storage.getItem(this.getStorageKey("color")),
+            this.storage.getItem(this.getStorageKey("center")),
+            this.storage.getItem(this.getStorageKey("zoom"))
+        ]);
+
+        // Check for undefined values directly, improving readability
+        if (app !== null && color !== null && center !== null && zoom !== null) {
+            return { app: app as string, color: color as number, center: center as number[], zoom: zoom as number };
+        }
+    }
+
 
     public async loadWorld(world: string, coreDefaults?: CoreDefaults) {
 
@@ -101,20 +102,21 @@ export class PixelawCore {
 
         await this.engine.init(worldConfig.config)
 
-
         this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore)
 
+        this.setWorld(world)
+
+
+        const storageDefaults = await this.getStorageDefaults()
+
         // Setting defaults if provided
-        const defaults = coreDefaults ?? worldConfig.defaults;
+        const defaults = storageDefaults ?? coreDefaults ?? worldConfig.defaults;
         if (defaults) {
             this.setApp(defaults.app);
             this.setColor(defaults.color);
             this.setCenter(defaults.center as Coordinate);
             this.setZoom(defaults.zoom);
         }
-
-
-        this.setWorld(world)
 
         this.worldConfig = worldConfig
 
@@ -138,6 +140,7 @@ export class PixelawCore {
     public setApp(newApp: string | null) {
         this.app = newApp
         this.events.emit("appChanged", newApp)
+        this.storage.setItem(this.getStorageKey("app"),newApp)
     }
 
     private setWorld(newWorld: string ) {
@@ -152,6 +155,7 @@ export class PixelawCore {
     public setColor(newColor: number | null) {
         this.color = newColor
         this.events.emit("colorChanged", newColor)
+        this.storage.setItem(this.getStorageKey("color"),newColor)
     }
 
     public getZoom(): number {
@@ -161,6 +165,7 @@ export class PixelawCore {
     public setZoom(newZoom: number) {
         this.zoom = newZoom
         this.events.emit("zoomChanged", newZoom)
+        this.storage.setItem(this.getStorageKey("zoom"),newZoom)
     }
 
     public getCenter(): Coordinate {
@@ -170,6 +175,7 @@ export class PixelawCore {
     public setCenter(newCenter: Coordinate) {
         this.center = newCenter
         this.events.emit("centerChanged", newCenter)
+        this.storage.setItem(this.getStorageKey("center"),newCenter)
     }
 
     public getWorld(): string {
@@ -182,4 +188,7 @@ export class PixelawCore {
         return this.engine.handleInteraction(app, pixel, this.color)
     }
 
+    private getStorageKey(key: string): string {
+        return `${this.world}::${key}`
+    }
 }

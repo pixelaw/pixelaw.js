@@ -13,3 +13,4 @@ export interface DojoConfig {
     world: string
 }
 
+export const ENGINE_ID = "dojo"

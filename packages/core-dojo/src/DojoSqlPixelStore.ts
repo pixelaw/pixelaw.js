@@ -106,7 +106,6 @@ class DojoSqlPixelStore implements PixelStore {
     }
 
     public refresh(): void {
-        console.log(JSON.stringify(this.queryBounds))
         if (!this.queryBounds) return
         const q = createSqlQuery(this.queryBounds)
 

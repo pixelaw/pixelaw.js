@@ -33,7 +33,6 @@ export class WsUpdateService implements UpdateService {
             }
 
             this.socket.onopen = () => {
-                console.log("sopen", this.socket?.readyState)
 
                 if (this.bounds) {
                     const message = JSON.stringify({ cmd: "subscribe", data: { boundingBox: this.bounds } })
@@ -42,7 +41,7 @@ export class WsUpdateService implements UpdateService {
             }
 
             this.socket.onclose = () => {
-                console.log("sclose")
+
                 this.socket = null
                 setTimeout(() => this.initializeSocket(url), 10000)
             }

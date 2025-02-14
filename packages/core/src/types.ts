@@ -181,4 +181,12 @@ export interface Wallet {
     address: string;
     chainId: string
     getAccount: () => unknown
+    toJSON: () => unknown
+}
+
+export interface WalletJson {
+    engine: string
+    id: string
+    address: string;
+    chainId: string
 }

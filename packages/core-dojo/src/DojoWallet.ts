@@ -1,5 +1,6 @@
-import type {Wallet} from "@pixelaw/core";
+import type {Wallet, WalletJson} from "@pixelaw/core";
 import type { AccountInterface} from "starknet";
+import {ENGINE_ID} from "./types.ts";
 
 export type DojoWalletId =
     | "argentX"
@@ -25,6 +26,11 @@ export class DojoWallet implements Wallet{
 
     getAccount(): AccountInterface {
         return this.account;
+    }
+
+    toJSON(): WalletJson {
+        const { id, address, chainId } = this;
+        return { engine: ENGINE_ID, id, address, chainId };
     }
 
 }

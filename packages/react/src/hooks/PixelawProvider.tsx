@@ -1,6 +1,8 @@
 import {PixelawCore} from "@pixelaw/core"
 import type { Coordinate, CoreDefaults, CoreStatus, Engine, EngineConstructor, Wallet,WorldsRegistry} from "@pixelaw/core"
 import {type ReactNode, createContext, useContext, useEffect, useState} from "react"
+import {createStorage} from "unstorage";
+import localStorageDriver from "unstorage/drivers/localstorage";
 
 export type IPixelawContext = {
     pixelawCore: PixelawCore
@@ -30,7 +32,11 @@ export const PixelawProvider = ({children, worldsRegistry, world, engines, coreD
     coreDefaults?: CoreDefaults
 }) => {
 
-    const [pixelawCore] = useState(() => new PixelawCore(engines, worldsRegistry))
+    const storage = createStorage({
+        driver: localStorageDriver({  }),
+    });
+
+    const [pixelawCore] = useState(() => new PixelawCore(engines, worldsRegistry, storage))
 
     const [contextValues, setContextValues] = useState<IPixelawContext>({
         pixelawCore,
@@ -98,7 +104,7 @@ export const PixelawProvider = ({children, worldsRegistry, world, engines, coreD
                 pixelawCore.events.off(event, handler)
             }
         }
-    }, [pixelawCore, world])
+    }, [pixelawCore, world, coreDefaults])
 
     return <PixelawContext.Provider value={contextValues}>{children}</PixelawContext.Provider>
 }

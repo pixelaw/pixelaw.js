@@ -43,7 +43,7 @@ export async function dojoInit(worldConfig: DojoConfig, schema: SchemaType): Pro
         },
     }
 
-    const sdk = await init<SchemaType>(sdkSetup, schema)
+    const sdk = await init<SchemaType>(sdkSetup, schema)    // TODO upgrade
 
     const { apps, manifest } = await fetchAppsAndManifest(worldConfig)
 
@@ -128,7 +128,6 @@ async function setupBurnerConnector(
 ): Promise<BurnerConnector | null> {
     const cacheKey = JSON.stringify({ rpcProvider, burnerConfig: worldConfig.wallets?.burner })
     if (burnerConnectorCache.has(cacheKey)) {
-        console.log("burnerConnectorCache hit")
         return burnerConnectorCache.get(cacheKey) || null
     }
 
