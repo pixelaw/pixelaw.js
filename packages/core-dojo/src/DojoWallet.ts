@@ -1,5 +1,5 @@
 import type {Wallet} from "@pixelaw/core";
-import type {Account} from "starknet";
+import type { AccountInterface} from "starknet";
 
 export type DojoWalletId =
     | "argentX"
@@ -13,17 +13,17 @@ export class DojoWallet implements Wallet{
     id: DojoWalletId;
     address: string;
     chainId: string
-    account: Account
+    account: AccountInterface
 
-    constructor(walletId: DojoWalletId, account: Account) {
+    constructor(walletId: DojoWalletId, chainId: string, account: AccountInterface) {
         this.id = walletId
         this.address = account.address
-        this.chainId = account.channel.chainId  // TODO see if we can access the private field like this
+        this.chainId = chainId
         this.account = account
         console.log({walletId, chainId: this.chainId})
     }
 
-    getAccount(): Account {
+    getAccount(): AccountInterface {
         return this.account;
     }
 

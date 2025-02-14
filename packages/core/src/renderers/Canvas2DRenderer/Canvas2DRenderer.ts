@@ -205,11 +205,11 @@ export class Canvas2DRenderer {
     private handleTouchStart(event: TouchEvent) {
 
          if (event.touches.length === 1) {
-             this.handleMouseDown(event.touches[0])
+             this.handleMouseDown(event.touches[0] as unknown as MouseEvent)
          }else
          if (event.touches.length === 2) {
             event.preventDefault();
-            const [touch1, touch2] = event.touches;
+            const [touch1, touch2] = Array.from(event.touches);
             this.initialPinchDistance = Math.hypot(
                 touch2.clientX - touch1.clientX,
                 touch2.clientY - touch1.clientY
@@ -224,7 +224,7 @@ export class Canvas2DRenderer {
             this.handleMouseMove(event.touches[0] as unknown as MouseEvent)
         } else if (event.touches.length === 2 && this.initialPinchDistance !== null) {
             event.preventDefault();
-            const [touch1, touch2] = event.touches;
+            const [touch1, touch2] = Array.from(event.touches);
             const currentDistance = Math.hypot(
                 touch2.clientX - touch1.clientX,
                 touch2.clientY - touch1.clientY

@@ -1,16 +1,18 @@
 import {PixelawCore} from "@pixelaw/core"
-import type {App, Coordinate, CoreDefaults, CoreStatus, Engine, EngineConstructor, WorldsRegistry} from "@pixelaw/core"
+import type { Coordinate, CoreDefaults, CoreStatus, Engine, EngineConstructor, Wallet,WorldsRegistry} from "@pixelaw/core"
 import {type ReactNode, createContext, useContext, useEffect, useState} from "react"
 
 export type IPixelawContext = {
     pixelawCore: PixelawCore
     coreStatus: CoreStatus
+    wallet: Wallet | null
     app: string | null
     engine: Engine | null
-    world: string
+    world: string | null
     color: number
     center: Coordinate
     zoom: number
+    setWallet: (wallet: Wallet | null) => void
     setApp: (app: string) => void
     setWorld: (world: string) => void
     setColor: (color: number) => void
@@ -33,13 +35,17 @@ export const PixelawProvider = ({children, worldsRegistry, world, engines, coreD
     const [contextValues, setContextValues] = useState<IPixelawContext>({
         pixelawCore,
         coreStatus: "uninitialized",
+        wallet:pixelawCore.getWallet(),
         app: pixelawCore.getApp(),
         engine: null,
         world: pixelawCore.getWorld(),
         color: pixelawCore.getColor(),
         center: pixelawCore.getCenter(),
         zoom: pixelawCore.getZoom(),
-        setApp: (app: App) => {
+        setWallet: (wallet: Wallet | null) => {
+            pixelawCore.setWallet(wallet)
+        },
+        setApp: (app: string) => {
             pixelawCore.setApp(app)
         },
         setWorld: (world: string) => {
@@ -59,7 +65,8 @@ export const PixelawProvider = ({children, worldsRegistry, world, engines, coreD
     useEffect(() => {
         const handlers = {
             statusChanged: (newStatus: CoreStatus) => setContextValues(prev => ({...prev, coreStatus: newStatus})),
-            appChanged: (newApp: App | null) => setContextValues(prev => ({...prev, app: newApp})),
+            walletChanged: (newWallet: Wallet | null) => setContextValues(prev => ({...prev, wallet: newWallet})),
+            appChanged: (newApp: string | null) => setContextValues(prev => ({...prev, app: newApp})),
             engineChanged: (newEngine: Engine | null) => setContextValues(prev => ({...prev, engine: newEngine})),
             worldChanged: (newWorld: string) => setContextValues(prev => ({...prev, world: newWorld})),
             colorChanged: (newColor: number) => setContextValues(prev => ({...prev, color: newColor})),
@@ -81,11 +88,13 @@ export const PixelawProvider = ({children, worldsRegistry, world, engines, coreD
         }
 
         for (const [event, handler] of Object.entries(handlers)) {
+            // @ts-ignore
             pixelawCore.events.on(event, handler)
         }
 
         return () => {
             for (const [event, handler] of Object.entries(handlers)) {
+                // @ts-ignore
                 pixelawCore.events.off(event, handler)
             }
         }

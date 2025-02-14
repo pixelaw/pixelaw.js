@@ -6,6 +6,7 @@ export default defineConfig({
     esbuildPlugins: [
         alias({
             "@": "./src",
+            "@pixelaw/core": "../core/src",
         }),
     ],
     minify: false,

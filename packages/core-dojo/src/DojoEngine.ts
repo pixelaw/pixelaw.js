@@ -13,14 +13,14 @@ import type { Account } from "starknet"
 import { DojoAppStore } from "./DojoAppStore.ts"
 
 export class DojoEngine implements Engine {
-    pixelStore: PixelStore = null!
-    tileStore: TileStore = null!
-    appStore: AppStore = null!
-    updateService: UpdateService = null!
+    // pixelStore: PixelStore = null!
+    // tileStore: TileStore = null!
+    // appStore: AppStore = null!
+    // updateService: UpdateService = null!
     status: EngineStatus = "uninitialized"
     config: DojoConfig = null!
     dojoSetup: DojoStuff | null = null
-    account: Account | null = null
+    // account: Account | null = null
     core: PixelawCore
 
     constructor(core: PixelawCore) {

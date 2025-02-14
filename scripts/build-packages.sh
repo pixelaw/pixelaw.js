@@ -10,8 +10,6 @@ packages=(
   "packages/core-mud"
   "packages/react"
   "packages/react-dojo"
-  "packages/vanilla"
-
 )
 
 # Iterate over each package directory and run the build command

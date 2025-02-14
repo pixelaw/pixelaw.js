@@ -126,9 +126,7 @@ export type PixelCoreEvents = {
 export type EngineStatus = "ready" | "loading" | "error" | "uninitialized"
 export type CoreStatus = "uninitialized" | "loadConfig" | "initializing" | "ready" | "error"
 export interface Engine {
-    pixelStore: PixelStore
-    tileStore: TileStore
-    appStore: AppStore
+    core: PixelawCore
     status: EngineStatus
 
     init(engineConfig: unknown): Promise<void>

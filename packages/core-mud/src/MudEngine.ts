@@ -1,25 +1,16 @@
 import type {
     App,
-    AppStore,
     Engine,
     EngineStatus,
     Interaction,
-    Pixel,
-    PixelStore,
-    TileStore,
-    UpdateService,
+    Pixel,PixelawCore
 } from "@pixelaw/core"
-import type {PixelawCore} from "@pixelaw/core/src";
 
 export type MudConfig = {
     todo: number
 }
 
 export class MudEngine implements Engine {
-    pixelStore: PixelStore = null!
-    tileStore: TileStore = null!
-    appStore: AppStore = null!
-    updateService: UpdateService = null!
     status: EngineStatus = "uninitialized"
     config: MudConfig = null!
     core: PixelawCore
@@ -30,7 +21,7 @@ export class MudEngine implements Engine {
     async init(config: MudConfig) {
         console.log("MudEngine init", config, this.constructor.name)
     }
-    async setAccount(wallet: unknown) {}
+
     // biome-ignore lint/correctness/noUnusedVariables: TODO
     handleInteraction(app: App, pixel: Pixel): Interaction {
         return {

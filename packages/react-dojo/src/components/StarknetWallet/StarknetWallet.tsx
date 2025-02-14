@@ -1,15 +1,14 @@
 import type ControllerConnector from "@cartridge/connector/controller"
-import { type DojoEngine, DojoWallet } from "@pixelaw/core-dojo"
+import { type DojoEngine, DojoWallet , type DojoWalletId} from "@pixelaw/core-dojo"
 import { usePixelawProvider } from "@pixelaw/react"
 import { type Connector, InjectedConnector, useAccount, useConnect, useDisconnect } from "@starknet-react/core"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { constants } from "starknet"
 import { ArgentMobileConnector, isInArgentMobileAppBrowser } from "starknetkit/argentMobile"
 import { WebWalletConnector } from "starknetkit/webwallet"
 import ControllerDetails from "../ControllerDetails/ControllerDetails"
 import styles from "./StarknetWallet.module.css"
-
-import { useNavigate } from "react-router-dom"
 
 export const StarknetWallet = () => {
     const { connectAsync } = useConnect()
@@ -67,13 +66,21 @@ export const StarknetWallet = () => {
     }, [controllerConnector, burnerConnector])
 
     useEffect(() => {
-        if (currentConnector && currentAccount) {
-
-            const wallet = new DojoWallet(currentConnector.id,  currentAccount)
-            pixelawCore.setWallet(wallet)
-            navigate("/")
+        const setupWallet = async () => {
+            if (currentConnector && currentAccount) {
+                try {
+                    const chainId = await currentAccount.getChainId()
+                    const wallet = new DojoWallet(currentConnector.id as DojoWalletId, chainId, currentAccount)
+                    pixelawCore.setWallet(wallet)
+                    navigate("/")
+                } catch (error) {
+                    console.error("Error setting up wallet:", error)
+                }
+            }
         }
-    }, [currentConnector,currentAccount, engine])
+
+        setupWallet()
+    }, [currentConnector, currentAccount, navigate])
 
     return (
         <div className={styles.inner}>

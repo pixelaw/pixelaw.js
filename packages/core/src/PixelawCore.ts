@@ -126,12 +126,12 @@ export class PixelawCore {
         this.events.emit("appChanged", newApp)
     }
 
-    private setWorld(newWorld: string | null) {
+    private setWorld(newWorld: string ) {
         this.world = newWorld
         this.events.emit("worldChanged", newWorld)
     }
 
-    public getColor(): number | null {
+    public getColor(): number  {
         return this.color
     }
 
@@ -158,7 +158,7 @@ export class PixelawCore {
         this.events.emit("centerChanged", newCenter)
     }
 
-    public getWorld(): string | undefined {
+    public getWorld(): string {
         return this.world
     }
 
