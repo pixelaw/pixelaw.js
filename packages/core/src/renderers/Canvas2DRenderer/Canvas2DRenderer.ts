@@ -36,7 +36,7 @@ export class Canvas2DRenderer {
     private initialZoom: number = this.zoom;
 
 
-    constructor(pixelCoreEvents: Emitter<PixelCoreEvents>, tileStore: TileStore, pixelStore: PixelStore) {
+    constructor(pixelCoreEvents: Emitter<PixelCoreEvents>, tileStore: TileStore, pixelStore: PixelStore, initialZoom: number, initialCenter: Coordinate) {
         this.canvas = document.createElement("canvas")
         this.context = this.canvas.getContext("2d")
         this.bufferCanvas = document.createElement("canvas")
@@ -44,6 +44,8 @@ export class Canvas2DRenderer {
         this.tileStore = tileStore
         this.pixelStore = pixelStore
         this.pixelCoreEvents = pixelCoreEvents
+
+        // TODO handle initialZoom and center
 
         this.setupEventListeners()
         this.subscribeToEvents()

@@ -102,14 +102,11 @@ export class PixelawCore {
 
         await this.engine.init(worldConfig.config)
 
-        this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore)
 
         this.setWorld(world)
 
-
         const storageDefaults = await this.getStorageDefaults()
 
-        // Setting defaults if provided
         const defaults = storageDefaults ?? coreDefaults ?? worldConfig.defaults;
         if (defaults) {
             this.setApp(defaults.app);
@@ -118,7 +115,17 @@ export class PixelawCore {
             this.setZoom(defaults.zoom);
         }
 
+        this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore, this.zoom, this.center)
+
         this.worldConfig = worldConfig
+
+        this.events.on("centerChanged", (newCenter: Coordinate) => {
+            this.setCenter(newCenter);
+        });
+
+        this.events.on("zoomChanged", (newZoom: number) => {
+            this.setZoom(newZoom);
+        });
 
         this.setStatus("ready")
         this.events.emit("engineChanged", this.engine)
@@ -164,7 +171,7 @@ export class PixelawCore {
 
     public setZoom(newZoom: number) {
         this.zoom = newZoom
-        this.events.emit("zoomChanged", newZoom)
+        // this.events.emit("zoomChanged", newZoom)
         this.storage.setItem(this.getStorageKey("zoom"),newZoom)
     }
 
@@ -174,7 +181,7 @@ export class PixelawCore {
 
     public setCenter(newCenter: Coordinate) {
         this.center = newCenter
-        this.events.emit("centerChanged", newCenter)
+        // this.events.emit("centerChanged", newCenter)
         this.storage.setItem(this.getStorageKey("center"),newCenter)
     }
 
