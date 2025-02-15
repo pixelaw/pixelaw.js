@@ -12,6 +12,7 @@ import type { CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfi
 
 import mitt from "mitt"
 import { type Storage, createStorage, prefixStorage } from "unstorage";
+import nullDriver from "unstorage/drivers/null";
 import { Canvas2DRenderer } from "./renderers"
 import type { AppStore, TileStore } from "./types.ts"
 
@@ -37,15 +38,15 @@ export class PixelawCore {
     private wallet: Wallet | null =  null
     private storage: Storage
 
-    constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry, storage: Storage = undefined) {
+    constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry, storage: Storage = createStorage({driver: nullDriver()})) {
         for (const engine of engines) {
             this.engines.add(engine)
         }
 
         this.worldsRegistry = worldsRegistry
 
-        // Use a default storage if none is provided, this means Core will never remember wallets, world and such
-        this.storage = storage ?? createStorage()
+
+        this.storage = storage 
     }
 
     public getWallet():  Wallet | null{
@@ -101,7 +102,6 @@ export class PixelawCore {
         this.setStatus("initializing")
 
         await this.engine.init(worldConfig.config)
-
 
         this.setWorld(world)
 
