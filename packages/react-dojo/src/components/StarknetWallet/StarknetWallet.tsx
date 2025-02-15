@@ -1,86 +1,12 @@
-import type ControllerConnector from "@cartridge/connector/controller"
-import { type DojoEngine, DojoWallet , type DojoWalletId} from "@pixelaw/core-dojo"
-import { usePixelawProvider } from "@pixelaw/react"
-import { type Connector, InjectedConnector, useAccount, useConnect, useDisconnect } from "@starknet-react/core"
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { constants } from "starknet"
-import { ArgentMobileConnector, isInArgentMobileAppBrowser } from "starknetkit/argentMobile"
-import { WebWalletConnector } from "starknetkit/webwallet"
-import ControllerDetails from "../ControllerDetails/ControllerDetails"
-import styles from "./StarknetWallet.module.css"
+import type ControllerConnector from "@cartridge/connector/controller";
+import { useAccount } from "@starknet-react/core";
+import { useConnectorContext } from "../../hooks/ConnectorProvider"; // Import the new provider
+import ControllerDetails from "../ControllerDetails/ControllerDetails";
+import styles from "./StarknetWallet.module.css";
 
 export const StarknetWallet = () => {
-    const { connectAsync } = useConnect()
-    const { disconnectAsync } = useDisconnect()
-    const { connector: currentConnector, account: currentAccount, status } = useAccount()
-
-    const [availableConnectors, setAvailableConnectors] = useState<Connector[]>([])
-
-    const { pixelawCore } = usePixelawProvider()
-    const engine = pixelawCore.engine as DojoEngine
-    const { controllerConnector, burnerConnector } = engine.dojoSetup || {}
-
-    const navigate = useNavigate()
-
-    const handleConnectorSelection = async (connector: Connector | null) => {
-        try {
-            if (currentConnector) await disconnectAsync()
-            if (connector) {
-                await connectAsync({ connector })
-            }
-        } catch (error) {
-            console.error("Error activating connector:", error)
-        }
-    }
-
-    useEffect(() => {
-        const connectors: Connector[] = [
-            ...(isInArgentMobileAppBrowser()
-                ? [
-                      ArgentMobileConnector.init({
-                          options: {
-                              url: window?.location.href || "",
-                              dappName: "PixeLAW",
-                              chainId: constants.NetworkName.SN_SEPOLIA,
-                          },
-                      }),
-                  ]
-                : [
-                      new InjectedConnector({ options: { id: "argentX" } }),
-                      new InjectedConnector({ options: { id: "braavos" } }),
-                      ArgentMobileConnector.init({
-                          options: {
-                              url: window?.location.href || "",
-                              dappName: "PixeLAW",
-                              chainId: constants.NetworkName.SN_MAIN,
-                          },
-                      }),
-                      new WebWalletConnector({ url: "https://web.argent.xyz" }),
-                  ]),
-            controllerConnector,
-            burnerConnector as Connector,
-        ].filter((connector): connector is Connector => connector != null)
-
-        setAvailableConnectors(connectors)
-    }, [controllerConnector, burnerConnector])
-
-    useEffect(() => {
-        const setupWallet = async () => {
-            if (currentConnector && currentAccount) {
-                try {
-                    const chainId = await currentAccount.getChainId()
-                    const wallet = new DojoWallet(currentConnector.id as DojoWalletId, chainId, currentAccount)
-                    pixelawCore.setWallet(wallet)
-                    navigate("/")
-                } catch (error) {
-                    console.error("Error setting up wallet:", error)
-                }
-            }
-        }
-
-        setupWallet()
-    }, [currentConnector, currentAccount, navigate])
+    const { connector: currentConnector, account: currentAccount, status } = useAccount();
+    const { availableConnectors, handleConnectorSelection } = useConnectorContext(); // Use the context
 
     return (
         <div className={styles.inner}>
@@ -116,7 +42,7 @@ export const StarknetWallet = () => {
                 ))}
             </ul>
         </div>
-    )
-}
+    );
+};
 
-export default StarknetWallet
+export default StarknetWallet;

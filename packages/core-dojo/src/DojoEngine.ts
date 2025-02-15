@@ -1,26 +1,26 @@
-import {NAMESPACE, type PixelawCore, RestTileStore, WsUpdateService, createDialog } from "@pixelaw/core"
+import {
+    NAMESPACE,
+    type PixelawCore,
+    RestTileStore,
+    type Wallet,
+    type WalletJson,
+    WsUpdateService,
+    createDialog
+} from "@pixelaw/core"
 import type { App, Engine, EngineStatus, Pixel, PixelStore, Position } from "@pixelaw/core"
+import { DojoAppStore } from "./DojoAppStore.ts"
 import { type DojoStuff, dojoInit } from "./DojoEngine.init.ts"
 import { DojoInteraction } from "./DojoInteraction.ts"
 import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
+import type {DojoWallet} from "./DojoWallet.ts";
 import { schema } from "./generated/models.gen.ts"
+import {type DojoConfig, ENGINE_ID} from "./types.ts"
 import getParamsDef, { generateDojoCall } from "./utils/paramsDef.ts"
 
-import type {DojoWallet} from "@/DojoWallet.ts";
-import type { DojoConfig } from "@/types.ts"
-import type { AppStore, TileStore, UpdateService } from "@pixelaw/core"
-import type { Account } from "starknet"
-import { DojoAppStore } from "./DojoAppStore.ts"
-
 export class DojoEngine implements Engine {
-    // pixelStore: PixelStore = null!
-    // tileStore: TileStore = null!
-    // appStore: AppStore = null!
-    // updateService: UpdateService = null!
     status: EngineStatus = "uninitialized"
     config: DojoConfig = null!
     dojoSetup: DojoStuff | null = null
-    // account: Account | null = null
     core: PixelawCore
 
     constructor(core: PixelawCore) {
@@ -51,6 +51,12 @@ export class DojoEngine implements Engine {
         } catch (error) {
             console.error("Dojo init error:", error)
         }
+    }
+
+    async loadWallet(walletJson: WalletJson): Promise<Wallet> {
+        if(walletJson.engine !== ENGINE_ID) throw Error("Incorrect engine for walletJson")
+
+        // TODO uh oh, this is probably in ReactDojo?
     }
 
     handleInteraction(app: App, pixel: Pixel | undefined, color: number): DojoInteraction {

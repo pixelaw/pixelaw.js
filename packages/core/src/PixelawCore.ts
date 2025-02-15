@@ -45,8 +45,7 @@ export class PixelawCore {
 
         this.worldsRegistry = worldsRegistry
 
-
-        this.storage = storage 
+        this.storage = storage
     }
 
     public getWallet():  Wallet | null{
@@ -101,6 +100,7 @@ export class PixelawCore {
 
         this.setStatus("initializing")
 
+        // Engine init will access some core setters, so stuff may change
         await this.engine.init(worldConfig.config)
 
         this.setWorld(world)
@@ -118,6 +118,14 @@ export class PixelawCore {
         this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore, this.zoom, this.center)
 
         this.worldConfig = worldConfig
+
+        // Try to get the Wallet
+        const walletJson = await this.storage.getItem(this.getStorageKey("wallet"))
+        if(walletJson){
+            const wallet = await this.engine.loadWallet(walletJson)
+            this.setWallet(wallet)
+        }
+
 
         this.events.on("centerChanged", (newCenter: Coordinate) => {
             this.setCenter(newCenter);

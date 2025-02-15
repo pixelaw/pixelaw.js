@@ -22,7 +22,7 @@
         "baseUrl": ".",
         "rootDir": ".",
         "paths": {
-            "~/*": ["src/*"]
+
         }
     },
     "include": ["src/**/*.ts", "test/**/*.ts"],
