@@ -45,7 +45,8 @@ export class Canvas2DRenderer {
         this.pixelStore = pixelStore
         this.pixelCoreEvents = pixelCoreEvents
 
-        // TODO handle initialZoom and center
+        this.zoom = initialZoom
+        this.center = initialCenter
 
         this.setupEventListeners()
         this.subscribeToEvents()
