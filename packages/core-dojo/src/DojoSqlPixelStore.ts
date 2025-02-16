@@ -51,7 +51,7 @@ class DojoSqlPixelStore implements PixelStore {
         // console.log({ workerUrl })
         this.worker = new Worker(workerUrl, { type: "module" })
         this.worker.onmessage = this.handleRefreshWorker.bind(this)
-        this.subscribe()
+        // this.subscribe()
     }
 
     public static getInstance(toriiUrl:string, sdk: SDK<SchemaType>): DojoSqlPixelStore {

@@ -81,9 +81,8 @@ export const PixelawProvider = ({children, worldsRegistry, world, engines, coreD
         }
 
         if (pixelawCore) {
-            console.log("loading provider")
 
-            pixelawCore.loadWorld(world, coreDefaults).catch((error) => {
+             pixelawCore.loadWorld(world, coreDefaults).catch((error) => {
                 console.error("Failed to load world:", error)
                 setContextValues((prev) => ({
                     ...prev,
@@ -99,6 +98,7 @@ export const PixelawProvider = ({children, worldsRegistry, world, engines, coreD
         }
 
         return () => {
+
             for (const [event, handler] of Object.entries(handlers)) {
                 // @ts-ignore
                 pixelawCore.events.off(event, handler)
@@ -110,6 +110,7 @@ export const PixelawProvider = ({children, worldsRegistry, world, engines, coreD
 }
 
 export const usePixelawProvider = (): IPixelawContext => {
+
     const context = useContext(PixelawContext)
     if (!context) throw new Error("usePixelawProvider can only be used within a PixelawProvider")
     return context

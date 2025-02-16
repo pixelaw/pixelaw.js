@@ -53,11 +53,11 @@ export class DojoEngine implements Engine {
         }
     }
 
-    async loadWallet(walletJson: WalletJson): Promise<Wallet> {
-        if(walletJson.engine !== ENGINE_ID) throw Error("Incorrect engine for walletJson")
-
-        // TODO uh oh, this is probably in ReactDojo?
-    }
+    // async loadWallet(walletJson: WalletJson): Promise<Wallet> {
+    //     if(walletJson.engine !== ENGINE_ID) throw Error("Incorrect engine for walletJson")
+    //
+    //     // TODO uh oh, this is probably in ReactDojo?
+    // }
 
     handleInteraction(app: App, pixel: Pixel | undefined, color: number): DojoInteraction {
         const result = new DojoInteraction()

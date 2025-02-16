@@ -43,7 +43,7 @@ export async function dojoInit(worldConfig: DojoConfig, schema: SchemaType): Pro
         },
     }
 
-    const sdk = await init<SchemaType>(sdkSetup, schema)    // TODO upgrade
+    const sdk = await init<SchemaType>(sdkSetup)    // TODO upgrade
 
     const { apps, manifest } = await fetchAppsAndManifest(worldConfig)
 

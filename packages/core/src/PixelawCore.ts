@@ -100,6 +100,7 @@ export class PixelawCore {
 
         this.setStatus("initializing")
 
+
         // Engine init will access some core setters, so stuff may change
         await this.engine.init(worldConfig.config)
 
@@ -120,11 +121,11 @@ export class PixelawCore {
         this.worldConfig = worldConfig
 
         // Try to get the Wallet
-        const walletJson = await this.storage.getItem(this.getStorageKey("wallet"))
-        if(walletJson){
-            const wallet = await this.engine.loadWallet(walletJson)
-            this.setWallet(wallet)
-        }
+        // const walletJson = await this.storage.getItem(this.getStorageKey("wallet"))
+        // if(walletJson){
+        //     const wallet = await this.engine.loadWallet(walletJson)
+        //     this.setWallet(wallet)
+        // }
 
 
         this.events.on("centerChanged", (newCenter: Coordinate) => {
@@ -137,6 +138,7 @@ export class PixelawCore {
 
         this.setStatus("ready")
         this.events.emit("engineChanged", this.engine)
+
     }
 
     private setStatus(newStatus: CoreStatus) {

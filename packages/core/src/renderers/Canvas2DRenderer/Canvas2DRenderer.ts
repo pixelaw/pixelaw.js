@@ -271,6 +271,7 @@ export class Canvas2DRenderer {
 
 
     private render() {
+
         if (!this.context || !this.bufferContext) return
 
         this.prepareCanvas()
@@ -350,7 +351,7 @@ export class Canvas2DRenderer {
     }
 
     public setZoom(newZoom: number) {
-        if (this.zoom === newZoom) return
+        if (this.zoom === newZoom || newZoom < 500) return
         this.zoom = newZoom
         this.pixelCoreEvents.emit("zoomChanged", newZoom)
     }
