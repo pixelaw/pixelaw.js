@@ -1,12 +1,12 @@
-import type { Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore } from "../../types.ts"
-import { ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE } from "./constants.ts"
-import { drawGrid } from "./drawGrid.ts"
-import { drawOutline } from "./drawOutline.ts"
-import { drawPixels } from "./drawPixels.ts"
-import { drawTiles } from "./drawTiles.ts"
-import { applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges } from "./utils.ts"
+import type {Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore} from "../../types.ts"
+import {ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE} from "./constants.ts"
+import {drawGrid} from "./drawGrid.ts"
+import {drawOutline} from "./drawOutline.ts"
+import {drawPixels} from "./drawPixels.ts"
+import {drawTiles} from "./drawTiles.ts"
+import {applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges} from "./utils.ts"
 
-import type { Emitter } from "mitt"
+import type {Emitter} from "mitt"
 
 export class Canvas2DRenderer {
     private canvas: HTMLCanvasElement
@@ -31,12 +31,16 @@ export class Canvas2DRenderer {
     private pixelCoreEvents: Emitter<PixelCoreEvents>
     private isRendering = false
 
+    private initialPinchDistance: number | null = null
+    private initialZoom: number = this.zoom
 
-    private initialPinchDistance: number | null = null;
-    private initialZoom: number = this.zoom;
-
-
-    constructor(pixelCoreEvents: Emitter<PixelCoreEvents>, tileStore: TileStore, pixelStore: PixelStore, initialZoom: number, initialCenter: Coordinate) {
+    constructor(
+        pixelCoreEvents: Emitter<PixelCoreEvents>,
+        tileStore: TileStore,
+        pixelStore: PixelStore,
+        initialZoom: number,
+        initialCenter: Coordinate,
+    ) {
         this.canvas = document.createElement("canvas")
         this.context = this.canvas.getContext("2d")
         this.bufferCanvas = document.createElement("canvas")
@@ -45,8 +49,8 @@ export class Canvas2DRenderer {
         this.pixelStore = pixelStore
         this.pixelCoreEvents = pixelCoreEvents
 
-        this.zoom = initialZoom
-        this.center = initialCenter
+        this.setZoom(initialZoom)
+        this.setCenter(initialCenter)
 
         this.setupEventListeners()
         this.subscribeToEvents()
@@ -67,11 +71,13 @@ export class Canvas2DRenderer {
         this.canvas.width = container.clientWidth
         this.canvas.height = container.clientHeight
         container.appendChild(this.canvas)
+        this.pixelStore.prepare(this.calculateWorldViewBounds())
+        this.pixelStore.refresh()
         this.requestRender()
     }
 
     private subscribeToEvents() {
-        if(!this.pixelStore) throw new Error("PixelStore not initialized")
+        if (!this.pixelStore) throw new Error("PixelStore not initialized")
         // TODO decide on whether pixelstore cacheupdated goes to a global event bus or not
         this.pixelStore.eventEmitter.on("cacheUpdated", (timestamp: number) => {
             this.requestRender()
@@ -100,7 +106,6 @@ export class Canvas2DRenderer {
         this.canvas.addEventListener("touchstart", this.handleTouchStart.bind(this), { passive: false })
         this.canvas.addEventListener("touchmove", this.handleTouchMove.bind(this), { passive: false })
         this.canvas.addEventListener("touchend", this.handleTouchEnd.bind(this), { passive: false })
-
     }
 
     private handleMouseDown(event: MouseEvent) {
@@ -202,76 +207,61 @@ export class Canvas2DRenderer {
         this.requestRender()
     }
 
-
     private handleTouchStart(event: TouchEvent) {
-
-         if (event.touches.length === 1) {
-             this.handleMouseDown(event.touches[0] as unknown as MouseEvent)
-         }else
-         if (event.touches.length === 2) {
-            event.preventDefault();
-            const [touch1, touch2] = Array.from(event.touches);
-            this.initialPinchDistance = Math.hypot(
-                touch2.clientX - touch1.clientX,
-                touch2.clientY - touch1.clientY
-            );
-            this.initialZoom = this.zoom;
+        if (event.touches.length === 1) {
+            this.handleMouseDown(event.touches[0] as unknown as MouseEvent)
+        } else if (event.touches.length === 2) {
+            event.preventDefault()
+            const [touch1, touch2] = Array.from(event.touches)
+            this.initialPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY)
+            this.initialZoom = this.zoom
         }
     }
 
     private handleTouchMove(event: TouchEvent) {
-
         if (event.touches.length === 1) {
             this.handleMouseMove(event.touches[0] as unknown as MouseEvent)
         } else if (event.touches.length === 2 && this.initialPinchDistance !== null) {
-            event.preventDefault();
-            const [touch1, touch2] = Array.from(event.touches);
-            const currentDistance = Math.hypot(
-                touch2.clientX - touch1.clientX,
-                touch2.clientY - touch1.clientY
-            );
+            event.preventDefault()
+            const [touch1, touch2] = Array.from(event.touches)
+            const currentDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY)
 
-            const scaleFactor = currentDistance / this.initialPinchDistance;
-            let newZoom = Math.round(this.initialZoom * scaleFactor);
+            const scaleFactor = currentDistance / this.initialPinchDistance
+            let newZoom = Math.round(this.initialZoom * scaleFactor)
 
             // Ensure the new zoom level does not exceed ZOOM_MAX
-            newZoom = Math.min(Math.max(newZoom, ZOOM_MIN), ZOOM_MAX);
+            newZoom = Math.min(Math.max(newZoom, ZOOM_MIN), ZOOM_MAX)
 
             // Calculate the midpoint between the two touch points
-            const rect = this.canvas.getBoundingClientRect();
-            const midX = (touch1.clientX + touch2.clientX) / 2 - rect.left;
-            const midY = (touch1.clientY + touch2.clientY) / 2 - rect.top;
+            const rect = this.canvas.getBoundingClientRect()
+            const midX = (touch1.clientX + touch2.clientX) / 2 - rect.left
+            const midY = (touch1.clientY + touch2.clientY) / 2 - rect.top
 
             // Calculate mouse cells before and after zoom
-            const mouseCellBeforeZoom = cellForPosition(this.zoom, this.pixelOffset, [midX, midY]);
-            const mouseCellAfterZoom = cellForPosition(newZoom, this.pixelOffset, [midX, midY]);
+            const mouseCellBeforeZoom = cellForPosition(this.zoom, this.pixelOffset, [midX, midY])
+            const mouseCellAfterZoom = cellForPosition(newZoom, this.pixelOffset, [midX, midY])
 
-            const cellDiffX = mouseCellAfterZoom[0] - mouseCellBeforeZoom[0];
-            const cellDiffY = mouseCellAfterZoom[1] - mouseCellBeforeZoom[1];
+            const cellDiffX = mouseCellAfterZoom[0] - mouseCellBeforeZoom[0]
+            const cellDiffY = mouseCellAfterZoom[1] - mouseCellBeforeZoom[1]
 
-            this.setZoom(newZoom);
-            this.worldOffset = [this.worldOffset[0] + cellDiffX, this.worldOffset[1] + cellDiffY];
-            this.requestRender();
+            this.setZoom(newZoom)
+            this.worldOffset = [this.worldOffset[0] + cellDiffX, this.worldOffset[1] + cellDiffY]
+            this.requestRender()
         }
     }
-
-
 
     private handleTouchEnd(event: TouchEvent) {
-
         if (event.touches.length === 0) {
             // Reset pinch-related variables when all touches are lifted
-            this.initialPinchDistance = null;
-            this.initialZoom = this.zoom;
+            this.initialPinchDistance = null
+            this.initialZoom = this.zoom
         } else if (event.touches.length === 1) {
             // Handle as a mouse up event if there's still one touch remaining
-            this.handleMouseUp(event.touches[0] as unknown as MouseEvent);
+            this.handleMouseUp(event.touches[0] as unknown as MouseEvent)
         }
     }
 
-
     private render() {
-
         if (!this.context || !this.bufferContext) return
 
         this.prepareCanvas()
@@ -358,7 +348,6 @@ export class Canvas2DRenderer {
 
     public setCenter(newCenter: Coordinate) {
         if (this.center === newCenter) return
-
         this.center = newCenter
         this.pixelCoreEvents.emit("centerChanged", newCenter)
         this.pixelStore.prepare(this.calculateWorldViewBounds())

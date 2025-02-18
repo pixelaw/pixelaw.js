@@ -76,8 +76,7 @@ export class DojoEngine implements Engine {
                 )
                 const wallet = this.core.getWallet() as DojoWallet
                 const account = wallet.getAccount()
-                console.log("acc", account)
-                console.log("dojoCall", dojoCall)
+
                 this.dojoSetup.provider
                     .execute(account!, dojoCall, NAMESPACE, {})
                     .then((res) => {
@@ -105,9 +104,4 @@ export class DojoEngine implements Engine {
 
         return result
     }
-
-    // setAccount(account: unknown | null) {
-    //     console.log({ account })
-    //     this.account = account as Account
-    // }
 }

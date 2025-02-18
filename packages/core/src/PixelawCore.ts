@@ -14,12 +14,12 @@ import type {
     UpdateService,
     Wallet,
     WorldConfig,
-    WorldsRegistry
+    WorldsRegistry,
 } from "./types.ts"
 
 import mitt from "mitt"
-import {createStorage, type Storage} from "unstorage";
-import nullDriver from "unstorage/drivers/null";
+import {createStorage, type Storage} from "unstorage"
+import nullDriver from "unstorage/drivers/null"
 import {Canvas2DRenderer} from "./renderers"
 
 export class PixelawCore {
@@ -64,7 +64,6 @@ export class PixelawCore {
     public setWallet(wallet: Wallet | null) {
         this.wallet = wallet
         this.events.emit("walletChanged", wallet)
-        console.log("stored wallet", { wallet })
         this.storage.setItem(this.getStorageKey("wallet"), wallet)
     }
 
@@ -87,8 +86,7 @@ export class PixelawCore {
         }
     }
 
-    public async loadWorld(world: string, coreDefaults?: CoreDefaults) {
-        console.log("loadWorld")
+    public async loadWorld(world: string, urlDefaults?: CoreDefaults) {
         if (!Object.prototype.hasOwnProperty.call(this.worldsRegistry, world))
             throw Error(`World ${world} does not exist in registry`)
 
@@ -114,7 +112,7 @@ export class PixelawCore {
 
         const storageDefaults = await this.getStorageDefaults()
 
-        const defaults = storageDefaults ?? coreDefaults ?? worldConfig.defaults
+        const defaults = urlDefaults ?? storageDefaults ?? worldConfig.defaults
         if (defaults) {
             this.setApp(defaults.app)
             this.setColor(defaults.color)
@@ -186,8 +184,9 @@ export class PixelawCore {
     }
 
     public setZoom(newZoom: number) {
+        if (this.zoom === newZoom) return
         this.zoom = newZoom
-        // this.events.emit("zoomChanged", newZoom)
+        this.events.emit("zoomChanged", newZoom)
         this.storage.setItem(this.getStorageKey("zoom"), newZoom)
     }
 
@@ -196,8 +195,9 @@ export class PixelawCore {
     }
 
     public setCenter(newCenter: Coordinate) {
+        if (this.center === newCenter) return
         this.center = newCenter
-        // this.events.emit("centerChanged", newCenter)
+        this.events.emit("centerChanged", newCenter)
         this.storage.setItem(this.getStorageKey("center"), newCenter)
     }
 

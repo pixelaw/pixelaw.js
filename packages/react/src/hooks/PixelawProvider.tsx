@@ -47,7 +47,6 @@ export const PixelawProvider = ({
     engines: EngineConstructor<Engine>[]
     coreDefaults?: CoreDefaults
 }) => {
-
     const [pixelawCore] = useState(
         () =>
             new PixelawCore(
@@ -110,7 +109,6 @@ export const PixelawProvider = ({
                     clientError: error,
                 }))
             })
-            console.log("loaded")
         }
 
         for (const [event, handler] of Object.entries(handlers)) {

@@ -1,6 +1,6 @@
-import type { Coordinate, Dimension, PixelStore } from "../../types.ts"
-import { ZOOM_TILEMODE } from "./constants.ts"
-import { applyWorldOffset, getCellSize, numRGBAToHex } from "./utils.ts"
+import type {Coordinate, Dimension, PixelStore} from "../../types.ts"
+import {ZOOM_TILEMODE} from "./constants.ts"
+import {applyWorldOffset, getCellSize, numRGBAToHex} from "./utils.ts"
 
 export function drawPixels(
     context: CanvasRenderingContext2D,
@@ -19,7 +19,6 @@ export function drawPixels(
     // How many pixels a cell extends offscreen
     const offsets: Coordinate = [0 - pixelOffset[0], 0 - pixelOffset[1]]
 
-    // console.log("p", cellSize)
     const drawPixel = (cellX: number, cellY: number, sizeAdjustment = 0) => {
         const worldCoords = applyWorldOffset(worldTranslation, [cellX, cellY])
 
