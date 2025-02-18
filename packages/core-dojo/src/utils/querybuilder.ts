@@ -1,5 +1,6 @@
-
-import { type Bounds, MAX_DIMENSION, QUERY_BUFFER } from "@pixelaw/core"
+import type {SchemaType} from "@/generated/models.gen.ts"
+import {ToriiQueryBuilder} from "@dojoengine/sdk"
+import {type Bounds, MAX_DIMENSION, QUERY_BUFFER} from "@pixelaw/core"
 
 export function getQueryBounds(viewBounds: Bounds): Bounds {
     const [[left, top], [right, bottom]] = viewBounds
@@ -36,6 +37,14 @@ export function getQueryBounds(viewBounds: Bounds): Bounds {
         [l, t],
         [r, b],
     ]
+}
+export function buildSubscriptionQuery(): ToriiQueryBuilder<SchemaType> {
+    const builder = new ToriiQueryBuilder<SchemaType>()
+    const timestamp = Date.now()
+    // TODO tweak the query, it works with withLimit(10) and withOffset(10) but removing them
+    // leads to a grpc error.
+    const query = builder.withLimit(10).withOffset(10).addEntityModel("pixel").updatedAfter(timestamp)
+    return query
 }
 
 export const SUBSCRIPTION_QUERY = {

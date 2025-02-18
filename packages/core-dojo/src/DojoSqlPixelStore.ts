@@ -7,11 +7,11 @@ import {
     MAX_DIMENSION,
     type Pixel,
     type PixelStore,
-    type PixelStoreEvents
+    type PixelStoreEvents,
 } from "@pixelaw/core"
 import mitt from "mitt"
 import type {SchemaType} from "./generated/models.gen.ts"
-import {getQueryBounds, SUBSCRIPTION_QUERY} from "./utils/querybuilder.ts"
+import {buildSubscriptionQuery, getQueryBounds} from "./utils/querybuilder.ts"
 
 type State = { [key: string]: Pixel | undefined }
 
@@ -51,7 +51,7 @@ class DojoSqlPixelStore implements PixelStore {
     private worker: Worker
     private toriiUrl: string
 
-    constructor(toriiUrl: string, sdk: SDK<SchemaType>) {
+    protected constructor(toriiUrl: string, sdk: SDK<SchemaType>) {
         this.sdk = sdk
         this.toriiUrl = toriiUrl
         const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url)
@@ -75,7 +75,7 @@ class DojoSqlPixelStore implements PixelStore {
         try {
             const [initialEntities, subscription] = await this.sdk.subscribeEntityQuery({
                 // @ts-ignore TODO fix the type of query
-                query: SUBSCRIPTION_QUERY,
+                query: buildSubscriptionQuery(),
                 callback: (response) => {
                     if (response.error) {
                         console.error("Error setting up entity sync:", response.error)
