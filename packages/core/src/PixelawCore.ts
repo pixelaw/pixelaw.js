@@ -1,4 +1,5 @@
 import type {
+    BaseWallet,
     Coordinate,
     CoreDefaults,
     Interaction,
@@ -11,7 +12,7 @@ import type {
 import type { CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfig } from "./types.ts"
 
 import mitt from "mitt"
-import { type Storage, createStorage, prefixStorage } from "unstorage";
+import { type Storage, createStorage } from "unstorage";
 import nullDriver from "unstorage/drivers/null";
 import { Canvas2DRenderer } from "./renderers"
 import type { AppStore, TileStore } from "./types.ts"
@@ -35,7 +36,7 @@ export class PixelawCore {
     private center: Coordinate = [0, 0]
     private world: string
     private engines: Set<EngineConstructor<Engine>> = new Set()
-    private wallet: Wallet | null =  null
+    private wallet: Wallet | BaseWallet | null =  null
     private storage: Storage
 
     constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry, storage: Storage = createStorage({driver: nullDriver()})) {
@@ -48,18 +49,17 @@ export class PixelawCore {
         this.storage = storage
     }
 
-    public getWallet():  Wallet | null{
+    public getWallet():  Wallet| BaseWallet | null{
         return this.wallet
     }
 
     public setWallet(wallet: Wallet | null){
         this.wallet = wallet
         this.events.emit("walletChanged", wallet)
-
+        console.log("stored wallet", {wallet})
         this.storage.setItem(this.getStorageKey("wallet"),wallet)
 
     }
-
 
     public getEngine(): string | null {
         return this.engine ? this.engine.constructor.name : null
@@ -121,11 +121,13 @@ export class PixelawCore {
         this.worldConfig = worldConfig
 
         // Try to get the Wallet
-        // const walletJson = await this.storage.getItem(this.getStorageKey("wallet"))
-        // if(walletJson){
-        //     const wallet = await this.engine.loadWallet(walletJson)
-        //     this.setWallet(wallet)
-        // }
+        const baseWallet = await this.storage.getItem(this.getStorageKey("wallet"))
+        if(baseWallet){
+            this.wallet = baseWallet as unknown as BaseWallet
+
+            // @ts-ignore FIXME it works but its not great
+            this.events.emit("walletChanged", baseWallet)
+        }
 
 
         this.events.on("centerChanged", (newCenter: Coordinate) => {

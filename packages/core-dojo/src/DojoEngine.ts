@@ -1,23 +1,16 @@
-import {
-    NAMESPACE,
-    type PixelawCore,
-    RestTileStore,
-    type Wallet,
-    type WalletJson,
-    WsUpdateService,
-    createDialog
-} from "@pixelaw/core"
+import { type Engines, NAMESPACE, type PixelawCore, RestTileStore, WsUpdateService, createDialog } from "@pixelaw/core"
 import type { App, Engine, EngineStatus, Pixel, PixelStore, Position } from "@pixelaw/core"
 import { DojoAppStore } from "./DojoAppStore.ts"
 import { type DojoStuff, dojoInit } from "./DojoEngine.init.ts"
 import { DojoInteraction } from "./DojoInteraction.ts"
 import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
-import type {DojoWallet} from "./DojoWallet.ts";
+import type { DojoWallet } from "./DojoWallet.ts"
 import { schema } from "./generated/models.gen.ts"
-import {type DojoConfig, ENGINE_ID} from "./types.ts"
+import { type DojoConfig, ENGINE_ID } from "./types.ts"
 import getParamsDef, { generateDojoCall } from "./utils/paramsDef.ts"
 
 export class DojoEngine implements Engine {
+    id: Engines = ENGINE_ID
     status: EngineStatus = "uninitialized"
     config: DojoConfig = null!
     dojoSetup: DojoStuff | null = null
@@ -40,21 +33,18 @@ export class DojoEngine implements Engine {
             // Setup PixelStore
             this.core.pixelStore = new DojoSqlPixelStore(this.config.toriiUrl, this.dojoSetup!.sdk!)
 
-
             // Setup UpdateService
             this.core.updateService = new WsUpdateService(config.serverUrl)
 
-
             // Setup TileStore
             this.core.tileStore = new RestTileStore(config.serverUrl)
-
         } catch (error) {
             console.error("Dojo init error:", error)
         }
     }
 
-    // async loadWallet(walletJson: WalletJson): Promise<Wallet> {
-    //     if(walletJson.engine !== ENGINE_ID) throw Error("Incorrect engine for walletJson")
+    // async loadWallet(BaseWallet: BaseWallet): Promise<Wallet> {
+    //     if(BaseWallet.engine !== ENGINE_ID) throw Error("Incorrect engine for BaseWallet")
     //
     //     // TODO uh oh, this is probably in ReactDojo?
     // }

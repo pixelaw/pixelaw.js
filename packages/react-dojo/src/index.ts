@@ -1,2 +1,2 @@
-export * from "./components/StarknetWallet/StarknetWallet"
+export * from "./hooks/StarknetChainProvider"
 export * from "./pages/StarknetWalletSelectorPage"

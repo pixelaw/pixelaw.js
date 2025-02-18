@@ -1,16 +1,13 @@
-import type {
-    App,
-    Engine,
-    EngineStatus,
-    Interaction,
-    Pixel,PixelawCore
-} from "@pixelaw/core"
+import type { App, Engine, EngineStatus, Engines, Interaction, Pixel, PixelawCore } from "@pixelaw/core"
 
 export type MudConfig = {
     todo: number
 }
 
+const ENGINE_ID = "mud"
+
 export class MudEngine implements Engine {
+    id: Engines = ENGINE_ID
     status: EngineStatus = "uninitialized"
     config: MudConfig = null!
     core: PixelawCore

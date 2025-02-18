@@ -1,4 +1,4 @@
-import type { Options } from "tsup";
+import type { Options } from "tsup"
 
 export const tsupConfig: Options = {
     entry: ["src/index.ts"],
@@ -7,7 +7,8 @@ export const tsupConfig: Options = {
     dts: true,
     sourcemap: true,
     clean: true,
-    minify: true,
+    minify: false,
+    splitting: true,
     terserOptions: {
         // Ensure the options are compatible with the specified terser version
         format: {
@@ -17,4 +18,4 @@ export const tsupConfig: Options = {
             drop_console: true,
         },
     },
-};
+}

@@ -1,5 +1,5 @@
 import type mitt from "mitt"
-import type {PixelawCore} from "./PixelawCore.ts";
+import type { PixelawCore } from "./PixelawCore.ts"
 
 export type Pixel = {
     action: string
@@ -126,6 +126,7 @@ export type PixelCoreEvents = {
 export type EngineStatus = "ready" | "loading" | "error" | "uninitialized"
 export type CoreStatus = "uninitialized" | "loadConfig" | "initializing" | "ready" | "error"
 export interface Engine {
+    id: Engines
     core: PixelawCore
     status: EngineStatus
 
@@ -145,10 +146,12 @@ export interface WalletConfig {
     url?: string
 }
 
-export type WorldsRegistry = Record<string, WorldConfig>;
+export type WorldsRegistry = Record<string, WorldConfig>
+
+export type Engines = "dojo" | "mud"
 
 export type WorldConfig = {
-    engine: string
+    engine: Engines
     description: string
     defaults?: CoreDefaults
     config: unknown
@@ -157,7 +160,7 @@ export type WorldConfig = {
 export type CoreDefaults = {
     app: string
     color: number
-    center: number[]    // same as Coordinate
+    center: number[] // same as Coordinate
     zoom: number
 }
 
@@ -176,17 +179,21 @@ export interface PixelStore {
     unload?: () => Promise<void>
 }
 
-export interface Wallet {
-    id: string
-    address: string;
+export class BaseWallet {
+    engine: string
+    id: unknown
+    address: string
     chainId: string
-    getAccount: () => unknown
-    toJSON: () => unknown
+
+    constructor(engine: string, id: string, address: string, chainId: string) {
+        this.engine = engine
+        this.id = id
+        this.address = address
+        this.chainId = chainId
+    }
 }
 
-export interface WalletJson {
-    engine: string
-    id: string
-    address: string;
-    chainId: string
+export abstract class Wallet extends BaseWallet {
+    abstract getAccount(): unknown
+    abstract toJSON(): unknown
 }

@@ -17,12 +17,7 @@
     "react-dom": "^18.2.0",
     "starknet": "6.21.0"
   },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
+
   "devDependencies": {
     "@types/node": "^18.19.50",
     "@types/react": "^18.3.9",

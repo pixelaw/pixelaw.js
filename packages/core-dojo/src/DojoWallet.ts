@@ -1,4 +1,4 @@
-import type {Wallet, WalletJson} from "@pixelaw/core";
+import {type BaseWallet, Wallet} from "@pixelaw/core";
 import type { AccountInterface} from "starknet";
 import {ENGINE_ID} from "./types.ts";
 
@@ -10,27 +10,22 @@ export type DojoWalletId =
     | "burner"
     | "controller";
 
-export class DojoWallet implements Wallet{
-    id: DojoWalletId;
-    address: string;
-    chainId: string
+export class DojoWallet extends Wallet{
+
     account: AccountInterface
 
     constructor(walletId: DojoWalletId, chainId: string, account: AccountInterface) {
-        this.id = walletId
-        this.address = account.address
-        this.chainId = chainId
+        super(ENGINE_ID, walletId, account.address, chainId );
         this.account = account
-        console.log({walletId, chainId: this.chainId})
     }
 
     getAccount(): AccountInterface {
         return this.account;
     }
 
-    toJSON(): WalletJson {
-        const { id, address, chainId } = this;
-        return { engine: ENGINE_ID, id, address, chainId };
+    toJSON(): BaseWallet {
+        const { engine, id, address, chainId } = this;
+        return { engine, id, address, chainId };
     }
 
 }
