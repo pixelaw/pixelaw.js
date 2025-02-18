@@ -30,6 +30,23 @@ export function drawPixels(
         const [x, y, w, h] = getRect(offsets, cellX, cellY, cellSize, doBorder, sizeAdjustment)
 
         context.fillRect(x, y, w, h)
+
+        // Draw an emoji at the center of the pixel
+        // Array of random emojis
+        const emojis = ["R", "O", "😍", "😎", "🤔", "😢", "😜", "😇", "😡", "🥳"]
+
+        // Select a random emoji
+        const emoji = emojis[Math.floor(Math.random() * emojis.length)]
+        // console.log(pixel.text)
+        // const emoji = pixel.text.codePointAt(0)
+        if (!emoji) return
+
+        const fontWeight = "300"
+        context.font = `${fontWeight} ${cellSize * 0.8}px "Noto Emoji", serif`
+        context.textAlign = "center"
+        context.textBaseline = "middle"
+        context.fillStyle = "#000000"
+        context.fillText(emoji, x + w / 2, y + h * 0.55)
     }
 
     for (let x = 0; x <= gridDimensions[0]; x++) {
@@ -38,9 +55,9 @@ export function drawPixels(
         }
     }
 
-    if (hoveredCell && zoom > ZOOM_TILEMODE) {
-        drawPixel(hoveredCell[0], hoveredCell[1], 15)
-    }
+    // if (hoveredCell && zoom > ZOOM_TILEMODE) {
+    //     drawPixel(hoveredCell[0], hoveredCell[1], 15)
+    // }
 }
 
 function getRect(

@@ -19,7 +19,7 @@ export function createSqlQuery(bounds: Bounds) {
     const [[left, top], [right, bottom]] = bounds
     const xWraps = right - left < 0
     const yWraps = bottom - top < 0
-    let result = `SELECT color as 'c', substr(text,  -4) as 't', (x << 16) | y AS v FROM "pixelaw-Pixel" WHERE( 1 = 0 ) `
+    let result = `SELECT json_array(color,  CAST(substr(text, -16) AS INTEGER) , (x << 16) | y ) as d FROM "pixelaw-Pixel" WHERE( 1 = 0 ) `
     const ZERO = 0
 
     if (xWraps && yWraps) {
