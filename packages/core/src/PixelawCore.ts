@@ -1,22 +1,26 @@
 import type {
+    AppStore,
     BaseWallet,
     Coordinate,
     CoreDefaults,
+    CoreStatus,
+    Engine,
+    EngineConstructor,
     Interaction,
     Pixel,
+    PixelCoreEvents,
     PixelStore,
+    TileStore,
     UpdateService,
     Wallet,
+    WorldConfig,
     WorldsRegistry
 } from "./types.ts"
-import type { CoreStatus, Engine, EngineConstructor, PixelCoreEvents, WorldConfig } from "./types.ts"
 
 import mitt from "mitt"
-import { type Storage, createStorage } from "unstorage";
+import {createStorage, type Storage} from "unstorage";
 import nullDriver from "unstorage/drivers/null";
-import { Canvas2DRenderer } from "./renderers"
-import type { AppStore, TileStore } from "./types.ts"
-
+import {Canvas2DRenderer} from "./renderers"
 
 export class PixelawCore {
     status: CoreStatus = "uninitialized"
@@ -36,10 +40,14 @@ export class PixelawCore {
     private center: Coordinate = [0, 0]
     private world: string
     private engines: Set<EngineConstructor<Engine>> = new Set()
-    private wallet: Wallet | BaseWallet | null =  null
+    private wallet: Wallet | BaseWallet | null = null
     private storage: Storage
 
-    constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry, storage: Storage = createStorage({driver: nullDriver()})) {
+    constructor(
+        engines: EngineConstructor<Engine>[],
+        worldsRegistry: WorldsRegistry,
+        storage: Storage = createStorage({ driver: nullDriver() }),
+    ) {
         for (const engine of engines) {
             this.engines.add(engine)
         }
@@ -49,16 +57,15 @@ export class PixelawCore {
         this.storage = storage
     }
 
-    public getWallet():  Wallet| BaseWallet | null{
+    public getWallet(): Wallet | BaseWallet | null {
         return this.wallet
     }
 
-    public setWallet(wallet: Wallet | null){
+    public setWallet(wallet: Wallet | null) {
         this.wallet = wallet
         this.events.emit("walletChanged", wallet)
-        console.log("stored wallet", {wallet})
-        this.storage.setItem(this.getStorageKey("wallet"),wallet)
-
+        console.log("stored wallet", { wallet })
+        this.storage.setItem(this.getStorageKey("wallet"), wallet)
     }
 
     public getEngine(): string | null {
@@ -71,19 +78,19 @@ export class PixelawCore {
             this.storage.getItem(this.getStorageKey("app")),
             this.storage.getItem(this.getStorageKey("color")),
             this.storage.getItem(this.getStorageKey("center")),
-            this.storage.getItem(this.getStorageKey("zoom"))
-        ]);
+            this.storage.getItem(this.getStorageKey("zoom")),
+        ])
 
         // Check for undefined values directly, improving readability
         if (app !== null && color !== null && center !== null && zoom !== null) {
-            return { app: app as string, color: color as number, center: center as number[], zoom: zoom as number };
+            return { app: app as string, color: color as number, center: center as number[], zoom: zoom as number }
         }
     }
 
-
     public async loadWorld(world: string, coreDefaults?: CoreDefaults) {
-
-        if(!Object.prototype.hasOwnProperty.call(this.worldsRegistry, world)) throw Error(`World ${world} does not exist in registry`)
+        console.log("loadWorld")
+        if (!Object.prototype.hasOwnProperty.call(this.worldsRegistry, world))
+            throw Error(`World ${world} does not exist in registry`)
 
         this.setStatus("loadConfig")
         const worldConfig = this.worldsRegistry[world]
@@ -100,7 +107,6 @@ export class PixelawCore {
 
         this.setStatus("initializing")
 
-
         // Engine init will access some core setters, so stuff may change
         await this.engine.init(worldConfig.config)
 
@@ -108,12 +114,12 @@ export class PixelawCore {
 
         const storageDefaults = await this.getStorageDefaults()
 
-        const defaults = storageDefaults ?? coreDefaults ?? worldConfig.defaults;
+        const defaults = storageDefaults ?? coreDefaults ?? worldConfig.defaults
         if (defaults) {
-            this.setApp(defaults.app);
-            this.setColor(defaults.color);
-            this.setCenter(defaults.center as Coordinate);
-            this.setZoom(defaults.zoom);
+            this.setApp(defaults.app)
+            this.setColor(defaults.color)
+            this.setCenter(defaults.center as Coordinate)
+            this.setZoom(defaults.zoom)
         }
 
         this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore, this.zoom, this.center)
@@ -122,25 +128,23 @@ export class PixelawCore {
 
         // Try to get the Wallet
         const baseWallet = await this.storage.getItem(this.getStorageKey("wallet"))
-        if(baseWallet){
+        if (baseWallet) {
             this.wallet = baseWallet as unknown as BaseWallet
 
             // @ts-ignore FIXME it works but its not great
             this.events.emit("walletChanged", baseWallet)
         }
 
-
         this.events.on("centerChanged", (newCenter: Coordinate) => {
-            this.setCenter(newCenter);
-        });
+            this.setCenter(newCenter)
+        })
 
         this.events.on("zoomChanged", (newZoom: number) => {
-            this.setZoom(newZoom);
-        });
+            this.setZoom(newZoom)
+        })
 
         this.setStatus("ready")
         this.events.emit("engineChanged", this.engine)
-
     }
 
     private setStatus(newStatus: CoreStatus) {
@@ -148,7 +152,7 @@ export class PixelawCore {
         this.events.emit("statusChanged", newStatus)
     }
 
-    public getWorldsRegistry(): WorldsRegistry  {
+    public getWorldsRegistry(): WorldsRegistry {
         return this.worldsRegistry
     }
 
@@ -159,22 +163,22 @@ export class PixelawCore {
     public setApp(newApp: string | null) {
         this.app = newApp
         this.events.emit("appChanged", newApp)
-        this.storage.setItem(this.getStorageKey("app"),newApp)
+        this.storage.setItem(this.getStorageKey("app"), newApp)
     }
 
-    private setWorld(newWorld: string ) {
+    private setWorld(newWorld: string) {
         this.world = newWorld
         this.events.emit("worldChanged", newWorld)
     }
 
-    public getColor(): number  {
+    public getColor(): number {
         return this.color
     }
 
     public setColor(newColor: number | null) {
         this.color = newColor
         this.events.emit("colorChanged", newColor)
-        this.storage.setItem(this.getStorageKey("color"),newColor)
+        this.storage.setItem(this.getStorageKey("color"), newColor)
     }
 
     public getZoom(): number {
@@ -184,7 +188,7 @@ export class PixelawCore {
     public setZoom(newZoom: number) {
         this.zoom = newZoom
         // this.events.emit("zoomChanged", newZoom)
-        this.storage.setItem(this.getStorageKey("zoom"),newZoom)
+        this.storage.setItem(this.getStorageKey("zoom"), newZoom)
     }
 
     public getCenter(): Coordinate {
@@ -194,7 +198,7 @@ export class PixelawCore {
     public setCenter(newCenter: Coordinate) {
         this.center = newCenter
         // this.events.emit("centerChanged", newCenter)
-        this.storage.setItem(this.getStorageKey("center"),newCenter)
+        this.storage.setItem(this.getStorageKey("center"), newCenter)
     }
 
     public getWorld(): string {

@@ -47,12 +47,17 @@ export const PixelawProvider = ({
     engines: EngineConstructor<Engine>[]
     coreDefaults?: CoreDefaults
 }) => {
-    console.log("prov")
-    const storage = createStorage({
-        driver: localStorageDriver({}),
-    })
 
-    const [pixelawCore] = useState(() => new PixelawCore(engines, worldsRegistry, storage))
+    const [pixelawCore] = useState(
+        () =>
+            new PixelawCore(
+                engines,
+                worldsRegistry,
+                createStorage({
+                    driver: localStorageDriver({}),
+                }),
+            ),
+    )
 
     const [contextValues, setContextValues] = useState<IPixelawContext>({
         pixelawCore,
