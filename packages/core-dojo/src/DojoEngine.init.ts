@@ -1,14 +1,14 @@
-import type { DojoConfig } from "@/types.ts"
+import type {DojoConfig} from "@/types.ts"
 import type ControllerConnector from "@cartridge/connector/controller"
-import { DojoProvider } from "@dojoengine/core"
-import type { Manifest } from "@dojoengine/core"
-import { BurnerConnector, BurnerManager, type BurnerManagerOptions } from "@dojoengine/create-burner"
-import { init } from "@dojoengine/sdk"
-import type { SDK } from "@dojoengine/sdk"
-import type { App } from "@pixelaw/core"
-import { Account, RpcProvider, shortString } from "starknet"
-import type { SchemaType } from "./generated/models.gen.ts"
-import { getControllerConnector } from "./utils/controller.ts"
+import type {Manifest} from "@dojoengine/core"
+import {DojoProvider} from "@dojoengine/core"
+import {BurnerConnector, BurnerManager, type BurnerManagerOptions} from "@dojoengine/create-burner"
+import type {SDK} from "@dojoengine/sdk"
+import {init} from "@dojoengine/sdk"
+import type {App} from "@pixelaw/core"
+import {Account, RpcProvider} from "starknet"
+import type {SchemaType} from "./generated/models.gen.ts"
+import {getControllerConnector} from "./utils/controller.ts"
 import baseManifest from "./utils/manifest.js"
 import {felt252ToString, felt252ToUnicode, formatAddress, getAbi} from "./utils/utils.ts"
 
@@ -23,7 +23,7 @@ export type DojoStuff = {
 const controllerConnectorCache = new Map<string, ControllerConnector | null>()
 const burnerConnectorCache = new Map<string, Promise<BurnerConnector | null>>()
 
-export async function dojoInit(worldConfig: DojoConfig, schema: SchemaType): Promise<DojoStuff> {
+export async function dojoInit(worldConfig: DojoConfig): Promise<DojoStuff> {
     if (!worldConfig) {
         throw new Error("WorldConfig is not loaded")
     }
@@ -43,7 +43,7 @@ export async function dojoInit(worldConfig: DojoConfig, schema: SchemaType): Pro
         },
     }
 
-    const sdk = await init<SchemaType>(sdkSetup)    // TODO upgrade
+    const sdk = await init<SchemaType>(sdkSetup)
 
     const { apps, manifest } = await fetchAppsAndManifest(worldConfig)
 
@@ -150,10 +150,8 @@ async function setupBurnerConnector(
 
             if (manager.list().length === 0) {
                 try {
-
                     await manager.create()
                 } catch (e) {
-
                     console.error(e)
                 }
             }

@@ -1,13 +1,12 @@
-import { type Engines, NAMESPACE, type PixelawCore, RestTileStore, WsUpdateService, createDialog } from "@pixelaw/core"
-import type { App, Engine, EngineStatus, Pixel, PixelStore, Position } from "@pixelaw/core"
-import { DojoAppStore } from "./DojoAppStore.ts"
-import { type DojoStuff, dojoInit } from "./DojoEngine.init.ts"
-import { DojoInteraction } from "./DojoInteraction.ts"
+import type {App, Engine, EngineStatus, Pixel, Position} from "@pixelaw/core"
+import {createDialog, type Engines, NAMESPACE, type PixelawCore, RestTileStore, WsUpdateService} from "@pixelaw/core"
+import {DojoAppStore} from "./DojoAppStore.ts"
+import {dojoInit, type DojoStuff} from "./DojoEngine.init.ts"
+import {DojoInteraction} from "./DojoInteraction.ts"
 import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
-import type { DojoWallet } from "./DojoWallet.ts"
-import { schema } from "./generated/models.gen.ts"
-import { type DojoConfig, ENGINE_ID } from "./types.ts"
-import getParamsDef, { generateDojoCall } from "./utils/paramsDef.ts"
+import type {DojoWallet} from "./DojoWallet.ts"
+import {type DojoConfig, ENGINE_ID} from "./types.ts"
+import getParamsDef, {generateDojoCall} from "./utils/paramsDef.ts"
 
 export class DojoEngine implements Engine {
     id: Engines = ENGINE_ID
@@ -24,7 +23,7 @@ export class DojoEngine implements Engine {
         this.config = config
         try {
             // Setup Dojo
-            this.dojoSetup = await dojoInit(this.config, schema)
+            this.dojoSetup = await dojoInit(this.config)
             this.status = this.dojoSetup ? "ready" : "error"
 
             // Setup AppStore

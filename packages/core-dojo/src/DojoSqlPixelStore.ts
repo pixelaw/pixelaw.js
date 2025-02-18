@@ -1,9 +1,17 @@
-import type { SDK } from "@dojoengine/sdk"
-import { MAX_DIMENSION, type PixelStore, type PixelStoreEvents } from "@pixelaw/core"
-import { type Bounds, type Coordinate, type Pixel, areBoundsEqual, makeString } from "@pixelaw/core"
+import type {SDK} from "@dojoengine/sdk"
+import {
+    areBoundsEqual,
+    type Bounds,
+    type Coordinate,
+    makeString,
+    MAX_DIMENSION,
+    type Pixel,
+    type PixelStore,
+    type PixelStoreEvents
+} from "@pixelaw/core"
 import mitt from "mitt"
-import type { SchemaType } from "./generated/models.gen.ts"
-import { SUBSCRIPTION_QUERY, getQueryBounds } from "./utils/querybuilder.ts"
+import type {SchemaType} from "./generated/models.gen.ts"
+import {getQueryBounds, SUBSCRIPTION_QUERY} from "./utils/querybuilder.ts"
 
 type State = { [key: string]: Pixel | undefined }
 
@@ -43,7 +51,7 @@ class DojoSqlPixelStore implements PixelStore {
     private worker: Worker
     private toriiUrl: string
 
-    constructor(toriiUrl:string, sdk: SDK<SchemaType>) {
+    constructor(toriiUrl: string, sdk: SDK<SchemaType>) {
         this.sdk = sdk
         this.toriiUrl = toriiUrl
         const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url)
@@ -51,10 +59,10 @@ class DojoSqlPixelStore implements PixelStore {
         // console.log({ workerUrl })
         this.worker = new Worker(workerUrl, { type: "module" })
         this.worker.onmessage = this.handleRefreshWorker.bind(this)
-        // this.subscribe() // Fix dojo upgrade, now this crashes
+        this.subscribe()
     }
 
-    public static getInstance(toriiUrl:string, sdk: SDK<SchemaType>): DojoSqlPixelStore {
+    public static getInstance(toriiUrl: string, sdk: SDK<SchemaType>): DojoSqlPixelStore {
         if (!DojoSqlPixelStore.instance) {
             DojoSqlPixelStore.instance = new DojoSqlPixelStore(toriiUrl, sdk)
         }
@@ -65,19 +73,17 @@ class DojoSqlPixelStore implements PixelStore {
         if (this.isSubscribed) return
 
         try {
-            const subscription = await this.sdk.subscribeEntityQuery({
+            const [initialEntities, subscription] = await this.sdk.subscribeEntityQuery({
                 // @ts-ignore TODO fix the type of query
                 query: SUBSCRIPTION_QUERY,
                 callback: (response) => {
                     if (response.error) {
                         console.error("Error setting up entity sync:", response.error)
                     } else if (response.data && response.data[0].entityId !== "0x0") {
-
                         const p = response.data[0].models.pixelaw.Pixel
                         const key = `${p?.x}_${p?.y}`
                         this.setPixel(key, p as Pixel)
                         this.eventEmitter.emit("cacheUpdated", Date.now())
-
                     }
                     this.cacheUpdated = Date.now()
                 },
