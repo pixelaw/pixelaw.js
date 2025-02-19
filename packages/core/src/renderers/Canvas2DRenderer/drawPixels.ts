@@ -31,22 +31,17 @@ export function drawPixels(
 
         context.fillRect(x, y, w, h)
 
-        // Draw an emoji at the center of the pixel
-        // Array of random emojis
-        const emojis = ["R", "O", "😍", "😎", "🤔", "😢", "😜", "😇", "😡", "🥳"]
+        // const emojis = ["R", "O", "😍", "😎", "🤔", "😢", "😜", "😇", "😡", "🥳"]
+        // const emoji = emojis[Math.floor(Math.random() * emojis.length)]
 
-        // Select a random emoji
-        const emoji = emojis[Math.floor(Math.random() * emojis.length)]
-        // console.log(pixel.text)
-        // const emoji = pixel.text.codePointAt(0)
-        if (!emoji) return
+        if (!pixel.text) return
 
         const fontWeight = "300"
         context.font = `${fontWeight} ${cellSize * 0.8}px "Noto Emoji", serif`
         context.textAlign = "center"
         context.textBaseline = "middle"
         context.fillStyle = "#000000"
-        context.fillText(emoji, x + w / 2, y + h * 0.55)
+        context.fillText(pixel.text, x + w / 2, y + h * 0.55)
     }
 
     for (let x = 0; x <= gridDimensions[0]; x++) {
