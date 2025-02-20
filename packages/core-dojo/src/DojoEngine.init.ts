@@ -10,7 +10,7 @@ import {Account, RpcProvider} from "starknet"
 import type {SchemaType} from "./generated/models.gen.ts"
 import {getControllerConnector} from "./utils/controller.ts"
 import baseManifest from "./utils/manifest.js"
-import {felt252ToString, felt252ToUnicode, formatAddress, getAbi} from "./utils/utils.ts"
+import {felt252ToString, felt252ToUnicode, formatAddress, getAbi} from "./utils/utils.starknet.ts"
 
 export type DojoStuff = {
     apps: App[]
