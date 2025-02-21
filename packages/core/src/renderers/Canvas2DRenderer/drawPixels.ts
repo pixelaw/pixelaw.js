@@ -32,7 +32,7 @@ export function drawPixels(
         context.fillRect(x, y, w, h)
 
         // const emojis = ["R", "O", "😍", "😎", "🤔", "😢", "😜", "😇", "😡", "🥳"]
-        // const emoji = emojis[Math.floor(Math.random() * emojis.length)]
+        // pixel.text = emojis[Math.floor(Math.random() * emojis.length)]
 
         if (!pixel.text) return
 
