@@ -1,7 +1,7 @@
 {
-  "local-populated": {
+  "local": {
       "engine": "dojoengine",
-      "description": "Local populated world",
+      "description": "Local world",
       "defaults": {
           "color": 123123,
           "center": [0,0],

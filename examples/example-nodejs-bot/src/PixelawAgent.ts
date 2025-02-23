@@ -30,7 +30,7 @@ export class PixelawAgent {
         this.core.events.on("engineChanged", handleEngineChange);
 
         try {
-            await this.core.loadWorld("local-populated");
+            await this.core.loadWorld("local");
         } catch (error) {
             console.error("Failed to load world:", error);
         }

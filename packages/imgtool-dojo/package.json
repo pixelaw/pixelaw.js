@@ -1,0 +1,41 @@
+{
+  "name": "@pixelaw/imgtool-dojo",
+  "private": true,
+  "version": "0.5.3",
+  "type": "module",
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "author": "thiscaspar",
+  "scripts": {
+    "build": "tsup",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "upgrade_dojo": "pnpm add @dojoengine/core @dojoengine/create-burner @dojoengine/react @dojoengine/recs @dojoengine/state @dojoengine/torii-client @dojoengine/utils @dojoengine/sdk @cartridge/connector",
+    "check": "biome check --apply .",
+    "test": "vitest run --config ./vitest.config.ts",
+    "process-initial": "tsx src/process-initial.ts"
+  },
+  "dependencies": {
+    "@dojoengine/core": "^1.1.1",
+    "@dojoengine/sdk": "^1.1.1",
+    "@dojoengine/state": "^1.1.1",
+    "@dojoengine/utils": "^1.1.1",
+    "@pixelaw/core": "workspace:*",
+    "dotenv": "^16.4.7",
+    "pngjs": "^7.0.0",
+    "pngjs3": "^6.1.1",
+    "starknet": "6.21.0",
+    "upng-js": "^2.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/upng-js": "^2.1.5",
+    "@types/pngjs": "^6.0.5",
+    "globals": "^15.14.0",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.2",
+    "@vitest/coverage-v8": "^1.6.0",
+    "vitest": "^1.6.0"
+  }
+}

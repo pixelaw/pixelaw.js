@@ -79,7 +79,6 @@ class DojoSqlPixelStore implements PixelStore {
                 // @ts-ignore TODO fix the type of query
                 query: buildSubscriptionQuery(),
                 callback: (response) => {
-                    console.log("cb", response)
                     if (response.error) {
                         console.error("Error setting up entity sync:", response.error)
                     } else if (response.data && response.data[0].entityId !== "0x0") {
@@ -88,7 +87,7 @@ class DojoSqlPixelStore implements PixelStore {
                         if (p.text) {
                             p.text = convertFullHexString(p.text)
                         }
-                        console.log({ p })
+
                         this.setPixel(key, p as Pixel)
                         this.eventEmitter.emit("cacheUpdated", Date.now())
                     }
