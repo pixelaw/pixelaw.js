@@ -9,9 +9,6 @@ export function convertFullHexString(str) {
     return parseText(result)
 }
 
-export function removeLeadingZeros(str) {
-    return str.replace(/^0+/, "")
-}
 export function parseText(str: string): string {
     if (!str.length) return str
 

@@ -15,7 +15,6 @@
     "check": "biome check --apply ."
   },
   "dependencies": {
-    "@pixelaw/core": "workspace:*",
     "@cartridge/connector": "^0.6.0",
     "@dojoengine/core": "^1.1.1",
     "@dojoengine/create-burner": "^1.1.1",
@@ -25,6 +24,8 @@
     "@dojoengine/state": "^1.1.1",
     "@dojoengine/torii-client": "^1.1.1",
     "@dojoengine/utils": "^1.1.1",
+    "@pixelaw/core": "workspace:*",
+    "@scure/starknet": "^1.1.0",
     "@starknet-react/core": "3.7.2",
     "@types/upng-js": "^2.1.5",
     "autoprefixer": "^10.4.20",

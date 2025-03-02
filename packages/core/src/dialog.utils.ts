@@ -1,4 +1,4 @@
-import type { Param } from "./types.ts"
+import type {Param} from "./types.ts"
 
 function formElementForParam(param: Param): HTMLElement {
     switch (param.type) {
@@ -21,6 +21,7 @@ export function createDialog(action, params: Param[]): HTMLDialogElement {
     form.className = "form"
 
     for (const param of params) {
+        console.log(param)
         const label = document.createElement("label")
         label.textContent = param.name
         label.className = "label"
@@ -41,6 +42,9 @@ export function createDialog(action, params: Param[]): HTMLDialogElement {
         event.preventDefault() // Prevent form submission
         const formData = new FormData(form)
         for (const p of params) {
+            if (p.transformer) {
+                // TODO
+            }
             p.value = Number.parseInt(formData.get(p.name).toString())
         }
         action(params)
