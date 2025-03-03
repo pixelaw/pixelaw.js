@@ -27,17 +27,13 @@
     "@pixelaw/core": "workspace:*",
     "@scure/starknet": "^1.1.0",
     "@starknet-react/core": "3.7.2",
-    "@types/upng-js": "^2.1.5",
     "autoprefixer": "^10.4.20",
     "browserify-zlib": "^0.2.0",
     "dotenv": "^16.4.7",
-    "idb-keyval": "^6.2.1",
-    "immer": "^10.1.1",
     "mitt": "^3.0.1",
-    "pngjs3": "^6.1.1",
+    "unstorage": "^1.14.4",
     "starknet": "6.21.0",
     "starknetkit": "^2.6.1",
-    "upng-js": "^2.1.0",
     "zustand": "^5.0.2"
   },
   "devDependencies": {

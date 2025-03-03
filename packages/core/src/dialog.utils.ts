@@ -38,14 +38,14 @@ export function createDialog(action, params: Param[]): HTMLDialogElement {
     okButton.type = "submit"
     okButton.textContent = "OK"
     okButton.className = "button ok-button"
-    okButton.onclick = (event) => {
-        event.preventDefault() // Prevent form submission
+    okButton.onclick = async (event) => {
+        event.preventDefault() // Prevent form submission so we can process with js
         const formData = new FormData(form)
         for (const p of params) {
-            if (p.transformer) {
-                // TODO
-            }
             p.value = Number.parseInt(formData.get(p.name).toString())
+
+            // Call the transformer if it's there. This will ensure params are ready for submission to chain.
+            if (p.transformer) await p.transformer()
         }
         action(params)
         dialog.close()

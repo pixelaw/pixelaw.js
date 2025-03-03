@@ -41,7 +41,7 @@ export class PixelawCore {
     private world: string
     private engines: Set<EngineConstructor<Engine>> = new Set()
     private wallet: Wallet | BaseWallet | null = null
-    private storage: Storage
+    readonly storage: Storage
 
     constructor(
         engines: EngineConstructor<Engine>[],
@@ -205,10 +205,10 @@ export class PixelawCore {
         return this.world
     }
 
-    public handleInteraction(coordinate: Coordinate): Interaction {
+    public async handleInteraction(coordinate: Coordinate): Promise<Interaction> {
         const pixel = this.pixelStore.getPixel(coordinate) ?? ({ x: coordinate[0], y: coordinate[1] } as Pixel)
         const app = this.appStore.getByName(this.app)
-        return this.engine.handleInteraction(app, pixel, this.color)
+        return await this.engine.handleInteraction(app, pixel, this.color)
     }
 
     private getStorageKey(key: string): string {

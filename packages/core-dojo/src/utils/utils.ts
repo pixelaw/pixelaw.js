@@ -1,3 +1,24 @@
+// TODO technically this is only 248bits randomness..
+export function generateRandomFelt252(): bigint {
+    let randomBytes: Uint8Array
+
+    if (typeof window !== "undefined" && window.crypto) {
+        // Browser environment
+        randomBytes = new Uint8Array(31)
+        window.crypto.getRandomValues(randomBytes)
+    } else {
+        // Node.js environment
+        const crypto = require("node:crypto")
+        randomBytes = crypto.randomBytes(31)
+    }
+
+    return BigInt(
+        `0x${Array.from(randomBytes)
+            .map((b) => b.toString(16).padStart(2, "0"))
+            .join("")}`,
+    )
+}
+
 export function sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms))
 }

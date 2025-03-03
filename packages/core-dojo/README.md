@@ -13,6 +13,9 @@ Example from RPS:
 - second_move(move)
 - finish(crv_move, crs_move)
 
+# "Param.transformer()"
+- 
+
 # Param Transformers
 - "crc_VARNAME_VARTYPE": CommitReveal: Commit
   - collect variable value from UI

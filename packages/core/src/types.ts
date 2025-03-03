@@ -1,5 +1,5 @@
 import type mitt from "mitt"
-import type { PixelawCore } from "./PixelawCore.ts"
+import type {PixelawCore} from "./PixelawCore.ts"
 
 export type Pixel = {
     action: string
@@ -32,7 +32,7 @@ export type Param = {
     type: "string" | "number" | "enum"
     typeName: string | null
     variants: Variant[]
-    transformer: (value: unknown) => unknown
+    transformer: () => void
     value?: number | null
 }
 
@@ -132,7 +132,7 @@ export interface Engine {
 
     init(engineConfig: unknown): Promise<void>
     // setAccount(account: unknown): void
-    handleInteraction(app: App, pixel: Pixel, color: number): Interaction
+    handleInteraction(app: App, pixel: Pixel, color: number): Promise<Interaction | undefined>
 }
 
 export type EngineConstructor<T extends Engine> = new (core: PixelawCore) => T

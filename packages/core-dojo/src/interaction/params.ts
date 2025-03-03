@@ -1,10 +1,12 @@
 import type {Manifest} from "@dojoengine/core"
 import type {Param} from "@pixelaw/core"
+import {poseidonHashMany} from "@scure/starknet"
+import type {DojoInteraction} from "../DojoInteraction.ts"
 import type {InterfaceType} from "./types.ts"
 
 const DEFAULT_PARAMETERS_TYPE = "pixelaw::core::utils::DefaultParameters"
 
-const isPrimitive = (type: string) => {
+export const isPrimitive = (type: string) => {
     return (
         type === "core::u8" ||
         type === "core::u16" ||
@@ -17,18 +19,18 @@ const isPrimitive = (type: string) => {
     )
 }
 
-const convertSnakeToPascal = (snakeCaseString: string) => {
+export const convertSnakeToPascal = (snakeCaseString: string) => {
     return snakeCaseString
         .split("_")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join("")
 }
 
-function findContract(manifest: Manifest, contractName: string) {
+export function findContract(manifest: Manifest, contractName: string) {
     return manifest.contracts.find((c) => c.name.includes(contractName))
 }
 
-function findInterface(abi: any[], interfaceName: string, strict?: boolean): InterfaceType | undefined {
+export function findInterface(abi: any[], interfaceName: string, strict?: boolean): InterfaceType | undefined {
     const methods = abi.find((x) => x.type === "interface" && x.name.includes(interfaceName)) as
         | InterfaceType
         | undefined
@@ -36,7 +38,7 @@ function findInterface(abi: any[], interfaceName: string, strict?: boolean): Int
     return methods
 }
 
-function findFunctionDefinition(abi, interfaceName, methodName: string, strict?: boolean) {
+export function findFunctionDefinition(abi, interfaceName, methodName: string, strict = false) {
     const methods = findInterface(abi, interfaceName, strict)
     if (!methods?.items) {
         if (strict) throw new Error(`no methods for interface: ${interfaceName}`)
@@ -51,7 +53,7 @@ function findFunctionDefinition(abi, interfaceName, methodName: string, strict?:
     return functionDef
 }
 
-function extractParameters(functionDef: any, abi: any[]) {
+export function extractParameters(functionDef: any) {
     const parameters = []
     for (const input of functionDef.inputs) {
         if (input.type !== DEFAULT_PARAMETERS_TYPE) {
@@ -61,21 +63,11 @@ function extractParameters(functionDef: any, abi: any[]) {
     return parameters
 }
 
-class NormalParam {
-    constructor(
-        public name: string,
-        public type: string,
-    ) {}
-}
-
-function paramFromName({ name, type }: Param) {
-    const parts = param.name.split("_")
-    if (parts.length === 1) return new NormalParam(name, type)
-}
-
-function processParams(rawParams: Param[], abi: any[]): Param[] {
+export async function prepareParams(interaction: DojoInteraction, rawParams: Param[], abi: any[]): Promise<Param[]> {
     const result: Param[] = []
-
+    const storage = interaction.engine.core.storage
+    const address = interaction.engine.core.getWallet().address
+    const positionString = `${interaction.position.x}_${interaction.position.y}`
     for (const rawParam of rawParams) {
         const param = { ...rawParam }
 
@@ -88,22 +80,30 @@ function processParams(rawParams: Param[], abi: any[]): Param[] {
                 param.name = nameRemaining[0]
                 param.type = nameRemaining[1]
 
-                // TODO setup a "transformer" that, after choosing a value, encodes it and calls the right function name.
-                param.transformer = (p: Param) => {
-                    // TODO switch name to real function param (e.g. crc_move_Move)
+                // setup a "transformer" that, after choosing a value, encodes it and calls the right function name.
+                param.transformer = async () => {
+                    // Store the original values
+                    await storage.setItem(`param_${address}-${positionString}-${param.name}`, param.value)
+                    param.name = rawParam.name
+                    param.type = rawParam.type
+                    param.variants = rawParam.variants
+
+                    param.value = poseidonHashMany([BigInt(param.value), interaction.salt])
                 }
             } else if (nameFirst === "crv") {
                 // TODO check that nameRemaining has 1 elements, for varname
                 param.name = nameRemaining[0]
+
+                // TODO this param does not require user input, but is read from storage
+                const origValue = await storage.getItem(`param_${address}-${positionString}-${param.name}`)
             } else if (nameFirst === "crs") {
                 // TODO check that nameRemaining has 1 elements, for varname
                 param.name = nameRemaining[0]
+                // TODO this param does not require user input, but is read from storage
             } else {
                 // Nothing, the name just had underscores but no special prefix
             }
         }
-
-        // const isPrimitiveType = rawParam.type.includes("core::integer") || rawParam.type.includes("core::felt252")
 
         param.variants = []
         // const transformer = undefined
@@ -148,7 +148,7 @@ export default function getParams(
 
     const rawParams = extractParameters(functionDef, contract.abi)
     console.log("rawParams", rawParams[0])
-    const params = processParams(rawParams, contract.abi)
+    const params = prepareParams(rawParams, contract.abi)
     console.log("params", params[0])
     return params
 }
