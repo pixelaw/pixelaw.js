@@ -1,5 +1,4 @@
 import {parseText} from "./utils/utils.ts"
-import type {Pixel} from "./generated/models.gen.ts"
 
 self.onmessage = async (event) => {
     const query = event.data.query
@@ -16,10 +15,11 @@ self.onmessage = async (event) => {
         for (const j of json) {
             const d = JSON.parse(j.d)
             const color = d[0]
-            const x = d[2] >> 16
-            const y = d[2] & 0xffff
+            const x = d[3] >> 16
+            const y = d[3] & 0xffff
             const text = parseText(d[1])
-            const pixel = { color, x, y, text } as Pixel
+            const action = parseText(d[2])
+            const pixel = { color, x, y, text, action }
             const key = `${x}_${y}`
             result[key] = pixel
         }

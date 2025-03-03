@@ -20,7 +20,7 @@ export function createSqlQuery(bounds: Bounds) {
     const [[left, top], [right, bottom]] = bounds
     const xWraps = right - left < 0
     const yWraps = bottom - top < 0
-    let result = `SELECT json_array(color,  ltrim(substr(text, 3), '0'),   (x << 16) | y ) as d FROM "pixelaw-Pixel" WHERE( 1 = 0 ) `
+    let result = `SELECT json_array(color,  ltrim(substr(text, 3), '0'), ltrim(substr(action, 3), '0'),   (x << 16) | y ) as d FROM "pixelaw-Pixel" WHERE( 1 = 0 ) `
     // let result = `SELECT json_array(color,  'f09f87b5f09f87adefb88f',   (x << 16) | y ) as d FROM "pixelaw-Pixel" WHERE( 1 = 0 ) `
     const ZERO = 0
 
@@ -76,15 +76,17 @@ class DojoSqlPixelStore implements PixelStore {
 
         try {
             const [initialEntities, subscription] = await this.sdk.subscribeEntityQuery({
-                // @ts-ignore TODO fix the type of query
+                // @ts-ignore TODO fix the type of query. it seems to trigger on non-pixel updates too still
                 query: buildSubscriptionQuery(),
                 callback: (response) => {
+                    console.log("cb")
                     if (response.error) {
                         console.error("Error setting up entity sync:", response.error)
                     } else if (response.data && response.data[0].entityId !== "0x0") {
                         const p = response.data[0].models.pixelaw.Pixel
                         const key = `${p?.x}_${p?.y}`
-                        if (p.text) {
+                        console.log(p)
+                        if (p?.text) {
                             p.text = convertFullHexString(p.text)
                         }
 

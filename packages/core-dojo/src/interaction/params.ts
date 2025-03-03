@@ -96,10 +96,14 @@ export async function prepareParams(interaction: DojoInteraction, rawParams: Par
 
                 // TODO this param does not require user input, but is read from storage
                 const origValue = await storage.getItem(`param_${address}-${positionString}-${param.name}`)
+
+                param.value = origValue
             } else if (nameFirst === "crs") {
                 // TODO check that nameRemaining has 1 elements, for varname
                 param.name = nameRemaining[0]
-                // TODO this param does not require user input, but is read from storage
+
+                // this param does not require user input, but is read from storage
+                param.value = interaction.salt
             } else {
                 // Nothing, the name just had underscores but no special prefix
             }

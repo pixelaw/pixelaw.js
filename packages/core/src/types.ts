@@ -34,6 +34,7 @@ export type Param = {
     variants: Variant[]
     transformer: () => void
     value?: number | null
+    systemOnly?: boolean
 }
 
 export type Tile = HTMLImageElement

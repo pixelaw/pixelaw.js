@@ -22,6 +22,7 @@ export function createDialog(action, params: Param[]): HTMLDialogElement {
 
     for (const param of params) {
         console.log(param)
+        if (param.systemOnly) continue
         const label = document.createElement("label")
         label.textContent = param.name
         label.className = "label"
