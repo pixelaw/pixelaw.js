@@ -89,6 +89,9 @@ class DojoSqlPixelStore implements PixelStore {
                         if (p?.text) {
                             p.text = convertFullHexString(p.text)
                         }
+                        if (p?.action) {
+                            p.action = convertFullHexString(p.action)
+                        }
 
                         this.setPixel(key, p as Pixel)
                         this.eventEmitter.emit("cacheUpdated", Date.now())

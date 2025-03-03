@@ -18,7 +18,7 @@ import {
     findFunctionDefinition,
     prepareParams,
 } from "./interaction/params.ts"
-import {generateRandomFelt252} from "./utils/utils.ts"
+import {generateRandomFelt252} from "./utils/utils.ts";
 
 export class DojoInteraction implements Interaction {
     functionName: string
@@ -62,8 +62,10 @@ export class DojoInteraction implements Interaction {
     }
 
     private initializeDialog() {
-        if (this.params.length) {
-            this.dialog = createDialog(this.action, this.params)
+        const uiParams = this.params.filter((param) => !param.systemOnly)
+
+        if (uiParams.length) {
+            this.dialog = createDialog(this.action, uiParams)
         } else {
             // No dialog, so we execute the interaction immediately
             this.action(this.params)
@@ -82,9 +84,9 @@ export class DojoInteraction implements Interaction {
         if (!functionDef) return
 
         const rawParams = extractParameters(functionDef)
-        console.log("rawParams", rawParams[0])
+        console.log("rawParams", rawParams[0], rawParams[1])
         const params = await prepareParams(this, rawParams, contract.abi)
-        console.log("params", params[0])
+        console.log("params", params[0], params[1])
 
         this.params = params
     }
@@ -92,7 +94,7 @@ export class DojoInteraction implements Interaction {
     private initializeAction() {
         // Prepare the closure to attach to the interaction
         this.action = (params) => {
-            console.log("params", params[0])
+            // console.log("params", params[0])
 
             const dojoCall = generateDojoCall(
                 this.engine.dojoSetup.manifest,

@@ -87,23 +87,27 @@ export async function prepareParams(interaction: DojoInteraction, rawParams: Par
                     param.name = rawParam.name
                     param.type = rawParam.type
                     param.variants = rawParam.variants
-
-                    param.value = poseidonHashMany([BigInt(param.value), interaction.salt])
+                    param.value = `0x${poseidonHashMany([BigInt(param.value), interaction.salt]).toString(16)}`
+                    console.log("hash:", param.value)
+                    console.log("salt:", `0x${interaction.salt}`)
                 }
             } else if (nameFirst === "crv") {
                 // TODO check that nameRemaining has 1 elements, for varname
-                param.name = nameRemaining[0]
+                const originalParamName = nameRemaining[0]
 
                 // TODO this param does not require user input, but is read from storage
-                const origValue = await storage.getItem(`param_${address}-${positionString}-${param.name}`)
+                const origValue = await storage.getItem(`param_${address}-${positionString}-${originalParamName}`)
 
                 param.value = origValue
+                param.systemOnly = true
             } else if (nameFirst === "crs") {
                 // TODO check that nameRemaining has 1 elements, for varname
-                param.name = nameRemaining[0]
+                // param.name = nameRemaining[0]
 
                 // this param does not require user input, but is read from storage
-                param.value = interaction.salt
+                param.value = `0x${interaction.salt.toString(16)}`
+                console.log("saltout:", param.value)
+                param.systemOnly = true
             } else {
                 // Nothing, the name just had underscores but no special prefix
             }
