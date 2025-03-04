@@ -2,6 +2,7 @@ import type {Manifest} from "@dojoengine/core"
 import type {Param} from "@pixelaw/core"
 import {poseidonHashMany} from "@scure/starknet"
 import type {DojoInteraction} from "../DojoInteraction.ts"
+import {generateRandomFelt252} from "../utils/utils.ts"
 import type {InterfaceType} from "./types.ts"
 
 const DEFAULT_PARAMETERS_TYPE = "pixelaw::core::utils::DefaultParameters"
@@ -82,14 +83,17 @@ export async function prepareParams(interaction: DojoInteraction, rawParams: Par
 
                 // setup a "transformer" that, after choosing a value, encodes it and calls the right function name.
                 param.transformer = async () => {
+                    const salt = `0x${generateRandomFelt252().toString(16)}`
                     // Store the original values
                     await storage.setItem(`param_${address}-${positionString}-${param.name}`, param.value)
+                    await storage.setItem(`param_${address}-${positionString}-${param.name}-salt`, salt)
                     param.name = rawParam.name
                     param.type = rawParam.type
                     param.variants = rawParam.variants
-                    param.value = `0x${poseidonHashMany([BigInt(param.value), interaction.salt]).toString(16)}`
+
+                    param.value = `0x${poseidonHashMany([BigInt(param.value), BigInt(salt)]).toString(16)}`
                     console.log("hash:", param.value)
-                    console.log("salt:", `0x${interaction.salt}`)
+                    console.log("salt:", salt)
                 }
             } else if (nameFirst === "crv") {
                 // TODO check that nameRemaining has 1 elements, for varname
@@ -105,7 +109,8 @@ export async function prepareParams(interaction: DojoInteraction, rawParams: Par
                 // param.name = nameRemaining[0]
 
                 // this param does not require user input, but is read from storage
-                param.value = `0x${interaction.salt.toString(16)}`
+                const salt = await storage.getItem(`param_${address}-${positionString}-${nameRemaining[0]}-salt`)
+                param.value = salt
                 console.log("saltout:", param.value)
                 param.systemOnly = true
             } else {
