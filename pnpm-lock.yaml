@@ -65,9 +65,18 @@ importers:
       '@pixelaw/core-dojo':
         specifier: workspace:*
         version: link:../core-dojo
+      better-sqlite3:
+        specifier: ^11.8.1
+        version: 11.8.1
       canvas:
         specifier: ^3.1.0
         version: 3.1.0
+      db0:
+        specifier: ^0.3.1
+        version: 0.3.1(better-sqlite3@11.8.1)
+      unstorage:
+        specifier: ^1.14.4
+        version: 1.14.4(db0@0.3.1(better-sqlite3@11.8.1))(idb-keyval@6.2.1)
     devDependencies:
       tsx:
         specifier: ^4.19.3
@@ -107,7 +116,7 @@ importers:
         version: 6.1.1
       unstorage:
         specifier: ^1.14.4
-        version: 1.14.4(idb-keyval@6.2.1)
+        version: 1.14.4(db0@0.3.1(better-sqlite3@11.8.1))(idb-keyval@6.2.1)
       upng-js:
         specifier: ^2.1.0
         version: 2.1.0
@@ -186,10 +195,10 @@ importers:
         version: 6.23.1(encoding@0.1.13)
       starknetkit:
         specifier: ^2.6.1
-        version: 2.6.1(starknet@6.23.1(encoding@0.1.13))
+        version: 2.6.1(db0@0.3.1(better-sqlite3@11.8.1))(starknet@6.23.1(encoding@0.1.13))
       unstorage:
         specifier: ^1.14.4
-        version: 1.14.4(idb-keyval@6.2.1)
+        version: 1.14.4(db0@0.3.1(better-sqlite3@11.8.1))(idb-keyval@6.2.1)
       zustand:
         specifier: ^5.0.2
         version: 5.0.3(@types/react@19.0.8)(immer@10.1.1)(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0))
@@ -373,7 +382,7 @@ importers:
         version: 6.21.0(encoding@0.1.13)
       starknetkit:
         specifier: ^2.6.1
-        version: 2.6.1(starknet@6.21.0(encoding@0.1.13))
+        version: 2.6.1(db0@0.3.1(better-sqlite3@11.8.1))(starknet@6.21.0(encoding@0.1.13))
     devDependencies:
       '@types/node':
         specifier: ^18.19.50
@@ -2469,6 +2478,9 @@ packages:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
     engines: {node: '>=4'}
 
+  better-sqlite3@11.8.1:
+    resolution: {integrity: sha512-9BxNaBkblMjhJW8sMRZxnxVTRgbRmssZW0Oxc1MPBTfiR+WW21e2Mk4qu8CzrcZb1LwPCnFsfDEzq+SNcBU8eg==}
+
   bin-links@4.0.4:
     resolution: {integrity: sha512-cMtq4W5ZsEwcutJrVId+a/tjt8GSbS+h0oNkdl6+6rBuEv8Ot33Bevj5KPm40t309zuhVic8NjpuL42QCiJWWA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -2476,6 +2488,9 @@ packages:
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
+
+  bindings@1.5.0:
+    resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
 
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -2828,6 +2843,29 @@ packages:
   dateformat@3.0.3:
     resolution: {integrity: sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==}
 
+  db0@0.3.1:
+    resolution: {integrity: sha512-3RogPLE2LLq6t4YiFCREyl572aBjkfMvfwPyN51df00TbPbryL3XqBYuJ/j6mgPssPK8AKfYdLxizaO5UG10sA==}
+    peerDependencies:
+      '@electric-sql/pglite': '*'
+      '@libsql/client': '*'
+      better-sqlite3: '*'
+      drizzle-orm: '*'
+      mysql2: '*'
+      sqlite3: '*'
+    peerDependenciesMeta:
+      '@electric-sql/pglite':
+        optional: true
+      '@libsql/client':
+        optional: true
+      better-sqlite3:
+        optional: true
+      drizzle-orm:
+        optional: true
+      mysql2:
+        optional: true
+      sqlite3:
+        optional: true
+
   debug@4.4.0:
     resolution: {integrity: sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==}
     engines: {node: '>=6.0'}
@@ -3135,6 +3173,9 @@ packages:
   figures@3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
     engines: {node: '>=8'}
+
+  file-uri-to-path@1.0.0:
+    resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
 
   filelist@1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
@@ -7883,21 +7924,21 @@ snapshots:
       loupe: 3.1.3
       tinyrainbow: 2.0.0
 
-  '@walletconnect/core@2.18.0':
+  '@walletconnect/core@2.18.0(db0@0.3.1(better-sqlite3@11.8.1))':
     dependencies:
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-provider': 1.0.14
       '@walletconnect/jsonrpc-types': 1.0.4
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/jsonrpc-ws-connection': 1.0.16
-      '@walletconnect/keyvaluestorage': 1.1.1
+      '@walletconnect/keyvaluestorage': 1.1.1(db0@0.3.1(better-sqlite3@11.8.1))
       '@walletconnect/logger': 2.1.2
       '@walletconnect/relay-api': 1.0.11
       '@walletconnect/relay-auth': 1.1.0
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.18.0
-      '@walletconnect/utils': 2.18.0
+      '@walletconnect/types': 2.18.0(db0@0.3.1(better-sqlite3@11.8.1))
+      '@walletconnect/utils': 2.18.0(db0@0.3.1(better-sqlite3@11.8.1))
       '@walletconnect/window-getters': 1.0.1
       events: 3.3.0
       lodash.isequal: 4.5.0
@@ -7966,11 +8007,11 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@walletconnect/keyvaluestorage@1.1.1':
+  '@walletconnect/keyvaluestorage@1.1.1(db0@0.3.1(better-sqlite3@11.8.1))':
     dependencies:
       '@walletconnect/safe-json': 1.0.2
       idb-keyval: 6.2.1
-      unstorage: 1.14.4(idb-keyval@6.2.1)
+      unstorage: 1.14.4(db0@0.3.1(better-sqlite3@11.8.1))(idb-keyval@6.2.1)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -8011,16 +8052,16 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/sign-client@2.18.0':
+  '@walletconnect/sign-client@2.18.0(db0@0.3.1(better-sqlite3@11.8.1))':
     dependencies:
-      '@walletconnect/core': 2.18.0
+      '@walletconnect/core': 2.18.0(db0@0.3.1(better-sqlite3@11.8.1))
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/logger': 2.1.2
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.18.0
-      '@walletconnect/utils': 2.18.0
+      '@walletconnect/types': 2.18.0(db0@0.3.1(better-sqlite3@11.8.1))
+      '@walletconnect/utils': 2.18.0(db0@0.3.1(better-sqlite3@11.8.1))
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -8048,12 +8089,12 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/types@2.18.0':
+  '@walletconnect/types@2.18.0(db0@0.3.1(better-sqlite3@11.8.1))':
     dependencies:
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-types': 1.0.4
-      '@walletconnect/keyvaluestorage': 1.1.1
+      '@walletconnect/keyvaluestorage': 1.1.1(db0@0.3.1(better-sqlite3@11.8.1))
       '@walletconnect/logger': 2.1.2
       events: 3.3.0
     transitivePeerDependencies:
@@ -8076,19 +8117,19 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@walletconnect/utils@2.18.0':
+  '@walletconnect/utils@2.18.0(db0@0.3.1(better-sqlite3@11.8.1))':
     dependencies:
       '@ethersproject/transactions': 5.7.0
       '@noble/ciphers': 1.2.1
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
       '@walletconnect/jsonrpc-utils': 1.0.8
-      '@walletconnect/keyvaluestorage': 1.1.1
+      '@walletconnect/keyvaluestorage': 1.1.1(db0@0.3.1(better-sqlite3@11.8.1))
       '@walletconnect/relay-api': 1.0.11
       '@walletconnect/relay-auth': 1.1.0
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.18.0
+      '@walletconnect/types': 2.18.0(db0@0.3.1(better-sqlite3@11.8.1))
       '@walletconnect/window-getters': 1.0.1
       '@walletconnect/window-metadata': 1.0.1
       detect-browser: 5.3.0
@@ -8284,6 +8325,11 @@ snapshots:
     dependencies:
       is-windows: 1.0.2
 
+  better-sqlite3@11.8.1:
+    dependencies:
+      bindings: 1.5.0
+      prebuild-install: 7.1.3
+
   bin-links@4.0.4:
     dependencies:
       cmd-shim: 6.0.3
@@ -8292,6 +8338,10 @@ snapshots:
       write-file-atomic: 5.0.1
 
   binary-extensions@2.3.0: {}
+
+  bindings@1.5.0:
+    dependencies:
+      file-uri-to-path: 1.0.0
 
   bl@4.1.0:
     dependencies:
@@ -8697,6 +8747,10 @@ snapshots:
 
   dateformat@3.0.3: {}
 
+  db0@0.3.1(better-sqlite3@11.8.1):
+    optionalDependencies:
+      better-sqlite3: 11.8.1
+
   debug@4.4.0:
     dependencies:
       ms: 2.1.3
@@ -9076,6 +9130,8 @@ snapshots:
   figures@3.2.0:
     dependencies:
       escape-string-regexp: 1.0.5
+
+  file-uri-to-path@1.0.0: {}
 
   filelist@1.0.4:
     dependencies:
@@ -11166,14 +11222,14 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  starknetkit@2.6.1(starknet@6.21.0(encoding@0.1.13)):
+  starknetkit@2.6.1(db0@0.3.1(better-sqlite3@11.8.1))(starknet@6.21.0(encoding@0.1.13)):
     dependencies:
       '@starknet-io/get-starknet': 4.0.5
       '@starknet-io/get-starknet-core': 4.0.5
       '@starknet-io/types-js': 0.7.10
       '@trpc/client': 10.45.2(@trpc/server@10.45.2)
       '@trpc/server': 10.45.2
-      '@walletconnect/sign-client': 2.18.0
+      '@walletconnect/sign-client': 2.18.0(db0@0.3.1(better-sqlite3@11.8.1))
       bowser: 2.11.0
       detect-browser: 5.3.0
       eventemitter3: 5.0.1
@@ -11204,14 +11260,14 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  starknetkit@2.6.1(starknet@6.23.1(encoding@0.1.13)):
+  starknetkit@2.6.1(db0@0.3.1(better-sqlite3@11.8.1))(starknet@6.23.1(encoding@0.1.13)):
     dependencies:
       '@starknet-io/get-starknet': 4.0.5
       '@starknet-io/get-starknet-core': 4.0.5
       '@starknet-io/types-js': 0.7.10
       '@trpc/client': 10.45.2(@trpc/server@10.45.2)
       '@trpc/server': 10.45.2
-      '@walletconnect/sign-client': 2.18.0
+      '@walletconnect/sign-client': 2.18.0(db0@0.3.1(better-sqlite3@11.8.1))
       bowser: 2.11.0
       detect-browser: 5.3.0
       eventemitter3: 5.0.1
@@ -11673,7 +11729,7 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  unstorage@1.14.4(idb-keyval@6.2.1):
+  unstorage@1.14.4(db0@0.3.1(better-sqlite3@11.8.1))(idb-keyval@6.2.1):
     dependencies:
       anymatch: 3.1.3
       chokidar: 3.6.0
@@ -11684,6 +11740,7 @@ snapshots:
       ofetch: 1.4.1
       ufo: 1.5.4
     optionalDependencies:
+      db0: 0.3.1(better-sqlite3@11.8.1)
       idb-keyval: 6.2.1
 
   upath@2.0.1: {}

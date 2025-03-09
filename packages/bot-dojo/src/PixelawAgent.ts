@@ -1,5 +1,6 @@
 import type {CoreStatus, Engine, EngineConstructor, WorldsRegistry} from "@pixelaw/core";
 import {PixelawCore} from "@pixelaw/core";
+import type {Storage} from "unstorage";
 
 export class PixelawAgent {
     private core: PixelawCore
@@ -7,14 +8,15 @@ export class PixelawAgent {
     public static async new(
         engines: EngineConstructor<Engine>[],
         worldsRegistry: WorldsRegistry,
+        storage: Storage,
     ): Promise<PixelawAgent> {
-        const agent = new PixelawAgent(engines, worldsRegistry)
+        const agent = new PixelawAgent(engines, worldsRegistry, storage)
         await agent.initialize()
         return agent
     }
 
-    constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry) {
-        this.core = new PixelawCore(engines, worldsRegistry)
+    constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry, storage: Storage) {
+        this.core = new PixelawCore(engines, worldsRegistry, storage)
     }
 
     private async initialize() {

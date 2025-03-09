@@ -64,7 +64,7 @@ export class PixelawCore {
     public setWallet(wallet: Wallet | null) {
         this.wallet = wallet
         this.events.emit("walletChanged", wallet)
-        this.storage.setItem(this.getStorageKey("wallet"), wallet)
+        this.storage.setItem(this.getStorageKey("wallet"), wallet).catch(console.error)
     }
 
     public getEngine(): string | null {
@@ -161,11 +161,12 @@ export class PixelawCore {
     public setApp(newApp: string | null) {
         this.app = newApp
         this.events.emit("appChanged", newApp)
-        this.storage.setItem(this.getStorageKey("app"), newApp)
+        this.storage.setItem(this.getStorageKey("app"), newApp).catch(console.error)
     }
 
     private setWorld(newWorld: string) {
         this.world = newWorld
+        this.storage.setItem(this.getStorageKey("world"), newWorld).catch(console.error)
         this.events.emit("worldChanged", newWorld)
     }
 
@@ -176,7 +177,7 @@ export class PixelawCore {
     public setColor(newColor: number | null) {
         this.color = newColor
         this.events.emit("colorChanged", newColor)
-        this.storage.setItem(this.getStorageKey("color"), newColor)
+        this.storage.setItem(this.getStorageKey("color"), newColor).catch(console.error)
     }
 
     public getZoom(): number {
@@ -187,7 +188,7 @@ export class PixelawCore {
         if (this.zoom === newZoom) return
         this.zoom = newZoom
         this.events.emit("zoomChanged", newZoom)
-        this.storage.setItem(this.getStorageKey("zoom"), newZoom)
+        this.storage.setItem(this.getStorageKey("zoom"), newZoom).catch(console.error)
     }
 
     public getCenter(): Coordinate {
@@ -198,7 +199,7 @@ export class PixelawCore {
         if (this.center === newCenter) return
         this.center = newCenter
         this.events.emit("centerChanged", newCenter)
-        this.storage.setItem(this.getStorageKey("center"), newCenter)
+        this.storage.setItem(this.getStorageKey("center"), newCenter).catch(console.error)
     }
 
     public getWorld(): string {

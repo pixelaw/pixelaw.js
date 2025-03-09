@@ -20,6 +20,9 @@
   "dependencies": {
     "@pixelaw/core": "workspace:*",
     "@pixelaw/core-dojo": "workspace:*",
-    "canvas": "^3.1.0"
+    "better-sqlite3": "^11.8.1",
+    "canvas": "^3.1.0",
+    "db0": "^0.3.1",
+    "unstorage": "^1.14.4"
   }
 }
