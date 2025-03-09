@@ -8,7 +8,7 @@ export class PixelawAgent {
     public static async new(
         engines: EngineConstructor<Engine>[],
         worldsRegistry: WorldsRegistry,
-        storage: Storage,
+        storage: Storage<string>,
     ): Promise<PixelawAgent> {
         const agent = new PixelawAgent(engines, worldsRegistry, storage)
         await agent.initialize()
@@ -28,8 +28,8 @@ export class PixelawAgent {
             console.log("Engine changed:", newEngine?.constructor.name)
         }
 
-        // this.core.events.on("statusChange", handleStatusChange)
-        // this.core.events.on("engineChanged", handleEngineChange)
+        this.core.events.on("statusChanged", handleStatusChange)
+        this.core.events.on("engineChanged", handleEngineChange)
 
         try {
             await this.core.loadWorld("local")

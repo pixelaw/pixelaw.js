@@ -137,15 +137,17 @@ async function setupBurnerConnector(
     // Load them in advance, needs to be async
     const burnerCookies = await storage.getItem("burner")
 
-    // TODO this document shim of cookie is for storage of burners
-    // Right now just storing the entire cookie string
-    global.document = {
-        get cookie() {
-            return burnerCookies ?? ""
-        },
-        set cookie(cookieStr) {
-            storage.setItem("burner", cookieStr).catch(console.error)
-        },
+    // TODO this document shim of cookie is for storage of burners using the Cookie library
+    if (typeof window === "undefined") {
+        // @ts-ignore don't care about implementing the other fields, its for nodejs
+        global.document = {
+            get cookie() {
+                return burnerCookies ?? ""
+            },
+            set cookie(cookieStr) {
+                storage.setItem("burner", cookieStr).catch(console.error)
+            },
+        }
     }
 
     const promise = (async () => {

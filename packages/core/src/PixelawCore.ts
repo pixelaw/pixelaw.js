@@ -10,6 +10,7 @@ import type {
     Pixel,
     PixelCoreEvents,
     PixelStore,
+    QueueStore,
     TileStore,
     UpdateService,
     Wallet,
@@ -32,6 +33,7 @@ export class PixelawCore {
     updateService: UpdateService = null!
     viewPort: Canvas2DRenderer = null!
     events = mitt<PixelCoreEvents>()
+    queue: QueueStore = null!
 
     private worldsRegistry: WorldsRegistry
     private app: string | null = null
@@ -64,7 +66,7 @@ export class PixelawCore {
     public setWallet(wallet: Wallet | null) {
         this.wallet = wallet
         this.events.emit("walletChanged", wallet)
-        this.storage.setItem(this.getStorageKey("wallet"), wallet).catch(console.error)
+        this.storage.setItem(this.getStorageKey("wallet"), JSON.stringify(wallet)).catch(console.error)
     }
 
     public getEngine(): string | null {

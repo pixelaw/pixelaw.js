@@ -49,6 +49,19 @@ export interface AppStore {
     getAll: () => App[]
 }
 
+// TODO this is rough and maybe dojo centric
+export type QueueItem = {
+    id: string
+    timestamp: number
+    called_system: string
+    selector: string
+    calldata: string
+}
+
+export interface QueueStore {
+    getAll: () => QueueItem[]
+}
+
 export interface TileStore {
     refresh: () => void
     prepare: (bounds: Bounds) => void

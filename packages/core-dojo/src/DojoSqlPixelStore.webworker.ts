@@ -1,8 +1,8 @@
-import {parseText} from "./utils/utils.ts";
+import {parseText} from "./utils/utils.ts"
 
 let postMessageFunction: (message: any) => void
 
-if (typeof globalThis.self !== "undefined" && globalThis.self.onmessage) {
+if (typeof self !== "undefined") {
     // Browser environment
     postMessageFunction = globalThis.self.postMessage.bind(globalThis.self)
     globalThis.self.onmessage = handleMessage
@@ -17,7 +17,6 @@ if (typeof globalThis.self !== "undefined" && globalThis.self.onmessage) {
 
 async function handleMessage(event: any) {
     const data = event.data ? event.data : event
-
     const query = data.query
     const toriiUrl = data.toriiUrl
 

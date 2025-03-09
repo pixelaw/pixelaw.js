@@ -80,6 +80,7 @@ class DojoSqlPixelStore implements PixelStore {
                 // Browser environment
                 const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url)
                 instance.worker = new Worker(workerUrl, { type: "module" })
+                console.log("worker")
             } else {
                 // Node.js environment
                 const { Worker } = await import("node:worker_threads")
