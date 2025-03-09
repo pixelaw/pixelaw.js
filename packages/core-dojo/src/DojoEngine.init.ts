@@ -4,13 +4,15 @@ import {DojoProvider} from "@dojoengine/core"
 import {BurnerConnector, BurnerManager, type BurnerManagerOptions} from "@dojoengine/create-burner"
 import type {SDK} from "@dojoengine/sdk"
 import {init} from "@dojoengine/sdk"
-import type {App} from "@pixelaw/core"
+import type {App, PixelawCore} from "@pixelaw/core"
 import {Account, RpcProvider} from "starknet"
 import type {SchemaType} from "./generated/models.gen.ts"
 import type {DojoConfig} from "./types.ts"
 import {getControllerConnector} from "./utils/controller.ts"
 import baseManifest from "./utils/manifest.js"
 import {felt252ToString, felt252ToUnicode, formatAddress, getAbi} from "./utils/utils.starknet.ts"
+
+import type {Storage} from "unstorage"
 
 export type DojoStuff = {
     apps: App[]
@@ -23,7 +25,7 @@ export type DojoStuff = {
 const controllerConnectorCache = new Map<string, ControllerConnector | null>()
 const burnerConnectorCache = new Map<string, Promise<BurnerConnector | null>>()
 
-export async function dojoInit(worldConfig: DojoConfig): Promise<DojoStuff> {
+export async function dojoInit(worldConfig: DojoConfig, core: PixelawCore): Promise<DojoStuff> {
     if (!worldConfig) {
         throw new Error("WorldConfig is not loaded")
     }
@@ -51,7 +53,7 @@ export async function dojoInit(worldConfig: DojoConfig): Promise<DojoStuff> {
 
     const controllerConnector = setupControllerConnector(manifest, worldConfig)
 
-    const burnerConnector = await setupBurnerConnector(provider, worldConfig)
+    const burnerConnector = await setupBurnerConnector(provider, worldConfig, core.storage)
 
     return {
         sdk,
@@ -125,10 +127,25 @@ function setupControllerConnector(manifest: Manifest, worldConfig: DojoConfig): 
 async function setupBurnerConnector(
     rpcProvider: DojoProvider,
     worldConfig: DojoConfig,
+    storage: Storage<string>,
 ): Promise<BurnerConnector | null> {
     const cacheKey = JSON.stringify({ rpcProvider, burnerConfig: worldConfig.wallets?.burner })
     if (burnerConnectorCache.has(cacheKey)) {
         return burnerConnectorCache.get(cacheKey) || null
+    }
+
+    // Load them in advance, needs to be async
+    const burnerCookies = await storage.getItem("burner")
+
+    // TODO this document shim of cookie is for storage of burners
+    // Right now just storing the entire cookie string
+    global.document = {
+        get cookie() {
+            return burnerCookies ?? ""
+        },
+        set cookie(cookieStr) {
+            storage.setItem("burner", cookieStr).catch(console.error)
+        },
     }
 
     const promise = (async () => {

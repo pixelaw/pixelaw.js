@@ -2,9 +2,9 @@ import {DojoEngine} from "@pixelaw/core-dojo"
 import {PixelawAgent} from "./PixelawAgent"
 import worldsRegistry from "./config/worlds.json"
 
-import {createStorage} from "unstorage";
-import sqlite from "db0/connectors/better-sqlite3";
-import {createDatabase} from "db0";
+import {createDatabase} from "db0"
+import sqlite from "db0/connectors/better-sqlite3"
+import {createStorage} from "unstorage"
 import dbDriver from "unstorage/drivers/db0" // Learn more: https://db0.unjs.io
 
 // Learn more: https://db0.unjs.io

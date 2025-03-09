@@ -21,7 +21,7 @@ export class DojoEngine implements Engine {
         this.config = config
         try {
             // Setup Dojo
-            this.dojoSetup = await dojoInit(this.config)
+            this.dojoSetup = await dojoInit(this.config, this.core)
             this.status = this.dojoSetup ? "ready" : "error"
 
             // Setup AppStore

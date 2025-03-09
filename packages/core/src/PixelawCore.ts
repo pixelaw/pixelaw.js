@@ -41,12 +41,12 @@ export class PixelawCore {
     private world: string
     private engines: Set<EngineConstructor<Engine>> = new Set()
     private wallet: Wallet | BaseWallet | null = null
-    readonly storage: Storage
+    readonly storage: Storage<string>
 
     constructor(
         engines: EngineConstructor<Engine>[],
         worldsRegistry: WorldsRegistry,
-        storage: Storage = createStorage({ driver: nullDriver() }),
+        storage: Storage<string> = createStorage({ driver: nullDriver() }),
     ) {
         for (const engine of engines) {
             this.engines.add(engine)
