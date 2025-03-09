@@ -3,6 +3,7 @@ import {type Engines, type PixelawCore, WsUpdateService} from "@pixelaw/core"
 import {DojoAppStore} from "./DojoAppStore.ts"
 import {dojoInit, type DojoStuff} from "./DojoEngine.init.ts"
 import {DojoInteraction} from "./DojoInteraction.ts"
+import {DojoQueueStore} from "./DojoQueueStore.ts"
 import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
 import {type DojoConfig, ENGINE_ID} from "./types.ts"
 
@@ -36,6 +37,8 @@ export class DojoEngine implements Engine {
 
             // Setup TileStore
             // this.core.tileStore = new RestTileStore(config.serverUrl)
+
+            this.core.queue = await DojoQueueStore.getInstance(this.dojoSetup)
         } catch (error) {
             console.error("Dojo init error:", error)
         }

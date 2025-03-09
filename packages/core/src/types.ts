@@ -58,7 +58,12 @@ export type QueueItem = {
     calldata: string
 }
 
+export type QueueStoreEvents = {
+    updated: number
+}
+
 export interface QueueStore {
+    eventEmitter: ReturnType<typeof mitt<QueueStoreEvents>>
     getAll: () => QueueItem[]
 }
 
