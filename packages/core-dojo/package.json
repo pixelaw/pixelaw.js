@@ -16,14 +16,14 @@
   },
   "dependencies": {
     "@cartridge/connector": "^0.6.0",
-    "@dojoengine/core": "^1.1.1",
-    "@dojoengine/create-burner": "^1.1.1",
-    "@dojoengine/react": "^1.1.1",
+    "@dojoengine/core": "^1.2.5",
+    "@dojoengine/create-burner": "^1.2.5",
+    "@dojoengine/react": "^1.2.5",
     "@dojoengine/recs": "^2.0.13",
-    "@dojoengine/sdk": "^1.1.1",
-    "@dojoengine/state": "^1.1.1",
-    "@dojoengine/torii-client": "^1.1.1",
-    "@dojoengine/utils": "^1.1.1",
+    "@dojoengine/sdk": "^1.2.5",
+    "@dojoengine/state": "^1.2.5",
+    "@dojoengine/torii-client": "^1.2.5",
+    "@dojoengine/utils": "^1.2.5",
     "@pixelaw/core": "workspace:*",
     "@scure/starknet": "^1.1.0",
     "@starknet-react/core": "3.7.2",
@@ -32,16 +32,16 @@
     "dotenv": "^16.4.7",
     "mitt": "^3.0.1",
     "unstorage": "^1.14.4",
-    "starknet": "6.21.0",
+    "starknet": "6.23.1",
     "starknetkit": "^2.6.1",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "esbuild-plugin-alias": "^0.2.1",
-    "globals": "^15.14.0",
-    "tsup": "^8.3.6",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "globals": "^16.0.0",
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
   }
 }

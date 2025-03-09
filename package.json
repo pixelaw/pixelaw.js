@@ -25,5 +25,10 @@
   },
   "dependencies": {
     "@changesets/cli": "^2.27.11"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@dojoengine/torii-wasm@1.2.5": "patches/@dojoengine__torii-wasm@1.2.5.patch"
+    }
   }
 }

@@ -20,8 +20,7 @@ export function createSqlQuery(bounds: Bounds) {
     const [[left, top], [right, bottom]] = bounds
     const xWraps = right - left < 0
     const yWraps = bottom - top < 0
-    let result = `SELECT json_array(color,  ltrim(substr(text, 3), '0'), ltrim(substr(action, 3), '0'),   (x << 16) | y ) as d FROM "pixelaw-Pixel" WHERE( 1 = 0 ) `
-    // let result = `SELECT json_array(color,  'f09f87b5f09f87adefb88f',   (x << 16) | y ) as d FROM "pixelaw-Pixel" WHERE( 1 = 0 ) `
+    let result = `SELECT json_array(color, ltrim(substr(text, 3), '0'), ltrim(substr(action, 3), '0'), (x << 16) | y ) as d FROM "pixelaw-Pixel" WHERE( 1 = 0 ) `
     const ZERO = 0
 
     if (xWraps && yWraps) {
@@ -42,6 +41,21 @@ export function createSqlQuery(bounds: Bounds) {
     return result
 }
 
+let postMessageFunction: (message: any) => void
+
+if (typeof globalThis.self !== "undefined" && globalThis.self.onmessage) {
+    // Browser environment
+    postMessageFunction = globalThis.self.postMessage.bind(globalThis.self)
+    globalThis.self.onmessage = handleMessage
+} else {
+    // Node.js environment
+    const { parentPort } = await import("node:worker_threads")
+    if (parentPort) {
+        postMessageFunction = (message) => parentPort.postMessage(message)
+        parentPort.on("message", handleMessage)
+    }
+}
+
 class DojoSqlPixelStore implements PixelStore {
     public readonly eventEmitter = mitt<PixelStoreEvents>()
     private static instance: DojoSqlPixelStore
@@ -50,23 +64,36 @@ class DojoSqlPixelStore implements PixelStore {
     private cacheUpdated: number = Date.now()
     private isSubscribed = false
     private sdk: SDK<SchemaType>
-    private worker: Worker
+    private worker: any // Worker type for both environments
     private toriiUrl: string
 
     protected constructor(toriiUrl: string, sdk: SDK<SchemaType>) {
         this.sdk = sdk
         this.toriiUrl = toriiUrl
-        const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url)
-        // console.log("import.meta.url", import.meta.url)
-        // console.log({ workerUrl })
-        this.worker = new Worker(workerUrl, { type: "module" })
-        this.worker.onmessage = this.handleRefreshWorker.bind(this)
-        this.subscribe()
     }
 
-    public static getInstance(toriiUrl: string, sdk: SDK<SchemaType>): DojoSqlPixelStore {
+    public static async getInstance(toriiUrl: string, sdk: SDK<SchemaType>): Promise<DojoSqlPixelStore> {
         if (!DojoSqlPixelStore.instance) {
-            DojoSqlPixelStore.instance = new DojoSqlPixelStore(toriiUrl, sdk)
+            const instance = new DojoSqlPixelStore(toriiUrl, sdk)
+
+            if (typeof window !== "undefined") {
+                // Browser environment
+                const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url)
+                instance.worker = new Worker(workerUrl, { type: "module" })
+            } else {
+                // Node.js environment
+                const { Worker } = await import("node:worker_threads")
+                const { fileURLToPath } = await import("node:url")
+                const path = await import("node:path")
+                const __filename = fileURLToPath(import.meta.url)
+                const __dirname = path.dirname(__filename)
+                const workerPath = path.resolve(__dirname, "./DojoSqlPixelStore.webworker.ts")
+                instance.worker = new Worker(workerPath, { workerData: { toriiUrl } })
+            }
+
+            instance.worker.onmessage = instance.handleRefreshWorker.bind(instance)
+            instance.subscribe()
+            DojoSqlPixelStore.instance = instance
         }
         return DojoSqlPixelStore.instance
     }

@@ -1,0 +1,4 @@
+{
+  "extends": "../../biome.json",
+  "ignore": ["./src/wasm/dojo_c.js"]
+}

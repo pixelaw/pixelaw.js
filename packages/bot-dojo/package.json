@@ -1,0 +1,25 @@
+{
+  "name": "bot-dojo",
+  "description": "A CLI nodejs based bot for pixelaw. Can be used by AI or for executing Queue items.",
+  "module": "index.ts",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "author": "thiscaspar",
+  "license": "MIT",
+  "packageManager": "pnpm@10.5.2",
+  "scripts": {
+    "build": "tsc",
+    "run": "tsx  --experimental-wasm-modules src/index.ts",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.3",
+    "vitest": "^3.0.7"
+  },
+  "dependencies": {
+    "@pixelaw/core": "workspace:*",
+    "@pixelaw/core-dojo": "workspace:*",
+    "canvas": "^3.1.0"
+  }
+}

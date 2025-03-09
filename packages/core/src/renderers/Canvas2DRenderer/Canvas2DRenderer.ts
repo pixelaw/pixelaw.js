@@ -1,12 +1,14 @@
+import {type CanvasRenderingContext2D, createCanvas} from "canvas"
 import type {Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore} from "../../types.ts"
 import {ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE} from "./constants.ts"
 import {drawGrid} from "./drawGrid.ts"
 import {drawOutline} from "./drawOutline.ts"
 import {drawPixels} from "./drawPixels.ts"
-import {drawTiles} from "./drawTiles.ts"
 import {applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges} from "./utils.ts"
 
 import type {Emitter} from "mitt"
+
+const isBrowser = typeof window !== "undefined" && typeof document !== "undefined"
 
 export class Canvas2DRenderer {
     private canvas: HTMLCanvasElement
@@ -30,7 +32,6 @@ export class Canvas2DRenderer {
     private center: Coordinate = [0, 0]
     private pixelCoreEvents: Emitter<PixelCoreEvents>
     private isRendering = false
-
     private initialPinchDistance: number | null = null
     private initialZoom: number = this.zoom
 
@@ -41,9 +42,15 @@ export class Canvas2DRenderer {
         initialZoom: number,
         initialCenter: Coordinate,
     ) {
-        this.canvas = document.createElement("canvas")
+        if (isBrowser) {
+            this.canvas = document.createElement("canvas")
+            this.bufferCanvas = document.createElement("canvas")
+        } else {
+            this.canvas = createCanvas(800, 600) // Default size, adjust as needed
+            this.bufferCanvas = createCanvas(800, 600)
+        }
+
         this.context = this.canvas.getContext("2d")
-        this.bufferCanvas = document.createElement("canvas")
         this.bufferContext = this.bufferCanvas.getContext("2d")
         this.tileStore = tileStore
         this.pixelStore = pixelStore
@@ -52,7 +59,10 @@ export class Canvas2DRenderer {
         this.setZoom(initialZoom)
         this.setCenter(initialCenter)
 
-        this.setupEventListeners()
+        if (isBrowser) {
+            this.setupEventListeners()
+        }
+
         this.subscribeToEvents()
         this.requestRender()
     }
@@ -60,10 +70,17 @@ export class Canvas2DRenderer {
     private requestRender() {
         if (!this.isRendering) {
             this.isRendering = true
-            requestAnimationFrame(() => {
-                this.render()
-                this.isRendering = false
-            })
+            if (isBrowser) {
+                requestAnimationFrame(() => {
+                    this.render()
+                    this.isRendering = false
+                })
+            } else {
+                setImmediate(() => {
+                    this.render()
+                    this.isRendering = false
+                })
+            }
         }
     }
 
@@ -267,14 +284,14 @@ export class Canvas2DRenderer {
         this.prepareCanvas()
 
         drawGrid(this.bufferContext, this.zoom, this.pixelOffset, [this.canvas.width, this.canvas.height])
-        drawTiles(
-            this.bufferContext,
-            this.zoom,
-            this.pixelOffset,
-            [this.canvas.width, this.canvas.height],
-            this.worldOffset,
-            this.tileStore.tileset!,
-        )
+        // drawTiles(
+        //     this.bufferContext,
+        //     this.zoom,
+        //     this.pixelOffset,
+        //     [this.canvas.width, this.canvas.height],
+        //     this.worldOffset,
+        //     this.tileStore.tileset!,
+        // )
         drawPixels(
             this.bufferContext,
             this.zoom,

@@ -1,8 +1,25 @@
-import {parseText} from "./utils/utils.ts"
+import {parseText} from "./utils/utils.ts";
 
-self.onmessage = async (event) => {
-    const query = event.data.query
-    const toriiUrl = event.data.toriiUrl
+let postMessageFunction: (message: any) => void
+
+if (typeof globalThis.self !== "undefined" && globalThis.self.onmessage) {
+    // Browser environment
+    postMessageFunction = globalThis.self.postMessage.bind(globalThis.self)
+    globalThis.self.onmessage = handleMessage
+} else {
+    // Node.js environment
+    const { parentPort } = await import("node:worker_threads")
+    if (parentPort) {
+        postMessageFunction = (message) => parentPort.postMessage(message)
+        parentPort.on("message", handleMessage)
+    }
+}
+
+async function handleMessage(event: any) {
+    const data = event.data ? event.data : event
+
+    const query = data.query
+    const toriiUrl = data.toriiUrl
 
     try {
         const result: Record<string, any> = {}
@@ -24,9 +41,8 @@ self.onmessage = async (event) => {
             result[key] = pixel
         }
 
-        self.postMessage({ success: true, data: result })
+        postMessageFunction({ success: true, data: result })
     } catch (error) {
-        // @ts-ignore
-        self.postMessage({ success: false, error: error.message })
+        postMessageFunction({ success: false, error: error.message })
     }
 }

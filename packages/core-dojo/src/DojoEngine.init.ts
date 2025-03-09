@@ -1,4 +1,3 @@
-import type {DojoConfig} from "@/types.ts"
 import type ControllerConnector from "@cartridge/connector/controller"
 import type {Manifest} from "@dojoengine/core"
 import {DojoProvider} from "@dojoengine/core"
@@ -8,6 +7,7 @@ import {init} from "@dojoengine/sdk"
 import type {App} from "@pixelaw/core"
 import {Account, RpcProvider} from "starknet"
 import type {SchemaType} from "./generated/models.gen.ts"
+import type {DojoConfig} from "./types.ts"
 import {getControllerConnector} from "./utils/controller.ts"
 import baseManifest from "./utils/manifest.js"
 import {felt252ToString, felt252ToUnicode, formatAddress, getAbi} from "./utils/utils.starknet.ts"
@@ -32,7 +32,7 @@ export async function dojoInit(worldConfig: DojoConfig): Promise<DojoStuff> {
         client: {
             rpcUrl: worldConfig.rpcUrl,
             toriiUrl: worldConfig.toriiUrl,
-            relayUrl: "",
+            relayUrl: worldConfig.relayUrl,
             worldAddress: worldConfig.world,
         },
         domain: {
