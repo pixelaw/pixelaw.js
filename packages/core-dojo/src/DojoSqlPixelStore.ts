@@ -41,21 +41,6 @@ export function createSqlQuery(bounds: Bounds) {
     return result
 }
 
-let postMessageFunction: (message: any) => void
-
-if (typeof globalThis.self !== "undefined" && globalThis.self.onmessage) {
-    // Browser environment
-    postMessageFunction = globalThis.self.postMessage.bind(globalThis.self)
-    globalThis.self.onmessage = handleMessage
-} else {
-    // Node.js environment
-    const { parentPort } = await import("node:worker_threads")
-    if (parentPort) {
-        postMessageFunction = (message) => parentPort.postMessage(message)
-        parentPort.on("message", handleMessage)
-    }
-}
-
 class DojoSqlPixelStore implements PixelStore {
     public readonly eventEmitter = mitt<PixelStoreEvents>()
     private static instance: DojoSqlPixelStore

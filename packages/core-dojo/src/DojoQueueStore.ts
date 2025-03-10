@@ -13,11 +13,12 @@ export class DojoQueueStore implements QueueStore {
     private isSubscribed = false
     private cacheUpdated: number = Date.now()
 
-    constructor(dojoStuff: DojoStuff) {
+    protected constructor(dojoStuff: DojoStuff) {
         this.dojoStuff = dojoStuff
         this.sdk = dojoStuff.sdk
     }
 
+    // Singleton factory
     public static async getInstance(dojoStuff: DojoStuff): Promise<DojoQueueStore> {
         if (!DojoQueueStore.instance) {
             const instance = new DojoQueueStore(dojoStuff)
