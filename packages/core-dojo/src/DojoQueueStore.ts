@@ -1,9 +1,9 @@
-import {KeysClause, SDK} from "@dojoengine/sdk"
+import {KeysClause, type SDK} from "@dojoengine/sdk"
+import type {EntityKeysClause} from "@dojoengine/torii-client"
 import type {QueueItem, QueueStore, QueueStoreEvents} from "@pixelaw/core"
 import mitt from "mitt"
 import type {DojoStuff} from "./DojoEngine.init.ts"
 import type {SchemaType} from "./generated/models.gen.ts"
-import {EntityKeysClause} from "@dojoengine/torii-client";
 
 type State = { [key: string]: QueueItem | undefined }
 
