@@ -1,9 +1,11 @@
-import type {SDK} from "@dojoengine/sdk"
+import {KeysClause, SDK} from "@dojoengine/sdk"
 import type {QueueItem, QueueStore, QueueStoreEvents} from "@pixelaw/core"
 import mitt from "mitt"
 import type {DojoStuff} from "./DojoEngine.init.ts"
 import type {SchemaType} from "./generated/models.gen.ts"
-import {buildSubscriptionQuery} from "./utils/querybuilder.ts"
+import {EntityKeysClause} from "@dojoengine/torii-client";
+
+type State = { [key: string]: QueueItem | undefined }
 
 export class DojoQueueStore implements QueueStore {
     public readonly eventEmitter = mitt<QueueStoreEvents>()
@@ -12,6 +14,7 @@ export class DojoQueueStore implements QueueStore {
     private static instance: DojoQueueStore
     private isSubscribed = false
     private cacheUpdated: number = Date.now()
+    private state: State = {}
 
     protected constructor(dojoStuff: DojoStuff) {
         this.dojoStuff = dojoStuff
@@ -33,22 +36,64 @@ export class DojoQueueStore implements QueueStore {
         if (this.isSubscribed) return
 
         try {
-            const [initialEntities, subscription] = await this.sdk.subscribeEntityQuery({
-                // @ts-ignore TODO fix the type of query. it seems to trigger on non-pixel updates too still
-                query: buildSubscriptionQuery(),
-                callback: (response) => {
-                    console.log("cb")
-                    if (response.error) {
-                        console.error("Error setting up entity sync:", response.error)
-                    } else if (response.data && response.data[0].entityId !== "0x0") {
-                        console.log(response)
+            const subscription = this.sdk.client.onEventMessageUpdated(
+                [KeysClause([], [undefined], "VariableLen").build() as unknown as EntityKeysClause],
+                false,
+                (id, data) => {
+                    if (id === "0x0") return
+                    try {
+                        console.log(data)
+                        const q = data["pixelaw-QueueScheduled"]
+
+                        const queueItem: QueueItem = {
+                            calldata: q.calldata.value,
+                            called_system: q.called_system.value,
+                            id: q.id.value,
+                            selector: q.selector.value,
+                            timestamp: q.timestamp.value,
+                        }
+                        this.setQueueItem(q.id.value, queueItem)
+                    } catch (e) {
+                        console.error(e)
                     }
+
                     this.cacheUpdated = Date.now()
                 },
-            })
+            )
+
+            const subscription2 = this.sdk.client.onEntityUpdated(
+                [
+                    {
+                        Keys: {
+                            pattern_matching: "VariableLen",
+                            keys: [undefined],
+                            models: ["pixelaw-QueueItem"],
+                        },
+                    },
+                ],
+                (id, data) => {
+                    if (id === "0x0") return
+                    try {
+                        console.log(data)
+                        // const q = data["pixelaw-QueueItem"]
+                        // const queueItem: QueueItem = {
+                        //     calldata: "",
+                        //     called_system: "",
+                        //     id: q.id.value,
+                        //     selector: "",
+                        //     timestamp: 0,
+                        // }
+                    } catch (e) {
+                        console.error(e)
+                    }
+
+                    this.cacheUpdated = Date.now()
+                },
+            )
 
             this.isSubscribed = true
             return () => {
+                console.log("cancel")
                 subscription.cancel()
                 this.isSubscribed = false
             }
@@ -56,7 +101,9 @@ export class DojoQueueStore implements QueueStore {
             console.error("Subscription error:", error)
         }
     }
-
+    public setQueueItem(key: string, queueItem: QueueItem): void {
+        this.state[key] = queueItem
+    }
     getAll(): QueueItem[] {
         return this.dojoStuff!.apps
     }

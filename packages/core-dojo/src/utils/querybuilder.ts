@@ -43,7 +43,7 @@ export function buildSubscriptionQuery(): ToriiQueryBuilder<SchemaType> {
     const timestamp = Date.now()
     // TODO tweak the query, it works with withLimit(10) and withOffset(10) but removing them
     // leads to a grpc error.
-    const query = builder.withLimit(10).withOffset(10).addEntityModel("pixelaw-Pixel").updatedAfter(timestamp)
+    const query = builder.withLimit(10).withOffset(0).addEntityModel("pixelaw-Pixel").updatedAfter(timestamp)
     return query
 }
 

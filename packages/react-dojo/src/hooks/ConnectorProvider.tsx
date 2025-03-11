@@ -1,14 +1,13 @@
-import { DojoWallet, type DojoWalletId } from "@pixelaw/core-dojo"
-import type { DojoEngine } from "@pixelaw/core-dojo/src"
-import { usePixelawProvider } from "@pixelaw/react"
-import type { Connector } from "@starknet-react/core"
-import { InjectedConnector, useAccount, useConnect, useDisconnect } from "@starknet-react/core"
-import type React from "react"
-import type { ReactNode } from "react"
-import { createContext, useContext, useEffect, useState } from "react"
-import { constants } from "starknet"
-import { ArgentMobileConnector, isInArgentMobileAppBrowser } from "starknetkit/argentMobile"
-import { WebWalletConnector } from "starknetkit/webwallet"
+import {DojoWallet, type DojoWalletId} from "@pixelaw/core-dojo"
+import type {DojoEngine} from "@pixelaw/core-dojo/src"
+import {usePixelawProvider} from "@pixelaw/react"
+import type {Connector} from "@starknet-react/core"
+import {InjectedConnector, useAccount, useConnect, useDisconnect} from "@starknet-react/core"
+
+import {createContext, useContext, useEffect, useState} from "react"
+import {constants} from "starknet"
+import {ArgentMobileConnector, isInArgentMobileAppBrowser} from "starknetkit/argentMobile"
+import {WebWalletConnector} from "starknetkit/webwallet"
 
 interface ConnectorContextType {
     availableConnectors: Connector[]
@@ -98,7 +97,6 @@ export const ConnectorProvider: React.FC<ConnectorProviderProps> = ({ children }
     useEffect(() => {
         const activateConnector = async () => {
             if (wallet && !(typeof wallet["getAccount"] === "function")) {
-                console.log("Handling loading from BaseWallet")
                 const matchingConnector = availableConnectors.find((connector) => connector.id === wallet.id)
 
                 if (matchingConnector) {

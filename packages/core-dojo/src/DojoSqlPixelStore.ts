@@ -1,4 +1,4 @@
-import type {SDK} from "@dojoengine/sdk"
+import {KeysClause, type SDK} from "@dojoengine/sdk"
 import {
     areBoundsEqual,
     type Bounds,
@@ -11,8 +11,9 @@ import {
 } from "@pixelaw/core"
 import mitt from "mitt"
 import type {SchemaType} from "./generated/models.gen.ts"
-import {buildSubscriptionQuery, getQueryBounds} from "./utils/querybuilder.ts"
+import {getQueryBounds} from "./utils/querybuilder.ts"
 import {convertFullHexString} from "./utils/utils.ts"
+import {EntityKeysClause} from "@dojoengine/torii-client";
 
 type State = { [key: string]: Pixel | undefined }
 
@@ -88,33 +89,38 @@ class DojoSqlPixelStore implements PixelStore {
         if (this.isSubscribed) return
 
         try {
-            const [initialEntities, subscription] = await this.sdk.subscribeEntityQuery({
-                // @ts-ignore TODO fix the type of query. it seems to trigger on non-pixel updates too still
-                query: buildSubscriptionQuery(),
-                callback: (response) => {
-                    console.log("cb")
-                    if (response.error) {
-                        console.error("Error setting up entity sync:", response.error)
-                    } else if (response.data && response.data[0].entityId !== "0x0") {
-                        const p = response.data[0].models.pixelaw.Pixel
-                        const key = `${p?.x}_${p?.y}`
-                        console.log(p)
-                        if (p?.text) {
-                            p.text = convertFullHexString(p.text)
-                        }
-                        if (p?.action) {
-                            p.action = convertFullHexString(p.action)
+            const subscription = this.sdk.client.onEntityUpdated(
+                [KeysClause(["pixelaw-Pixel"], [undefined], "VariableLen").build() as unknown as EntityKeysClause],
+                (id, data) => {
+                    if (id === "0x0") return
+                    try {
+                        const p = data["pixelaw-Pixel"]
+
+                        const pixel: Pixel = {
+                            action: convertFullHexString(p.action.value),
+                            color: p.color.value,
+                            owner: "",
+                            text: convertFullHexString(p.text.value),
+                            timestamp: p.timestamp.value,
+                            x: p.x.value,
+                            y: p.y.value,
                         }
 
-                        this.setPixel(key, p as Pixel)
-                        this.eventEmitter.emit("cacheUpdated", Date.now())
+                        const key = `${p?.x.value}_${p?.y.value}`
+
+                        this.setPixel(key, pixel)
+                    } catch (e) {
+                        console.error(e)
                     }
+
+                    this.eventEmitter.emit("cacheUpdated", Date.now())
                     this.cacheUpdated = Date.now()
                 },
-            })
+            )
 
             this.isSubscribed = true
             return () => {
+                console.log("subcancel")
                 subscription.cancel()
                 this.isSubscribed = false
             }
@@ -129,7 +135,7 @@ class DojoSqlPixelStore implements PixelStore {
             this.state = { ...this.state, ...data }
 
             this.eventEmitter.emit("cacheUpdated", Date.now())
-            console.log("pixels in cache: ", Object.keys(this.state).length)
+            // console.log("pixels in cache: ", Object.keys(this.state).length)
         } else {
             console.error("RefreshWorker error:", error)
         }
