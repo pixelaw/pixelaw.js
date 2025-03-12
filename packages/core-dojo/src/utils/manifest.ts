@@ -1,7 +1,7 @@
 // abi's for dojo 1.2.1
 // models for pixelaw 0.6.13
 
-export default function (worldAddress: string) {
+export function baseManifest(worldAddress: string) {
     return {
         world: {
             class_hash: "0x7c9469d45a9cdbab775035afb48e1fa73fb35ab059fcb9dfb0a301aa973e783",

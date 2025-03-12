@@ -60,6 +60,7 @@ export type QueueItem = {
 
 export type QueueStoreEvents = {
     updated: number
+    scheduled: QueueItem
 }
 
 export interface QueueStore {
@@ -152,6 +153,7 @@ export interface Engine {
     init(engineConfig: unknown): Promise<void>
     // setAccount(account: unknown): void
     handleInteraction(app: App, pixel: Pixel, color: number): Promise<Interaction | undefined>
+    executeQueueItem(queueItem: QueueItem): Promise<boolean>
 }
 
 export type EngineConstructor<T extends Engine> = new (core: PixelawCore) => T

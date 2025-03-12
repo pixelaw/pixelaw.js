@@ -2,21 +2,21 @@ import type ControllerConnector from "@cartridge/connector/controller"
 import type {Manifest} from "@dojoengine/core"
 import {DojoProvider} from "@dojoengine/core"
 import {BurnerConnector, BurnerManager, type BurnerManagerOptions} from "@dojoengine/create-burner"
-import type {SDK} from "@dojoengine/sdk"
-import {init} from "@dojoengine/sdk"
+import {init, KeysClause, type SDK, ToriiQueryBuilder, type ToriiResponse} from "@dojoengine/sdk"
 import type {App, PixelawCore} from "@pixelaw/core"
 import {Account, RpcProvider} from "starknet"
+import type {Storage} from "unstorage"
 import type {SchemaType} from "./generated/models.gen.ts"
 import type {DojoConfig} from "./types.ts"
 import {getControllerConnector} from "./utils/controller.ts"
-import baseManifest from "./utils/manifest.js"
 import {felt252ToString, felt252ToUnicode, formatAddress, getAbi} from "./utils/utils.starknet.ts"
 
-import type {Storage} from "unstorage"
+import {baseManifest} from "./utils/manifest.js"
 
 export type DojoStuff = {
     apps: App[]
     manifest: Manifest | null
+    coreAddress: string
     controllerConnector: ControllerConnector | null
     burnerConnector: BurnerConnector | null
     sdk: SDK<SchemaType> | null
@@ -47,7 +47,7 @@ export async function dojoInit(worldConfig: DojoConfig, core: PixelawCore): Prom
 
     const sdk = await init<SchemaType>(sdkSetup)
 
-    const { apps, manifest } = await fetchAppsAndManifest(worldConfig)
+    const { apps, manifest, coreAddress } = await fetchAppsAndManifest(worldConfig, sdk)
 
     const provider = new DojoProvider(manifest, worldConfig.rpcUrl)
 
@@ -60,13 +60,30 @@ export async function dojoInit(worldConfig: DojoConfig, core: PixelawCore): Prom
         controllerConnector,
         apps,
         manifest,
+        coreAddress,
         burnerConnector,
         provider,
     }
 }
 
-async function fetchAppsAndManifest(worldConfig: DojoConfig): Promise<{ apps: App[]; manifest: Manifest }> {
+async function fetchAppsAndManifest(
+    worldConfig: DojoConfig,
+    sdk: SDK<SchemaType>,
+): Promise<{ apps: App[]; manifest: Manifest; coreAddress: string }> {
     try {
+        const [initialEntities, subscription] = await sdk.subscribeEntityQuery({
+            historical: false,
+            query: new ToriiQueryBuilder()
+                .withClause(KeysClause([], [undefined], "VariableLen").build())
+                .addEntityModel("pixelaw-App")
+                .includeHashedKeys(),
+            callback(response: { data?: ToriiResponse<SchemaType, false>; error?: Error }): void {
+                if (response.data[0].entityId === "0x0") return
+                console.log("jaja", response.data[0])
+            },
+        })
+
+        console.log("initialEntities", initialEntities)
         const query = "SELECT internal_entity_id, name, system, action, icon FROM 'pixelaw-App';"
 
         const response = await fetch(`${worldConfig.toriiUrl}/sql?query=${query}`)
@@ -90,15 +107,22 @@ async function fetchAppsAndManifest(worldConfig: DojoConfig): Promise<{ apps: Ap
             apps.map((app) => getAbi(new RpcProvider({ nodeUrl: worldConfig.rpcUrl }), app)),
         )
 
+        // TODO make this dynamic based on chain
+        const base = baseManifest(worldConfig.world)
+
+        const coreContract = base.contracts[0]
+
         const manifest = {
-            ...baseManifest(worldConfig.world),
+            ...base,
             contracts,
         } as unknown as Manifest
 
-        return { apps, manifest }
+        console.log(coreContract)
+
+        return { apps, manifest, coreAddress: coreContract.address }
     } catch (error) {
         console.error("Error fetching apps and manifest:", error)
-        return { apps: [], manifest: {} as Manifest }
+        return { apps: [], manifest: {} as Manifest, coreAddress: "" }
     }
 }
 

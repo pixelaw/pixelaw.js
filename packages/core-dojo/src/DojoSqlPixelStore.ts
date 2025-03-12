@@ -46,11 +46,12 @@ class DojoSqlPixelStore implements PixelStore {
     public readonly eventEmitter = mitt<PixelStoreEvents>()
     private static instance: DojoSqlPixelStore
     private state: State = {}
+    private idLookupTable: Record<string, string> = {}
     private queryBounds: Bounds | null = null
     private cacheUpdated: number = Date.now()
     private isSubscribed = false
     private sdk: SDK<SchemaType>
-    private worker: any // Worker type for both environments
+    private worker: any
     private toriiUrl: string
 
     protected constructor(toriiUrl: string, sdk: SDK<SchemaType>) {
@@ -95,20 +96,25 @@ class DojoSqlPixelStore implements PixelStore {
                     if (id === "0x0") return
                     try {
                         const p = data["pixelaw-Pixel"]
+                        if (Object.keys(data).length === 0) {
+                            // Pixel got deleted
+                            this.deletePixel(this.idLookupTable[id])
+                            delete this.idLookupTable[id]
+                        } else {
+                            const pixel: Pixel = {
+                                action: convertFullHexString(p.action.value),
+                                color: p.color.value,
+                                owner: "",
+                                text: convertFullHexString(p.text.value),
+                                timestamp: p.timestamp.value,
+                                x: p.x.value,
+                                y: p.y.value,
+                            }
 
-                        const pixel: Pixel = {
-                            action: convertFullHexString(p.action.value),
-                            color: p.color.value,
-                            owner: "",
-                            text: convertFullHexString(p.text.value),
-                            timestamp: p.timestamp.value,
-                            x: p.x.value,
-                            y: p.y.value,
+                            const key = `${p?.x.value}_${p?.y.value}`
+                            this.idLookupTable[id] = key
+                            this.setPixel(key, pixel)
                         }
-
-                        const key = `${p?.x.value}_${p?.y.value}`
-
-                        this.setPixel(key, pixel)
                     } catch (e) {
                         console.error(e)
                     }
@@ -161,6 +167,10 @@ class DojoSqlPixelStore implements PixelStore {
     public getPixel(coord: Coordinate): Pixel | undefined {
         const key = `${coord[0]}_${coord[1]}`
         return this.state[key]
+    }
+
+    public deletePixel(key: string): void {
+        delete this.state[key]
     }
 
     public setPixel(key: string, pixel: Pixel): void {

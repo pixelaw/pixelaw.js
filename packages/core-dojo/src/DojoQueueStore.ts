@@ -42,17 +42,18 @@ export class DojoQueueStore implements QueueStore {
                 (id, data) => {
                     if (id === "0x0") return
                     try {
-                        console.log(data)
+                        console.log(id, data)
                         const q = data["pixelaw-QueueScheduled"]
 
                         const queueItem: QueueItem = {
-                            calldata: q.calldata.value,
+                            calldata: q.calldata.value.map((val) => val.value),
                             called_system: q.called_system.value,
                             id: q.id.value,
                             selector: q.selector.value,
                             timestamp: q.timestamp.value,
                         }
                         this.setQueueItem(q.id.value, queueItem)
+                        this.eventEmitter.emit("scheduled", queueItem)
                     } catch (e) {
                         console.error(e)
                     }
@@ -74,7 +75,6 @@ export class DojoQueueStore implements QueueStore {
                 (id, data) => {
                     if (id === "0x0") return
                     try {
-                        console.log(data)
                         // const q = data["pixelaw-QueueItem"]
                         // const queueItem: QueueItem = {
                         //     calldata: "",
@@ -95,6 +95,7 @@ export class DojoQueueStore implements QueueStore {
             return () => {
                 console.log("cancel")
                 subscription.cancel()
+                subscription2.cancel()
                 this.isSubscribed = false
             }
         } catch (error) {
