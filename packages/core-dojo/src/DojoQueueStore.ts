@@ -80,7 +80,6 @@ export class DojoQueueStore implements QueueStore {
                 (id, data) => {
                     if (id === "0x0") return
                     try {
-                        console.log("qsub")
                         const item = data["pixelaw-QueueScheduled"]
 
                         const queueItem: QueueItem = {
