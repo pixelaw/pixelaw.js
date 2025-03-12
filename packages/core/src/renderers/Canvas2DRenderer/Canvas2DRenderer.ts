@@ -283,7 +283,6 @@ export class Canvas2DRenderer {
 
         this.prepareCanvas()
 
-        drawGrid(this.bufferContext, this.zoom, this.pixelOffset, [this.canvas.width, this.canvas.height])
         // drawTiles(
         //     this.bufferContext,
         //     this.zoom,
@@ -302,6 +301,7 @@ export class Canvas2DRenderer {
             this.pixelStore,
         )
         drawOutline(this.bufferContext, [this.canvas.width, this.canvas.height])
+        drawGrid(this.bufferContext, this.zoom, this.pixelOffset, [this.canvas.width, this.canvas.height])
         this.context.drawImage(this.bufferCanvas, 0, 0)
     }
 

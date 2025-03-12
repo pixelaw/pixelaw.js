@@ -1,9 +1,10 @@
 import {KeysClause, type SDK} from "@dojoengine/sdk"
-import type {EntityKeysClause} from "@dojoengine/torii-client"
+import {queryTorii} from "@dojoengine/sdk/sql"
 import type {QueueItem, QueueStore, QueueStoreEvents} from "@pixelaw/core"
 import mitt from "mitt"
 import type {DojoStuff} from "./DojoEngine.init.ts"
 import type {SchemaType} from "./generated/models.gen.ts"
+import type {EntityKeysClause} from "@dojoengine/torii-client"
 
 type State = { [key: string]: QueueItem | undefined }
 
@@ -15,26 +16,57 @@ export class DojoQueueStore implements QueueStore {
     private isSubscribed = false
     private cacheUpdated: number = Date.now()
     private state: State = {}
+    private toriiUrl
 
-    protected constructor(dojoStuff: DojoStuff) {
+    protected constructor(toriiUrl: string, dojoStuff: DojoStuff) {
         this.dojoStuff = dojoStuff
         this.sdk = dojoStuff.sdk
+        this.toriiUrl = toriiUrl
     }
 
     // Singleton factory
-    public static async getInstance(dojoStuff: DojoStuff): Promise<DojoQueueStore> {
+    public static async getInstance(toriiUrl: string, dojoStuff: DojoStuff): Promise<DojoQueueStore> {
         if (!DojoQueueStore.instance) {
-            const instance = new DojoQueueStore(dojoStuff)
+            DojoQueueStore.instance = new DojoQueueStore(toriiUrl, dojoStuff)
 
-            instance.subscribe()
-            DojoQueueStore.instance = instance
+            await DojoQueueStore.instance.subscribe()
+            await DojoQueueStore.instance.initialize()
         }
         return DojoQueueStore.instance
     }
 
+    private async initialize() {
+        try {
+            const items = await queryTorii(
+                this.toriiUrl,
+                `SELECT qs.id, qs.timestamp, qs.called_system, qs.selector, qs.calldata
+                FROM "pixelaw-QueueScheduled" qs
+                INNER JOIN "pixelaw-QueueItem" qi 
+                ON qi.id = qs.id;
+                `,
+                (rows: any[]) => {
+                    return rows.map((item) => {
+                        return {
+                            ...item,
+                            calldata: JSON.parse(item.calldata),
+                        }
+                    })
+                },
+            )
+            for (const item of items) {
+                console.log("INITIAL", item.id)
+                this.setQueueItem(item.id, item)
+                this.eventEmitter.emit("scheduled", item)
+            }
+            // console.log({ items })
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
     private async subscribe() {
         if (this.isSubscribed) return
-
+        console.log("sub")
         try {
             const subscription = this.sdk.client.onEventMessageUpdated(
                 [KeysClause([], [undefined], "VariableLen").build() as unknown as EntityKeysClause],
@@ -42,47 +74,18 @@ export class DojoQueueStore implements QueueStore {
                 (id, data) => {
                     if (id === "0x0") return
                     try {
-                        console.log(id, data)
-                        const q = data["pixelaw-QueueScheduled"]
+                        console.log("queue.sub", id, data)
+                        const item = data["pixelaw-QueueScheduled"]
 
                         const queueItem: QueueItem = {
-                            calldata: q.calldata.value.map((val) => val.value),
-                            called_system: q.called_system.value,
-                            id: q.id.value,
-                            selector: q.selector.value,
-                            timestamp: q.timestamp.value,
+                            calldata: item.calldata.value.map((val) => val.value),
+                            called_system: item.called_system.value,
+                            id: item.id.value,
+                            selector: item.selector.value,
+                            timestamp: item.timestamp.value,
                         }
-                        this.setQueueItem(q.id.value, queueItem)
+                        this.setQueueItem(item.id.value, queueItem)
                         this.eventEmitter.emit("scheduled", queueItem)
-                    } catch (e) {
-                        console.error(e)
-                    }
-
-                    this.cacheUpdated = Date.now()
-                },
-            )
-
-            const subscription2 = this.sdk.client.onEntityUpdated(
-                [
-                    {
-                        Keys: {
-                            pattern_matching: "VariableLen",
-                            keys: [undefined],
-                            models: ["pixelaw-QueueItem"],
-                        },
-                    },
-                ],
-                (id, data) => {
-                    if (id === "0x0") return
-                    try {
-                        // const q = data["pixelaw-QueueItem"]
-                        // const queueItem: QueueItem = {
-                        //     calldata: "",
-                        //     called_system: "",
-                        //     id: q.id.value,
-                        //     selector: "",
-                        //     timestamp: 0,
-                        // }
                     } catch (e) {
                         console.error(e)
                     }
@@ -95,7 +98,7 @@ export class DojoQueueStore implements QueueStore {
             return () => {
                 console.log("cancel")
                 subscription.cancel()
-                subscription2.cancel()
+                // subscription2.cancel()
                 this.isSubscribed = false
             }
         } catch (error) {

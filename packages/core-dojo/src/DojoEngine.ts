@@ -50,7 +50,7 @@ export class DojoEngine implements Engine {
             // Setup TileStore
             // this.core.tileStore = new RestTileStore(config.serverUrl)
 
-            this.core.queue = await DojoQueueStore.getInstance(this.dojoSetup)
+            this.core.queue = await DojoQueueStore.getInstance(this.config.toriiUrl, this.dojoSetup)
         } catch (error) {
             console.error("Dojo init error:", error)
         }

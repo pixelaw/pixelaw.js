@@ -10,6 +10,7 @@
   "packageManager": "pnpm@10.5.2",
   "scripts": {
     "build": "tsc",
+    "run-clean": "rm -f db.sqlite && tsx  --experimental-wasm-modules src/index.ts",
     "run": "tsx  --experimental-wasm-modules src/index.ts",
     "test": "vitest"
   },

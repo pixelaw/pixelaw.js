@@ -61,12 +61,12 @@ class DojoSqlPixelStore implements PixelStore {
 
     public static async getInstance(toriiUrl: string, sdk: SDK<SchemaType>): Promise<DojoSqlPixelStore> {
         if (!DojoSqlPixelStore.instance) {
-            const instance = new DojoSqlPixelStore(toriiUrl, sdk)
+            DojoSqlPixelStore.instance = new DojoSqlPixelStore(toriiUrl, sdk)
 
             if (typeof window !== "undefined" && Object.keys(window).length !== 0) {
                 // Browser environment
                 const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url)
-                instance.worker = new Worker(workerUrl, { type: "module" })
+                DojoSqlPixelStore.instance.worker = new Worker(workerUrl, { type: "module" })
                 console.log("worker")
             } else {
                 // Node.js environment
@@ -76,12 +76,13 @@ class DojoSqlPixelStore implements PixelStore {
                 const __filename = fileURLToPath(import.meta.url)
                 const __dirname = path.dirname(__filename)
                 const workerPath = path.resolve(__dirname, "./DojoSqlPixelStore.webworker.ts")
-                instance.worker = new Worker(workerPath, { workerData: { toriiUrl } })
+                DojoSqlPixelStore.instance.worker = new Worker(workerPath, { workerData: { toriiUrl } })
             }
 
-            instance.worker.onmessage = instance.handleRefreshWorker.bind(instance)
-            instance.subscribe()
-            DojoSqlPixelStore.instance = instance
+            DojoSqlPixelStore.instance.worker.onmessage = DojoSqlPixelStore.instance.handleRefreshWorker.bind(
+                DojoSqlPixelStore.instance,
+            )
+            DojoSqlPixelStore.instance.subscribe()
         }
         return DojoSqlPixelStore.instance
     }

@@ -83,7 +83,6 @@ async function fetchAppsAndManifest(
             },
         })
 
-        console.log("initialEntities", initialEntities)
         const query = "SELECT internal_entity_id, name, system, action, icon FROM 'pixelaw-App';"
 
         const response = await fetch(`${worldConfig.toriiUrl}/sql?query=${query}`)
@@ -117,7 +116,7 @@ async function fetchAppsAndManifest(
             contracts,
         } as unknown as Manifest
 
-        console.log(coreContract)
+        // console.log(coreContract)
 
         return { apps, manifest, coreAddress: coreContract.address }
     } catch (error) {
