@@ -69,12 +69,17 @@ export class DojoQueueStore implements QueueStore {
         console.log("sub")
         try {
             const subscription = this.sdk.client.onEventMessageUpdated(
-                [KeysClause([], [undefined], "VariableLen").build() as unknown as EntityKeysClause],
+                [
+                    KeysClause(
+                        ["pixelaw-QueueScheduled"],
+                        [undefined],
+                        "VariableLen",
+                    ).build() as unknown as EntityKeysClause,
+                ],
                 false,
                 (id, data) => {
                     if (id === "0x0") return
                     try {
-                        console.log("queue.sub", id, data)
                         const item = data["pixelaw-QueueScheduled"]
 
                         const queueItem: QueueItem = {
