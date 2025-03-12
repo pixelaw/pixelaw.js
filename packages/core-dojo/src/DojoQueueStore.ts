@@ -66,7 +66,7 @@ export class DojoQueueStore implements QueueStore {
 
     private async subscribe() {
         if (this.isSubscribed) return
-        console.log("sub")
+
         try {
             const subscription = this.sdk.client.onEventMessageUpdated(
                 [
@@ -80,6 +80,7 @@ export class DojoQueueStore implements QueueStore {
                 (id, data) => {
                     if (id === "0x0") return
                     try {
+                        console.log("qsub")
                         const item = data["pixelaw-QueueScheduled"]
 
                         const queueItem: QueueItem = {
@@ -103,7 +104,6 @@ export class DojoQueueStore implements QueueStore {
             return () => {
                 console.log("cancel")
                 subscription.cancel()
-                // subscription2.cancel()
                 this.isSubscribed = false
             }
         } catch (error) {

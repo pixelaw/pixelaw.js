@@ -40,9 +40,8 @@ export class DojoEngine implements Engine {
             // Setup AppStore
             this.core.appStore = new DojoAppStore(this.dojoSetup)
 
-            // Setup PixelStore TODO why the getInstance
+            // Setup PixelStore
             this.core.pixelStore = await DojoSqlPixelStore.getInstance(this.config.toriiUrl, this.dojoSetup!.sdk!)
-            // this.core.pixelStore = new DojoSqlPixelStore(this.config.toriiUrl, this.dojoSetup!.sdk!)
 
             // Setup UpdateService
             this.core.updateService = new WsUpdateService(config.serverUrl)
