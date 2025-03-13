@@ -21,6 +21,7 @@ export type DojoStuff = {
     burnerConnector: BurnerConnector | null
     sdk: SDK<SchemaType> | null
     provider: DojoProvider
+    toriiUrl: string
 }
 const controllerConnectorCache = new Map<string, ControllerConnector | null>()
 const burnerConnectorCache = new Map<string, Promise<BurnerConnector | null>>()
@@ -29,7 +30,7 @@ export async function dojoInit(worldConfig: DojoConfig, core: PixelawCore): Prom
     if (!worldConfig) {
         throw new Error("WorldConfig is not loaded")
     }
-
+    const toriiUrl = worldConfig.toriiUrl
     const sdkSetup = {
         client: {
             rpcUrl: worldConfig.rpcUrl,
@@ -63,6 +64,7 @@ export async function dojoInit(worldConfig: DojoConfig, core: PixelawCore): Prom
         coreAddress,
         burnerConnector,
         provider,
+        toriiUrl,
     }
 }
 

@@ -54,7 +54,6 @@ export class DojoQueueStore implements QueueStore {
                 },
             )
             for (const item of items) {
-                console.log("INITIAL", item.id)
                 this.setQueueItem(item.id, item)
                 this.eventEmitter.emit("scheduled", item)
             }

@@ -38,7 +38,7 @@ export class DojoEngine implements Engine {
             this.status = this.dojoSetup ? "ready" : "error"
 
             // Setup AppStore
-            this.core.appStore = new DojoAppStore(this.dojoSetup)
+            this.core.appStore = await DojoAppStore.getInstance(this.dojoSetup)
 
             // Setup PixelStore
             this.core.pixelStore = await DojoSqlPixelStore.getInstance(this.config.toriiUrl, this.dojoSetup!.sdk!)
