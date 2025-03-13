@@ -31,5 +31,9 @@
     "unstorage": "^1.14.4",
     "postcss": "^8.4.49",
     "react-router-dom": "^7.1.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   }
 }

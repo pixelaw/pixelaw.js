@@ -37,5 +37,9 @@
     "postcss": "^8.4.49",
     "react-router-dom": "^7.1.0",
     "starknetkit": "^2.6.1"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   }
 }
