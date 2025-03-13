@@ -1,12 +1,7 @@
-import { type Canvas, type CanvasRenderingContext2D, createCanvas } from "canvas"
-import type { Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore } from "../../types.ts"
-import { ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE } from "./constants.ts"
-import { drawGrid } from "./drawGrid.ts"
-import { drawOutline } from "./drawOutline.ts"
-import { drawPixels } from "./drawPixels.ts"
-import { applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges } from "./utils.ts"
+import type {Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore} from "../../types.ts"
+import {applyWorldOffset, cellForPosition} from "./utils.ts"
 
-import type { Emitter } from "mitt"
+import type {Emitter} from "mitt"
 
 export abstract class AbstractCanvas2DRenderer {
     protected pixelOffset: Coordinate = [0, 0]
@@ -24,28 +19,12 @@ export abstract class AbstractCanvas2DRenderer {
     protected initialPinchDistance: number | null = null
     protected initialZoom: number = this.zoom
 
-    constructor(
-        pixelCoreEvents: Emitter<PixelCoreEvents>,
-        tileStore: TileStore,
-        pixelStore: PixelStore,
-        initialZoom: number,
-        initialCenter: Coordinate,
-    ) {
-        this.prepareCanvas()
-        // this.canvas = createCanvas(800, 600)
-        // this.bufferCanvas = createCanvas(800, 600)
-        //
-        // this.context = this.canvas.getContext("2d")
-        // this.bufferContext = this.bufferCanvas.getContext("2d")
+    constructor(pixelCoreEvents: Emitter<PixelCoreEvents>, tileStore: TileStore, pixelStore: PixelStore) {
         this.tileStore = tileStore
         this.pixelStore = pixelStore
         this.pixelCoreEvents = pixelCoreEvents
 
-        this.setZoom(initialZoom)
-        this.setCenter(initialCenter)
-
         this.subscribeToEvents()
-        this.requestRender()
     }
 
     protected abstract prepareCanvas()
@@ -71,7 +50,7 @@ export abstract class AbstractCanvas2DRenderer {
         })
     }
 
-    private calculateCenter(): Coordinate {
+    protected calculateCenter(): Coordinate {
         const [width, height] = this.getCanvasDimensions()
 
         const viewportCenter: Coordinate = [width / 2, height / 2]
@@ -83,7 +62,7 @@ export abstract class AbstractCanvas2DRenderer {
         return applyWorldOffset(this.worldOffset, centerCell)
     }
 
-    private calculateWorldViewBounds(): Bounds {
+    protected calculateWorldViewBounds(): Bounds {
         const [canvasWidth, canvasHeight] = this.getCanvasDimensions()
         const topLeft = applyWorldOffset(this.worldOffset, [0, 0])
         const bottomRightCell = cellForPosition(this.zoom, this.pixelOffset, [canvasWidth, canvasHeight])

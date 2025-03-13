@@ -1,17 +1,58 @@
-import type { Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore } from "../../types.ts"
-import { ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE } from "./constants.ts"
-import { drawGrid } from "./drawGrid.ts"
-import { drawOutline } from "./drawOutline.ts"
-import { drawPixels } from "./drawPixels.ts"
-import { applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges } from "./utils.ts"
-import type { Emitter } from "mitt"
-import { AbstractCanvas2DRenderer } from "./AbstractCanvas2DRenderer.ts"
+import type {Coordinate, PixelCoreEvents, PixelStore, TileStore} from "../../types.ts"
+import {ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE} from "./constants.ts"
+import {drawGrid} from "./drawGrid.ts"
+import {drawOutline} from "./drawOutline.ts"
+import {drawPixels} from "./drawPixels.ts"
+import {applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges} from "./utils.ts"
+import {AbstractCanvas2DRenderer} from "./AbstractCanvas2DRenderer.ts"
+import type {Emitter} from "mitt"
 
 export class BrowserCanvas2DRenderer extends AbstractCanvas2DRenderer {
     private canvas: HTMLCanvasElement
     private context: CanvasRenderingContext2D | null
     private bufferCanvas: HTMLCanvasElement
     private bufferContext: CanvasRenderingContext2D | null
+
+    constructor(
+        pixelCoreEvents: Emitter<PixelCoreEvents>,
+        tileStore: TileStore,
+        pixelStore: PixelStore,
+        initialZoom: number,
+        initialCenter: Coordinate,
+    ) {
+        super(pixelCoreEvents, tileStore, pixelStore)
+
+        this.canvas = document.createElement("canvas")
+        this.context = this.canvas.getContext("2d")
+        this.bufferCanvas = document.createElement("canvas")
+        this.bufferContext = this.bufferCanvas.getContext("2d")
+
+        this.prepareCanvas()
+        this.setupEventListeners()
+        this.setZoom(initialZoom)
+        this.setCenter(initialCenter)
+
+        this.requestRender()
+    }
+
+    protected prepareCanvas() {
+        const width = this.canvas.width
+        const height = this.canvas.height
+
+        if (!this.context || !this.bufferContext) return
+
+        // These lines are needed, otherwise an interesting ghosting effect..
+        this.canvas.width = width
+        this.canvas.height = height
+
+        this.context.imageSmoothingEnabled = false
+
+        this.bufferCanvas.width = width
+        this.bufferCanvas.height = height
+        this.bufferContext.imageSmoothingEnabled = false
+
+        this.bufferContext.clearRect(0, 0, width, height)
+    }
 
     protected getCanvasDimensions(): number[] {
         return [this.canvas.width, this.canvas.height]
@@ -62,7 +103,7 @@ export class BrowserCanvas2DRenderer extends AbstractCanvas2DRenderer {
         this.requestRender()
     }
 
-    private setupEventListeners() {
+    protected setupEventListeners() {
         this.canvas.addEventListener("mousedown", this.handleMouseDown.bind(this))
         this.canvas.addEventListener("mousemove", this.handleMouseMove.bind(this))
         this.canvas.addEventListener("mouseup", this.handleMouseUp.bind(this))
@@ -226,25 +267,6 @@ export class BrowserCanvas2DRenderer extends AbstractCanvas2DRenderer {
             // Handle as a mouse up event if there's still one touch remaining
             this.handleMouseUp(event.touches[0] as unknown as MouseEvent)
         }
-    }
-
-    protected prepareCanvas() {
-        const width = this.canvas.width
-        const height = this.canvas.height
-
-        if (!this.context || !this.bufferContext) return
-
-        // These lines are needed, otherwise an interesting ghosting effect..
-        this.canvas.width = width
-        this.canvas.height = height
-
-        this.context.imageSmoothingEnabled = false
-
-        this.bufferCanvas.width = width
-        this.bufferCanvas.height = height
-        this.bufferContext.imageSmoothingEnabled = false
-
-        this.bufferContext.clearRect(0, 0, width, height)
     }
 
     private drag(lastDragPoint: Coordinate, mouse: Coordinate) {

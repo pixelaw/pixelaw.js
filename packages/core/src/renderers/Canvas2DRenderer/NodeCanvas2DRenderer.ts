@@ -1,19 +1,38 @@
-import { type Canvas, type CanvasRenderingContext2D, createCanvas } from "canvas"
-import type { Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore } from "../../types.ts"
-import { ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE } from "./constants.ts"
-import { drawGrid } from "./drawGrid.ts"
-import { drawOutline } from "./drawOutline.ts"
-import { drawPixels } from "./drawPixels.ts"
-import { applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges } from "./utils.ts"
+import {type Canvas, type CanvasRenderingContext2D, createCanvas} from "canvas"
+import type {Coordinate, PixelCoreEvents, PixelStore, TileStore} from "../../types.ts"
+import {drawGrid} from "./drawGrid.ts"
+import {drawOutline} from "./drawOutline.ts"
+import {drawPixels} from "./drawPixels.ts"
 
-import type { Emitter } from "mitt"
-import { AbstractCanvas2DRenderer } from "./AbstractCanvas2DRenderer.ts"
+import type {Emitter} from "mitt"
+import {AbstractCanvas2DRenderer} from "./AbstractCanvas2DRenderer.ts"
 
 export class NodeCanvas2DRenderer extends AbstractCanvas2DRenderer {
     protected canvas: Canvas
     protected context: CanvasRenderingContext2D | null
     protected bufferCanvas: Canvas
     protected bufferContext: CanvasRenderingContext2D | null
+
+    constructor(
+        pixelCoreEvents: Emitter<PixelCoreEvents>,
+        tileStore: TileStore,
+        pixelStore: PixelStore,
+        initialZoom: number,
+        initialCenter: Coordinate,
+    ) {
+        super(pixelCoreEvents, tileStore, pixelStore)
+
+        this.canvas = createCanvas(800, 600) // Default size, adjust as needed
+        this.bufferCanvas = createCanvas(800, 600)
+        this.context = this.canvas.getContext("2d")
+        this.bufferContext = this.bufferCanvas.getContext("2d")
+
+        this.prepareCanvas()
+        this.setZoom(initialZoom)
+        this.setCenter(initialCenter)
+
+        this.requestRender()
+    }
 
     protected getCanvasDimensions(): number[] {
         return [this.canvas.width, this.canvas.height]

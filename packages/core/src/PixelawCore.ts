@@ -89,7 +89,12 @@ export class PixelawCore {
 
         // Check for undefined values directly, improving readability
         if (app !== null && color !== null && center !== null && zoom !== null) {
-            return { app: app as string, color: color as number, center: center as number[], zoom: zoom as number }
+            return {
+                app: app as string,
+                color: color as unknown as number,
+                center: center as unknown as number[],
+                zoom: zoom as unknown as number,
+            }
         }
     }
 
@@ -204,7 +209,7 @@ export class PixelawCore {
     public setColor(newColor: number | null) {
         this.color = newColor
         this.events.emit("colorChanged", newColor)
-        this.storage.setItem(this.getStorageKey("color"), newColor).catch(console.error)
+        this.storage.setItem(this.getStorageKey("color"), newColor.toString()).catch(console.error)
     }
 
     public getZoom(): number {
@@ -215,7 +220,7 @@ export class PixelawCore {
         if (this.zoom === newZoom) return
         this.zoom = newZoom
         this.events.emit("zoomChanged", newZoom)
-        this.storage.setItem(this.getStorageKey("zoom"), newZoom).catch(console.error)
+        this.storage.setItem(this.getStorageKey("zoom"), newZoom.toString()).catch(console.error)
     }
 
     public getCenter(): Coordinate {
@@ -226,7 +231,7 @@ export class PixelawCore {
         if (this.center === newCenter) return
         this.center = newCenter
         this.events.emit("centerChanged", newCenter)
-        this.storage.setItem(this.getStorageKey("center"), newCenter).catch(console.error)
+        this.storage.setItem(this.getStorageKey("center"), JSON.stringify(newCenter)).catch(console.error)
     }
 
     public getWorld(): string {
