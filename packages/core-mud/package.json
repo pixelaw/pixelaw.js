@@ -1,6 +1,6 @@
 {
   "name": "@pixelaw/core-mud",
-  "private": true,
+  "private": false,
   "version": "0.5.3",
   "type": "module",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "build": "tsup src/index.ts",
     "lint": "biome lint .",
     "format": "biome format --write .",
-  "check": "biome check --apply ."
+    "check": "biome check --apply ."
   },
   "dependencies": {
     "@pixelaw/core": "workspace:*"

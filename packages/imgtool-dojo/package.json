@@ -1,6 +1,6 @@
 {
   "name": "@pixelaw/imgtool-dojo",
-  "private": true,
+  "private": false,
   "version": "0.5.3",
   "type": "module",
   "license": "MIT",

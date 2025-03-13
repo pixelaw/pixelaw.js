@@ -9,6 +9,7 @@
     "prettier": "pnpx prettier --write packages examples",
     "lint": "pnpm lint",
     "release": "pnpm build && pnpm -F './packages/**' publish -r --force",
+    "publish": "pnpm -F './packages/**' publish -r --force",
     "docs": "npx typedoc --out docs",
     "prepare_NOPE": "husky install"
   },

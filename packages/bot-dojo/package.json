@@ -1,5 +1,6 @@
 {
   "name": "bot-dojo",
+  "private": false,
   "description": "A CLI nodejs based bot for pixelaw. Can be used by AI or for executing Queue items.",
   "module": "index.ts",
   "version": "0.0.0",
