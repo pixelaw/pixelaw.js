@@ -1,8 +1,8 @@
-import 'dotenv/config';
-import type {CoreStatus, Engine, EngineConstructor, QueueItem, WorldsRegistry} from "@pixelaw/core"
-import {PixelawCore} from "@pixelaw/core"
-import type {DojoEngine} from "@pixelaw/core-dojo"
-import type {Storage} from "unstorage"
+import "dotenv/config"
+import type { CoreStatus, Engine, EngineConstructor, QueueItem, WorldsRegistry } from "@pixelaw/core"
+import { PixelawCore } from "@pixelaw/core"
+import type { DojoEngine } from "@pixelaw/core-dojo"
+import type { Storage } from "unstorage"
 
 export class PixelawAgent {
     private core: PixelawCore
@@ -10,14 +10,14 @@ export class PixelawAgent {
     public static async new(
         engines: EngineConstructor<Engine>[],
         worldsRegistry: WorldsRegistry,
-        storage: Storage<string>,
+        storage: Storage<StorageValue>,
     ): Promise<PixelawAgent> {
         const agent = new PixelawAgent(engines, worldsRegistry, storage)
         await agent.initialize()
         return agent
     }
 
-    constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry, storage: Storage<string>) {
+    constructor(engines: EngineConstructor<Engine>[], worldsRegistry: WorldsRegistry, storage: Storage<StorageValue>) {
         this.core = new PixelawCore(engines, worldsRegistry, storage)
     }
 

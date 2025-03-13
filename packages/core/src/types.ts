@@ -1,5 +1,5 @@
 import type mitt from "mitt"
-import type {PixelawCore} from "./PixelawCore.ts"
+import type { PixelawCore } from "./PixelawCore.ts"
 
 export type Pixel = {
     action: string
@@ -216,6 +216,7 @@ export class BaseWallet {
 
 export abstract class Wallet extends BaseWallet {
     abstract getAccount(): unknown
-    abstract initialize(): void
+    // abstract initialize(): void
     abstract toJSON(): unknown
 }
+export const IS_BROWSER = typeof window !== "undefined" && typeof window.document !== "undefined"

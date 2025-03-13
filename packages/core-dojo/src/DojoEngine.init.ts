@@ -1,17 +1,17 @@
 import type ControllerConnector from "@cartridge/connector/controller"
-import type {Manifest} from "@dojoengine/core"
-import {DojoProvider} from "@dojoengine/core"
-import {BurnerConnector, BurnerManager, type BurnerManagerOptions} from "@dojoengine/create-burner"
-import {init, KeysClause, type SDK, ToriiQueryBuilder, type ToriiResponse} from "@dojoengine/sdk"
-import type {App, PixelawCore} from "@pixelaw/core"
-import {Account, RpcProvider} from "starknet"
-import type {Storage} from "unstorage"
-import type {SchemaType} from "./generated/models.gen.ts"
-import type {DojoConfig} from "./types.ts"
-import {getControllerConnector} from "./utils/controller.ts"
-import {felt252ToString, felt252ToUnicode, formatAddress, getAbi} from "./utils/utils.starknet.ts"
+import type { Manifest } from "@dojoengine/core"
+import { DojoProvider } from "@dojoengine/core"
+import { BurnerConnector, BurnerManager, type BurnerManagerOptions } from "@dojoengine/create-burner"
+import { init, KeysClause, type SDK, ToriiQueryBuilder, type ToriiResponse } from "@dojoengine/sdk"
+import type { App, PixelawCore } from "@pixelaw/core"
+import { Account, RpcProvider } from "starknet"
+import type { Storage, StorageValue } from "unstorage"
+import type { SchemaType } from "./generated/models.gen.ts"
+import type { DojoConfig } from "./types.ts"
+import { getControllerConnector } from "./utils/controller.ts"
+import { felt252ToString, felt252ToUnicode, formatAddress, getAbi } from "./utils/utils.starknet.ts"
 
-import {baseManifest} from "./utils/manifest.js"
+import { baseManifest } from "./utils/manifest.js"
 
 export type DojoStuff = {
     apps: App[]
@@ -152,7 +152,7 @@ function setupControllerConnector(manifest: Manifest, worldConfig: DojoConfig): 
 async function setupBurnerConnector(
     rpcProvider: DojoProvider,
     worldConfig: DojoConfig,
-    storage: Storage<string>,
+    storage: Storage<StorageValue>,
 ): Promise<BurnerConnector | null> {
     const cacheKey = JSON.stringify({ rpcProvider, burnerConfig: worldConfig.wallets?.burner })
     if (burnerConnectorCache.has(cacheKey)) {
@@ -167,7 +167,7 @@ async function setupBurnerConnector(
         // @ts-ignore don't care about implementing the other fields, its for nodejs
         global.document = {
             get cookie() {
-                return burnerCookies ?? ""
+                return (burnerCookies as string) ?? ""
             },
             set cookie(cookieStr) {
                 storage.setItem("burner", cookieStr).catch(console.error)

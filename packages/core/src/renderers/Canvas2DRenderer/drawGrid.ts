@@ -2,7 +2,8 @@ import type { Coordinate, Dimension } from "../../types.ts"
 import { getCellSize } from "./utils.ts"
 
 export function drawGrid(
-    context: CanvasRenderingContext2D,
+    // biome-ignore lint/suspicious/noExplicitAny: TODO fix later
+    context: any,
     zoom: number,
     pixelOffset: Coordinate,
     dimensions: Dimension,

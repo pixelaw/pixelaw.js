@@ -1,28 +1,31 @@
-import type {
-    AppStore,
-    BaseWallet,
-    Coordinate,
-    CoreDefaults,
-    CoreStatus,
-    Engine,
-    EngineConstructor,
-    Interaction,
-    Pixel,
-    PixelCoreEvents,
-    PixelStore,
-    QueueItem,
-    QueueStore,
-    TileStore,
-    UpdateService,
-    Wallet,
-    WorldConfig,
-    WorldsRegistry,
+import {
+    type AppStore,
+    type BaseWallet,
+    type Coordinate,
+    type CoreDefaults,
+    type CoreStatus,
+    type Engine,
+    type EngineConstructor,
+    type Interaction,
+    IS_BROWSER,
+    type Pixel,
+    type PixelCoreEvents,
+    type PixelStore,
+    type QueueItem,
+    type QueueStore,
+    type TileStore,
+    type UpdateService,
+    type Wallet,
+    type WorldConfig,
+    type WorldsRegistry,
 } from "./types.ts"
 
 import mitt from "mitt"
-import {createStorage, type Storage} from "unstorage"
+import { createStorage, type Storage, type StorageValue } from "unstorage"
 import nullDriver from "unstorage/drivers/null"
-import {Canvas2DRenderer} from "./renderers"
+import { BrowserCanvas2DRenderer } from "./renderers"
+import { NodeCanvas2DRenderer } from "./renderers/Canvas2DRenderer/NodeCanvas2DRenderer.ts"
+import type { AbstractCanvas2DRenderer } from "./renderers/Canvas2DRenderer/AbstractCanvas2DRenderer.ts"
 
 export class PixelawCore {
     status: CoreStatus = "uninitialized"
@@ -32,7 +35,7 @@ export class PixelawCore {
     tileStore: TileStore = null!
     appStore: AppStore = null!
     updateService: UpdateService = null!
-    viewPort: Canvas2DRenderer = null!
+    viewPort: AbstractCanvas2DRenderer = null!
     events = mitt<PixelCoreEvents>()
     queue: QueueStore = null!
 
@@ -44,12 +47,12 @@ export class PixelawCore {
     private world: string
     private engines: Set<EngineConstructor<Engine>> = new Set()
     private wallet: Wallet | BaseWallet | null = null
-    readonly storage: Storage<string>
+    readonly storage: Storage<StorageValue>
 
     constructor(
         engines: EngineConstructor<Engine>[],
         worldsRegistry: WorldsRegistry,
-        storage: Storage<string> = createStorage({ driver: nullDriver() }),
+        storage: Storage<StorageValue> = createStorage({ driver: nullDriver() }),
     ) {
         for (const engine of engines) {
             this.engines.add(engine)
@@ -126,7 +129,23 @@ export class PixelawCore {
             this.setZoom(defaults.zoom)
         }
 
-        this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore, this.zoom, this.center)
+        if (IS_BROWSER) {
+            this.viewPort = new BrowserCanvas2DRenderer(
+                this.events,
+                this.tileStore,
+                this.pixelStore,
+                this.zoom,
+                this.center,
+            )
+        } else {
+            this.viewPort = new NodeCanvas2DRenderer(
+                this.events,
+                this.tileStore,
+                this.pixelStore,
+                this.zoom,
+                this.center,
+            )
+        }
 
         this.worldConfig = worldConfig
 
@@ -134,7 +153,7 @@ export class PixelawCore {
         const baseWallet = await this.storage.getItem(this.getStorageKey("wallet"))
         if (baseWallet) {
             console.log("loading basewallet")
-            this.setWallet(baseWallet as unknown as BaseWallet)
+            this.setWallet(baseWallet as unknown as Wallet)
             // this.wallet = baseWallet as unknown as BaseWallet
 
             // @ts-ignore FIXME it works but its not great

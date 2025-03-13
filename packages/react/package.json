@@ -26,6 +26,8 @@
   "dependencies": {
     "@pixelaw/core": "workspace:*",
     "@pixelaw/core-dojo": "workspace:*",
+    "@pixelaw/react-dojo": "workspace:*",
+    "unstorage": "^1.14.4",
     "postcss": "^8.4.49",
     "react-router-dom": "^7.1.0"
   }

@@ -1,8 +1,8 @@
 import type ControllerConnector from "@cartridge/connector/controller"
-import {useAccount} from "@starknet-react/core"
-import {useEffect} from "react"
+import { useAccount } from "@starknet-react/core"
+import { useEffect } from "react"
 import ControllerDetails from "../components/ControllerDetails/ControllerDetails"
-import {useConnectorContext} from "../hooks/ConnectorProvider"
+import { useConnectorContext } from "../hooks/ConnectorProvider"
 import styles from "./StarknetWalletSelectorPage.module.css"
 
 export const StarknetWalletSelectorPage = () => {
@@ -19,7 +19,7 @@ export const StarknetWalletSelectorPage = () => {
         <div className={styles.inner}>
             <h1>Current Wallet</h1>
             {currentConnector?.id === "controller" && (
-                <ControllerDetails connector={currentConnector as ControllerConnector} />
+                <ControllerDetails connector={currentConnector as unknown as ControllerConnector} />
             )}
             <p>
                 {currentConnector ? currentConnector.id : "none"} {status}{" "}

@@ -1,87 +1,56 @@
-import {type CanvasRenderingContext2D, createCanvas} from "canvas"
-import type {Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore} from "../../types.ts"
-import {ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE} from "./constants.ts"
-import {drawGrid} from "./drawGrid.ts"
-import {drawOutline} from "./drawOutline.ts"
-import {drawPixels} from "./drawPixels.ts"
-import {applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges} from "./utils.ts"
+import type { Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore } from "../../types.ts"
+import { ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE } from "./constants.ts"
+import { drawGrid } from "./drawGrid.ts"
+import { drawOutline } from "./drawOutline.ts"
+import { drawPixels } from "./drawPixels.ts"
+import { applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges } from "./utils.ts"
+import type { Emitter } from "mitt"
+import { AbstractCanvas2DRenderer } from "./AbstractCanvas2DRenderer.ts"
 
-import type {Emitter} from "mitt"
-
-const isBrowser = typeof window !== "undefined" && typeof document !== "undefined"
-
-export class Canvas2DRenderer {
+export class BrowserCanvas2DRenderer extends AbstractCanvas2DRenderer {
     private canvas: HTMLCanvasElement
     private context: CanvasRenderingContext2D | null
     private bufferCanvas: HTMLCanvasElement
     private bufferContext: CanvasRenderingContext2D | null
-    private pixelOffset: Coordinate = [0, 0]
-    private worldOffset: Coordinate = [0, 0]
-    private hoveredCell: Coordinate | undefined
-    // private worldView: Bounds = [
-    //     [0, 0],
-    //     [0, 0],
-    // ]
 
-    private lastDragPoint: Coordinate = [0, 0]
-    private dragStart = 0
-    private dragStartPoint: Coordinate | null = null
-    private tileStore: TileStore
-    private pixelStore: PixelStore
-    private zoom = 2000
-    private center: Coordinate = [0, 0]
-    private pixelCoreEvents: Emitter<PixelCoreEvents>
-    private isRendering = false
-    private initialPinchDistance: number | null = null
-    private initialZoom: number = this.zoom
-
-    constructor(
-        pixelCoreEvents: Emitter<PixelCoreEvents>,
-        tileStore: TileStore,
-        pixelStore: PixelStore,
-        initialZoom: number,
-        initialCenter: Coordinate,
-    ) {
-        if (isBrowser) {
-            this.canvas = document.createElement("canvas")
-            this.bufferCanvas = document.createElement("canvas")
-        } else {
-            this.canvas = createCanvas(800, 600) // Default size, adjust as needed
-            this.bufferCanvas = createCanvas(800, 600)
-        }
-
-        this.context = this.canvas.getContext("2d")
-        this.bufferContext = this.bufferCanvas.getContext("2d")
-        this.tileStore = tileStore
-        this.pixelStore = pixelStore
-        this.pixelCoreEvents = pixelCoreEvents
-
-        this.setZoom(initialZoom)
-        this.setCenter(initialCenter)
-
-        if (isBrowser) {
-            this.setupEventListeners()
-        }
-
-        this.subscribeToEvents()
-        this.requestRender()
+    protected getCanvasDimensions(): number[] {
+        return [this.canvas.width, this.canvas.height]
     }
-
-    private requestRender() {
+    protected requestRender() {
         if (!this.isRendering) {
             this.isRendering = true
-            if (isBrowser) {
-                requestAnimationFrame(() => {
-                    this.render()
-                    this.isRendering = false
-                })
-            } else {
-                setImmediate(() => {
-                    this.render()
-                    this.isRendering = false
-                })
-            }
+            requestAnimationFrame(() => {
+                this.render()
+                this.isRendering = false
+            })
         }
+    }
+
+    protected render() {
+        if (!this.context || !this.bufferContext) return
+
+        this.prepareCanvas()
+
+        // drawTiles(
+        //     this.bufferContext,
+        //     this.zoom,
+        //     this.pixelOffset,
+        //     [this.canvas.width, this.canvas.height],
+        //     this.worldOffset,
+        //     this.tileStore.tileset!,
+        // )
+        drawPixels(
+            this.bufferContext,
+            this.zoom,
+            this.pixelOffset,
+            [this.canvas.width, this.canvas.height],
+            this.worldOffset,
+            this.hoveredCell,
+            this.pixelStore,
+        )
+        drawOutline(this.bufferContext, [this.canvas.width, this.canvas.height])
+        drawGrid(this.bufferContext, this.zoom, this.pixelOffset, [this.canvas.width, this.canvas.height])
+        this.context.drawImage(this.bufferCanvas, 0, 0)
     }
 
     public setContainer(container: HTMLElement) {
@@ -91,25 +60,6 @@ export class Canvas2DRenderer {
         this.pixelStore.prepare(this.calculateWorldViewBounds())
         this.pixelStore.refresh()
         this.requestRender()
-    }
-
-    private subscribeToEvents() {
-        if (!this.pixelStore) throw new Error("PixelStore not initialized")
-        // TODO decide on whether pixelstore cacheupdated goes to a global event bus or not
-        this.pixelStore.eventEmitter.on("cacheUpdated", (timestamp: number) => {
-            this.requestRender()
-        })
-
-        this.pixelCoreEvents.on("pixelStoreUpdated", (timestamp: number) => {
-            console.log(`pixelStoreUpdated at: ${timestamp}`)
-
-            this.requestRender()
-        })
-        this.pixelCoreEvents.on("tileStoreUpdated", (timestamp: number) => {
-            console.log(`tileStoreUpdated at: ${timestamp}`)
-
-            this.requestRender()
-        })
     }
 
     private setupEventListeners() {
@@ -278,34 +228,7 @@ export class Canvas2DRenderer {
         }
     }
 
-    private render() {
-        if (!this.context || !this.bufferContext) return
-
-        this.prepareCanvas()
-
-        // drawTiles(
-        //     this.bufferContext,
-        //     this.zoom,
-        //     this.pixelOffset,
-        //     [this.canvas.width, this.canvas.height],
-        //     this.worldOffset,
-        //     this.tileStore.tileset!,
-        // )
-        drawPixels(
-            this.bufferContext,
-            this.zoom,
-            this.pixelOffset,
-            [this.canvas.width, this.canvas.height],
-            this.worldOffset,
-            this.hoveredCell,
-            this.pixelStore,
-        )
-        drawOutline(this.bufferContext, [this.canvas.width, this.canvas.height])
-        drawGrid(this.bufferContext, this.zoom, this.pixelOffset, [this.canvas.width, this.canvas.height])
-        this.context.drawImage(this.bufferCanvas, 0, 0)
-    }
-
-    private prepareCanvas() {
+    protected prepareCanvas() {
         const width = this.canvas.width
         const height = this.canvas.height
 
@@ -324,25 +247,6 @@ export class Canvas2DRenderer {
         this.bufferContext.clearRect(0, 0, width, height)
     }
 
-    private calculateCenter(): Coordinate {
-        const width = this.canvas.width
-        const height = this.canvas.height
-        const viewportCenter: Coordinate = [width / 2, height / 2]
-        const adjustedCenter: Coordinate = [
-            viewportCenter[0] + this.pixelOffset[0],
-            viewportCenter[1] + this.pixelOffset[1],
-        ]
-        const centerCell = cellForPosition(this.zoom, [0, 0], adjustedCenter)
-        return applyWorldOffset(this.worldOffset, centerCell)
-    }
-
-    private calculateWorldViewBounds(): Bounds {
-        const topLeft = applyWorldOffset(this.worldOffset, [0, 0])
-        const bottomRightCell = cellForPosition(this.zoom, this.pixelOffset, [this.canvas.width, this.canvas.height])
-        const bottomRight = applyWorldOffset(this.worldOffset, bottomRightCell)
-        return [topLeft, bottomRight]
-    }
-
     private drag(lastDragPoint: Coordinate, mouse: Coordinate) {
         const cellWidth = getCellSize(this.zoom)
         const [newPixelOffset, newWorldOffset] = handlePixelChanges(
@@ -356,26 +260,6 @@ export class Canvas2DRenderer {
         this.worldOffset = newWorldOffset
         this.requestRender()
     }
-
-    public setZoom(newZoom: number) {
-        if (this.zoom === newZoom || newZoom < 500) return
-        this.zoom = newZoom
-        this.pixelCoreEvents.emit("zoomChanged", newZoom)
-    }
-
-    public setCenter(newCenter: Coordinate) {
-        if (this.center === newCenter) return
-        this.center = newCenter
-        this.pixelCoreEvents.emit("centerChanged", newCenter)
-        this.pixelStore.prepare(this.calculateWorldViewBounds())
-        this.pixelStore.refresh()
-        this.requestRender()
-    }
-
-    // private setWorldView(newBounds: Bounds) {
-    //     this.worldView = newBounds
-    //     this.pixelCoreEvents.emit("worldViewChanged", newBounds)
-    // }
 
     public destroy() {
         this.canvas.removeEventListener("mousedown", this.handleMouseDown.bind(this))

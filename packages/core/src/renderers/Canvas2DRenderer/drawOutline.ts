@@ -1,6 +1,7 @@
-import type {Dimension} from "../../types"
+import type { Dimension } from "../../types"
 
-export function drawOutline(context: CanvasRenderingContext2D, dimensions: Dimension) {
+// biome-ignore lint/suspicious/noExplicitAny: TODO fix later
+export function drawOutline(context: any, dimensions: Dimension) {
     // Draw outline
     context.beginPath()
     context.rect(0, 0, dimensions[0], dimensions[1])

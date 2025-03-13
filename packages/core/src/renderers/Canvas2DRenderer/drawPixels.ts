@@ -1,14 +1,15 @@
-import type {Coordinate, Dimension, PixelStore} from "../../types.ts"
-import {ZOOM_TILEMODE} from "./constants.ts"
-import {applyWorldOffset, getCellSize, numRGBAToHex} from "./utils.ts"
+import type { Coordinate, Dimension, PixelStore } from "../../types.ts"
+import { ZOOM_TILEMODE } from "./constants.ts"
+import { applyWorldOffset, getCellSize, numRGBAToHex } from "./utils.ts"
 
 export function drawPixels(
-    context: CanvasRenderingContext2D,
+    // biome-ignore lint/suspicious/noExplicitAny: TODO fix later
+    context: any,
     zoom: number,
     pixelOffset: Coordinate,
     dimensions: Dimension,
     worldTranslation: Coordinate,
-    hoveredCell: Coordinate | undefined,
+    _hoveredCell: Coordinate | undefined,
     pixelStore: PixelStore,
 ) {
     const cellSize = getCellSize(zoom)

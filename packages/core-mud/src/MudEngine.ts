@@ -1,4 +1,4 @@
-import type { App, Engine, EngineStatus, Engines, Interaction, Pixel, PixelawCore } from "@pixelaw/core"
+import type { App, Engine, EngineStatus, Engines, Interaction, Pixel, PixelawCore, QueueItem } from "@pixelaw/core"
 
 export type MudConfig = {
     todo: number
@@ -20,7 +20,7 @@ export class MudEngine implements Engine {
     }
 
     // biome-ignore lint/correctness/noUnusedVariables: TODO
-    handleInteraction(app: App, pixel: Pixel): Interaction {
+    async handleInteraction(app: App, pixel: Pixel): Promise<Interaction> {
         return {
             dialog: null,
             action: () => {},
@@ -34,5 +34,9 @@ export class MudEngine implements Engine {
         // app
         // engine.manifest
         // engine.account?
+    }
+
+    executeQueueItem(queueItem: QueueItem): Promise<boolean> {
+        return Promise.resolve(false)
     }
 }

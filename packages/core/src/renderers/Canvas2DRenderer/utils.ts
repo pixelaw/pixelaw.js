@@ -118,6 +118,7 @@ export const numRGBAToHex = (rgba: number | undefined) => {
     const color = rgba >>> 8
     return `#${color.toString(16).padStart(6, "0")}`
 }
+
 /*
 
 export async function fillPixelData(imageUrl: string, setPixels: (pixels: { key: string, pixel: Pixel }[]) => void) {
@@ -227,8 +228,6 @@ export function calculateTileBounds(inputBounds: Bounds): Bounds {
         [rightTileCoord, bottomTileCoord],
     ]
 }
-
-
 
 // Apply WorldOffset to viewport coordinates
 // WorldOffset means "number to add to world to get view"
