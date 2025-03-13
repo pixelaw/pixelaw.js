@@ -31,13 +31,14 @@
     "browserify-zlib": "^0.2.0",
     "dotenv": "^16.4.7",
     "mitt": "^3.0.1",
-    "unstorage": "^1.14.4",
     "starknet": "6.23.1",
     "starknetkit": "^2.6.1",
+    "unstorage": "^1.14.4",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@types/node": "^18.19.50",
     "esbuild-plugin-alias": "^0.2.1",
     "globals": "^16.0.0",
     "tsup": "^8.4.0",
