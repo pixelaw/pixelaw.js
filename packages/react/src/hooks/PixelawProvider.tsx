@@ -100,7 +100,7 @@ export const PixelawProvider = ({
             zoomChanged: (newZoom: number) => setContextValues((prev) => ({ ...prev, zoom: newZoom })),
         }
 
-        if (pixelawCore) {
+        if (pixelawCore && pixelawCore.status === "uninitialized") {
             pixelawCore.loadWorld(world, coreDefaults).catch((error) => {
                 console.error("Failed to load world:", error)
                 setContextValues((prev) => ({

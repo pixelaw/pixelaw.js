@@ -88,8 +88,6 @@ export class DojoInteraction implements Interaction {
     private initializeAction() {
         // Prepare the closure to attach to the interaction
         this.action = (params) => {
-            // console.log("params", params[0])
-
             const dojoCall = generateDojoCall(
                 this.engine.dojoSetup.manifest,
                 params,
@@ -103,7 +101,7 @@ export class DojoInteraction implements Interaction {
             this.engine.dojoSetup.provider
                 .execute(account!, dojoCall, NAMESPACE, {})
                 .then((res) => {
-                    console.log("dojocall after exec", res)
+                    console.log("tx", res)
                     // TODO animate "flickering" of the pixel that was modified?
                     // pixelStore.setPixelColor(clickedCell, hexRGBtoNumber(color))
                     // pixelStore.setCacheUpdated(Date.now())

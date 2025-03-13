@@ -66,7 +66,6 @@ export class DojoQueueStore implements QueueStore {
 
     private async subscribe() {
         if (this.isSubscribed) return
-
         try {
             const subscription = this.sdk.client.onEventMessageUpdated(
                 [

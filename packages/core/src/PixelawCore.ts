@@ -66,6 +66,7 @@ export class PixelawCore {
 
     public setWallet(wallet: Wallet | null) {
         this.wallet = wallet
+        console.log("setWallet", this.wallet)
         this.events.emit("walletChanged", wallet)
         this.storage.setItem(this.getStorageKey("wallet"), JSON.stringify(wallet)).catch(console.error)
     }
@@ -90,6 +91,8 @@ export class PixelawCore {
     }
 
     public async loadWorld(world: string, urlDefaults?: CoreDefaults) {
+        console.log("loading loadWorld")
+
         if (!Object.prototype.hasOwnProperty.call(this.worldsRegistry, world))
             throw Error(`World ${world} does not exist in registry`)
 
@@ -130,10 +133,12 @@ export class PixelawCore {
         // Try to get the Wallet
         const baseWallet = await this.storage.getItem(this.getStorageKey("wallet"))
         if (baseWallet) {
-            this.wallet = baseWallet as unknown as BaseWallet
+            console.log("loading basewallet")
+            this.setWallet(baseWallet as unknown as BaseWallet)
+            // this.wallet = baseWallet as unknown as BaseWallet
 
             // @ts-ignore FIXME it works but its not great
-            this.events.emit("walletChanged", baseWallet)
+            // this.events.emit("walletChanged", baseWallet)
         }
 
         this.events.on("centerChanged", (newCenter: Coordinate) => {
@@ -218,9 +223,6 @@ export class PixelawCore {
     // TODO finalize return type etc
     public async executeQueueItem(queueItem: QueueItem): Promise<boolean> {
         return await this.engine.executeQueueItem(queueItem)
-        // const pixel = this.pixelStore.getPixel(coordinate) ?? ({ x: coordinate[0], y: coordinate[1] } as Pixel)
-        // const app = this.appStore.getByName(this.app)
-        // return await this.engine.handleInteraction(app, pixel, this.color)
     }
 
     private getStorageKey(key: string): string {

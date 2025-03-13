@@ -66,8 +66,6 @@ export class DojoEngine implements Engine {
     }
 
     async executeQueueItem(item: QueueItem): Promise<boolean> {
-
-
         const dojoCall = {
             contractAddress: "0x074d62337ea2319f3e65d75cda97bc8691a3e0e6c5efc12ceb3e982c3caf62f8", //this.dojoSetup.coreAddress,
             entrypoint: "process_queue",
@@ -82,6 +80,10 @@ export class DojoEngine implements Engine {
         }
 
         const wallet = this.core.getWallet() as DojoWallet
+        if (!wallet || !wallet.account) {
+            console.log("executeQueueItem but no wallet")
+            return
+        }
         const account = wallet.getAccount()
 
         this.dojoSetup.provider
@@ -91,7 +93,7 @@ export class DojoEngine implements Engine {
             })
             .catch((error) => {
                 console.error("Error executing DojoCall:", error)
-                // Handle the error appropriately here
+                // TODO Handle the error appropriately here
             })
 
         return true

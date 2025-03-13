@@ -79,7 +79,7 @@ export const ConnectorProvider: React.FC<ConnectorProviderProps> = ({ children }
             if (currentConnector && currentAccount) {
                 console.log("Handling Connector activation")
                 try {
-                    console.log({ currentAccount })
+                    console.log("activateConnector", { currentAccount })
                     const chainId = await currentAccount.getChainId()
                     const wallet = new DojoWallet(currentConnector.id as DojoWalletId, chainId, currentAccount)
                     setWallet(wallet)

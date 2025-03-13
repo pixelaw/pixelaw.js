@@ -216,5 +216,6 @@ export class BaseWallet {
 
 export abstract class Wallet extends BaseWallet {
     abstract getAccount(): unknown
+    abstract initialize(): void
     abstract toJSON(): unknown
 }
