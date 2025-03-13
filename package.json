@@ -1,5 +1,6 @@
 {
   "name": "pixelaw.js",
+  "version": "0.0.0",
   "private": false,
   "scripts": {
     "build-cores": "bash ./scripts/build-core-packages.sh",
