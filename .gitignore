@@ -3,5 +3,5 @@
 **/.idea/
 **/node_modules/
 .DS_Store
-
+.npmrc
 lerna-debug.log
