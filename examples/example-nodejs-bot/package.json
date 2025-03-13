@@ -2,7 +2,7 @@
   "name": "example-nodejs-bot",
   "private": false,
   "module": "index.ts",
-  "version": "0.0.0",
+  "version": "0.6.0",
   "type": "module",
   "main": "dist/src/server.js",
   "devDependencies": {},
