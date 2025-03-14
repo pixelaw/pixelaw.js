@@ -44,17 +44,29 @@ export class Canvas2DRenderer {
         if (isBrowser) {
             this.canvas = document.createElement("canvas")
             this.bufferCanvas = document.createElement("canvas")
+            this.context = this.canvas.getContext("2d")
+            this.bufferContext = this.bufferCanvas.getContext("2d")
+
+            this.tileStore = tileStore
+            this.pixelStore = pixelStore
+            this.pixelCoreEvents = pixelCoreEvents
+
             this.setZoom(initialZoom)
             this.setCenter(initialCenter)
             this.setupEventListeners()
-            this.context = this.canvas.getContext("2d")
-            this.bufferContext = this.bufferCanvas.getContext("2d")
 
 
         } else {
             import("canvas").then(({ createCanvas }) => {
                 this.canvas = createCanvas(800, 600) // Default size, adjust as needed
                 this.bufferCanvas = createCanvas(800, 600)
+                this.context = this.canvas.getContext("2d")
+                this.bufferContext = this.bufferCanvas.getContext("2d")
+
+                this.tileStore = tileStore
+                this.pixelStore = pixelStore
+                this.pixelCoreEvents = pixelCoreEvents
+
                 this.setZoom(initialZoom)
                 this.setCenter(initialCenter)
                 this.subscribeToEvents()
@@ -62,9 +74,6 @@ export class Canvas2DRenderer {
             })
 
         }
-        this.tileStore = tileStore
-        this.pixelStore = pixelStore
-        this.pixelCoreEvents = pixelCoreEvents
 
 
 

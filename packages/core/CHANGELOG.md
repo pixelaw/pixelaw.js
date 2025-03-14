@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.6.7
+
+### Patch Changes
+
+- fic
+
 ## 0.6.6
 
 ### Patch Changes
