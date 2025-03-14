@@ -65,7 +65,7 @@ class DojoSqlPixelStore implements PixelStore {
 
             if (typeof window !== "undefined" && Object.keys(window).length !== 0) {
                 // Browser environment
-                const workerUrl = new URL("./DojoSqlPixelStore.webworker.ts", import.meta.url)
+                const workerUrl = new URL("./DojoSqlPixelStore.webworker.js", import.meta.url)
                 DojoSqlPixelStore.instance.worker = new Worker(workerUrl, { type: "module" })
                 console.log("worker")
             } else {

@@ -1,6 +1,6 @@
 import {parseText} from "./utils/utils.ts"
 
-let postMessageFunction: (message: any) => void
+let postMessageFunction
 
 if (typeof self !== "undefined") {
     // Browser environment
@@ -15,13 +15,13 @@ if (typeof self !== "undefined") {
     }
 }
 
-async function handleMessage(event: any) {
+async function handleMessage(event) {
     const data = event.data ? event.data : event
     const query = data.query
     const toriiUrl = data.toriiUrl
 
     try {
-        const result: Record<string, any> = {}
+        const result = {}
         const response = await fetch(`${toriiUrl}/sql?query=${query}`)
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`)

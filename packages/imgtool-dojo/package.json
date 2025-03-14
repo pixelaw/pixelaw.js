@@ -1,7 +1,7 @@
 {
   "name": "@pixelaw/imgtool-dojo",
   "private": false,
-  "version": "0.6.1",
+  "version": "0.6.2",
   "type": "module",
   "license": "MIT",
   "source": "src/index.ts",
@@ -25,7 +25,7 @@
     "dotenv": "^16.4.7",
     "pngjs": "^7.0.0",
     "pngjs3": "^6.1.1",
-    "starknet": "6.21.0",
+    "starknet": "6.23.0",
     "upng-js": "^2.1.0"
   },
   "devDependencies": {
