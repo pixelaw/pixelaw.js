@@ -1,7 +1,7 @@
-import type {App, AppStore} from "@pixelaw/core"
-import type {DojoStuff} from "./DojoEngine.init.ts"
-import {queryTorii} from "@dojoengine/sdk/sql";
-import {convertFullHexString} from "./utils/utils.ts";
+import type { App, AppStore } from "@pixelaw/core"
+import type { DojoStuff } from "./DojoEngine.init.ts"
+import { queryTorii } from "@dojoengine/sdk/sql"
+import { convertFullHexString } from "./utils/utils.ts"
 
 type State = { [key: string]: App | undefined }
 
@@ -38,6 +38,7 @@ export class DojoAppStore implements AppStore {
                     name: convertFullHexString(item.name),
                     plugin: item.plugin,
                     system: item.system,
+                    entity: { id: "" }, // TODO
                 }
                 this.state[app.name] = app
                 console.log("APP", app)

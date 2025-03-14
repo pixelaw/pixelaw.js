@@ -10,7 +10,8 @@
   "license": "MIT",
   "packageManager": "pnpm@10.5.2",
   "scripts": {
-    "build": "tsc",
+    "build:deps": "tsup --dts-resolve",
+    "build": "pnpm build:deps",
     "run-clean": "rm -f db.sqlite && tsx  --experimental-wasm-modules src/index.ts",
     "run": "tsx  --experimental-wasm-modules src/index.ts",
     "test": "vitest"

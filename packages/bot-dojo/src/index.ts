@@ -1,12 +1,14 @@
-import {DojoEngine} from "@pixelaw/core-dojo"
-import {PixelawAgent} from "./PixelawAgent"
-import worldsRegistry from "./config/worlds.json"
+import { DojoEngine } from "@pixelaw/core-dojo"
+import { PixelawAgent } from "./PixelawAgent"
+import worldsRegistryData from "./config/worlds.json"
+import type { WorldsRegistry } from "@pixelaw/core"
 
-import {createDatabase} from "db0"
+const worldsRegistry: WorldsRegistry = worldsRegistryData as WorldsRegistry
+
+import { createDatabase } from "db0"
 import sqlite from "db0/connectors/better-sqlite3"
-import {createStorage} from "unstorage"
-import dbDriver from "unstorage/drivers/db0" // Learn more: https://db0.unjs.io
-
+import { createStorage } from "unstorage"
+import dbDriver from "unstorage/drivers/db0"
 // Learn more: https://db0.unjs.io
 const database = createDatabase(
     sqlite({
@@ -22,4 +24,4 @@ const storage = createStorage({
     }),
 })
 
-const agent = await PixelawAgent.new({"dojoengine": DojoEngine}, worldsRegistry, storage)
+const agent = await PixelawAgent.new({ dojoengine: DojoEngine }, worldsRegistry, storage)

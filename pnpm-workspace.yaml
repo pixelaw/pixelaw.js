@@ -1,6 +1,6 @@
 packages:
   - "packages/*"
-  - "examples/**"
+#  - "examples/**"
 
 catalog:
   "@types/react": ^18.3.1

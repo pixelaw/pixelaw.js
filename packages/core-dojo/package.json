@@ -8,7 +8,9 @@
   "main": "dist/index.js",
   "author": "thiscaspar",
   "scripts": {
-    "build": "tsup",
+    "build:deps": "tsup --dts-resolve",
+    "build": "pnpm build:deps",
+    "dev": "tsup --watch",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "upgrade_dojo": "pnpm add @dojoengine/core @dojoengine/create-burner @dojoengine/react @dojoengine/recs @dojoengine/state @dojoengine/torii-client @dojoengine/utils @dojoengine/sdk @cartridge/connector",

@@ -9,7 +9,9 @@
   "author": "thiscaspar",
   "type": "module",
   "scripts": {
-    "build": "tsup --dts-resolve",
+    "build:deps": "tsup --dts-resolve",
+    "build": "pnpm build:deps",
+    "dev": "tsup --watch",
     "test": "vitest run --coverage"
   },
   "peerDependencies": {
@@ -27,7 +29,6 @@
   "dependencies": {
     "@pixelaw/core": "workspace:*",
     "@pixelaw/core-dojo": "workspace:*",
-    "@pixelaw/react-dojo": "workspace:*",
     "unstorage": "^1.14.4",
     "postcss": "^8.4.49",
     "react-router-dom": "^7.1.0"

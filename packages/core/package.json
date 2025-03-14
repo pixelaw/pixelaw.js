@@ -8,7 +8,9 @@
   "source": "src/index.ts",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsup",
+    "build:deps": "tsup --dts-resolve",
+    "build": "pnpm build:deps",
+    "dev": "tsup --dts-resolve --watch",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check --apply ."

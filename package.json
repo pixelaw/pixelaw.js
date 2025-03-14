@@ -2,9 +2,12 @@
   "name": "pixelaw.js",
   "version": "0.0.0",
   "private": false,
+  "packageManager": "pnpm@10.5.2",
   "scripts": {
+    "build:deps": "turbo build:deps",
+    "build": "turbo run build",
+    "dev": "turbo watch dev --concurrency 15",
     "build-cores": "bash ./scripts/build-core-packages.sh",
-    "build": "bash ./scripts/build-packages.sh",
     "build-examples": "bash ./scripts/build-examples.sh",
     "clean": "bash ./scripts/clean.sh",
     "prettier-check": "pnpx prettier --check packages examples",
@@ -23,6 +26,7 @@
     "husky": "^9.1.7",
     "lerna": "^8.1.9",
     "tsup": "^8.3.5",
+    "turbo": "^2.4.4",
     "typedoc": "^0.27.9",
     "typedoc-plugin-coverage": "^3.4.1"
   },

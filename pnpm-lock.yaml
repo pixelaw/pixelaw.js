@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@dojoengine/torii-wasm@1.2.5':
-    hash: spvjssrwif4pvh7hg54mn5tbe4
+    hash: 1291cf1b84f79d51f5e0a99487ebf19779d70fe8469c523a49c7e4266e1d84dc
     path: patches/@dojoengine__torii-wasm@1.2.5.patch
 
 importers:
@@ -38,21 +38,15 @@ importers:
       tsup:
         specifier: ^8.3.5
         version: 8.4.0(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.3)(typescript@5.8.2)(yaml@2.7.0)
+      turbo:
+        specifier: ^2.4.4
+        version: 2.4.4
       typedoc:
         specifier: ^0.27.9
         version: 0.27.9(typescript@5.8.2)
       typedoc-plugin-coverage:
         specifier: ^3.4.1
         version: 3.4.1(typedoc@0.27.9(typescript@5.8.2))
-
-  examples/example-nodejs-bot:
-    dependencies:
-      '@pixelaw/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@pixelaw/core-dojo':
-        specifier: workspace:*
-        version: link:../../packages/core-dojo
 
   packages/bot-dojo:
     dependencies:
@@ -322,9 +316,6 @@ importers:
       '@pixelaw/core-dojo':
         specifier: workspace:*
         version: link:../core-dojo
-      '@pixelaw/react-dojo':
-        specifier: workspace:*
-        version: link:../react-dojo
       postcss:
         specifier: ^8.4.49
         version: 8.5.3
@@ -4632,8 +4623,42 @@ packages:
   tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
 
+  turbo-darwin-64@2.4.4:
+    resolution: {integrity: sha512-5kPvRkLAfmWI0MH96D+/THnDMGXlFNmjeqNRj5grLKiry+M9pKj3pRuScddAXPdlxjO5Ptz06UNaOQrrYGTx1g==}
+    cpu: [x64]
+    os: [darwin]
+
+  turbo-darwin-arm64@2.4.4:
+    resolution: {integrity: sha512-/gtHPqbGQXDFhrmy+Q/MFW2HUTUlThJ97WLLSe4bxkDrKHecDYhAjbZ4rN3MM93RV9STQb3Tqy4pZBtsd4DfCw==}
+    cpu: [arm64]
+    os: [darwin]
+
+  turbo-linux-64@2.4.4:
+    resolution: {integrity: sha512-SR0gri4k0bda56hw5u9VgDXLKb1Q+jrw4lM7WAhnNdXvVoep4d6LmnzgMHQQR12Wxl3KyWPbkz9d1whL6NTm2Q==}
+    cpu: [x64]
+    os: [linux]
+
+  turbo-linux-arm64@2.4.4:
+    resolution: {integrity: sha512-COXXwzRd3vslQIfJhXUklgEqlwq35uFUZ7hnN+AUyXx7hUOLIiD5NblL+ETrHnhY4TzWszrbwUMfe2BYWtaPQg==}
+    cpu: [arm64]
+    os: [linux]
+
   turbo-stream@2.4.0:
     resolution: {integrity: sha512-FHncC10WpBd2eOmGwpmQsWLDoK4cqsA/UT/GqNoaKOQnT8uzhtCbg3EoUDMvqpOSAI0S26mr0rkjzbOO6S3v1g==}
+
+  turbo-windows-64@2.4.4:
+    resolution: {integrity: sha512-PV9rYNouGz4Ff3fd6sIfQy5L7HT9a4fcZoEv8PKRavU9O75G7PoDtm8scpHU10QnK0QQNLbE9qNxOAeRvF0fJg==}
+    cpu: [x64]
+    os: [win32]
+
+  turbo-windows-arm64@2.4.4:
+    resolution: {integrity: sha512-403sqp9t5sx6YGEC32IfZTVWkRAixOQomGYB8kEc6ZD+//LirSxzeCHCnM8EmSXw7l57U1G+Fb0kxgTcKPU/Lg==}
+    cpu: [arm64]
+    os: [win32]
+
+  turbo@2.4.4:
+    resolution: {integrity: sha512-N9FDOVaY3yz0YCOhYIgOGYad7+m2ptvinXygw27WPLQvcZDl3+0Sa77KGVlLSiuPDChOUEnTKE9VJwLSi9BPGQ==}
+    hasBin: true
 
   type-detect@4.1.0:
     resolution: {integrity: sha512-Acylog8/luQ8L7il+geoSxhEkazvkslg7PSNKOX59mbB9cOveP5aq9h74Y7YU8yDpJwetzQQrfIwtf4Wp4LKcw==}
@@ -5751,9 +5776,9 @@ snapshots:
 
   '@dojoengine/torii-client@1.2.5':
     dependencies:
-      '@dojoengine/torii-wasm': 1.2.5(patch_hash=spvjssrwif4pvh7hg54mn5tbe4)
+      '@dojoengine/torii-wasm': 1.2.5(patch_hash=1291cf1b84f79d51f5e0a99487ebf19779d70fe8469c523a49c7e4266e1d84dc)
 
-  '@dojoengine/torii-wasm@1.2.5(patch_hash=spvjssrwif4pvh7hg54mn5tbe4)': {}
+  '@dojoengine/torii-wasm@1.2.5(patch_hash=1291cf1b84f79d51f5e0a99487ebf19779d70fe8469c523a49c7e4266e1d84dc)': {}
 
   '@dojoengine/utils@1.2.5(starknet@6.23.0(encoding@0.1.13))(typescript@5.8.2)':
     dependencies:
@@ -10216,7 +10241,34 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
+  turbo-darwin-64@2.4.4:
+    optional: true
+
+  turbo-darwin-arm64@2.4.4:
+    optional: true
+
+  turbo-linux-64@2.4.4:
+    optional: true
+
+  turbo-linux-arm64@2.4.4:
+    optional: true
+
   turbo-stream@2.4.0: {}
+
+  turbo-windows-64@2.4.4:
+    optional: true
+
+  turbo-windows-arm64@2.4.4:
+    optional: true
+
+  turbo@2.4.4:
+    optionalDependencies:
+      turbo-darwin-64: 2.4.4
+      turbo-darwin-arm64: 2.4.4
+      turbo-linux-64: 2.4.4
+      turbo-linux-arm64: 2.4.4
+      turbo-windows-64: 2.4.4
+      turbo-windows-arm64: 2.4.4
 
   type-detect@4.1.0: {}
 

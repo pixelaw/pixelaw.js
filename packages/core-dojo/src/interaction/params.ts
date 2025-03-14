@@ -1,9 +1,9 @@
-import type {Manifest} from "@dojoengine/core"
-import type {Param} from "@pixelaw/core"
-import {poseidonHashMany} from "@scure/starknet"
-import type {DojoInteraction} from "../DojoInteraction.ts"
-import {generateRandomFelt252} from "../utils/utils.ts"
-import type {InterfaceType} from "./types.ts"
+import type { Manifest } from "@dojoengine/core"
+import type { Param } from "@pixelaw/core"
+import { poseidonHashMany } from "@scure/starknet"
+import type { DojoInteraction } from "../DojoInteraction.ts"
+import { generateRandomFelt252 } from "../utils/utils.ts"
+import type { InterfaceType } from "./types.ts"
 
 const DEFAULT_PARAMETERS_TYPE = "pixelaw::core::utils::DefaultParameters"
 
@@ -79,6 +79,7 @@ export async function prepareParams(interaction: DojoInteraction, rawParams: Par
             if (nameFirst === "crc") {
                 // TODO check that nameRemaining has 2 elements, for varname and vartype
                 param.name = nameRemaining[0]
+                // @ts-ignore TODO
                 param.type = nameRemaining[1]
 
                 // setup a "transformer" that, after choosing a value, encodes it and calls the right function name.
@@ -91,6 +92,7 @@ export async function prepareParams(interaction: DojoInteraction, rawParams: Par
                     param.type = rawParam.type
                     param.variants = rawParam.variants
 
+                    // @ts-ignore TODO
                     param.value = `0x${poseidonHashMany([BigInt(param.value), BigInt(salt)]).toString(16)}`
                     console.log("hash:", param.value)
                     console.log("salt:", salt)
@@ -100,7 +102,9 @@ export async function prepareParams(interaction: DojoInteraction, rawParams: Par
                 const originalParamName = nameRemaining[0]
 
                 // TODO this param does not require user input, but is read from storage
-                const origValue = await storage.getItem(`param_${address}-${positionString}-${originalParamName}`)
+                const origValue = await storage.getItem<number>(
+                    `param_${address}-${positionString}-${originalParamName}`,
+                )
 
                 param.value = origValue
                 param.systemOnly = true
@@ -109,7 +113,9 @@ export async function prepareParams(interaction: DojoInteraction, rawParams: Par
                 // param.name = nameRemaining[0]
 
                 // this param does not require user input, but is read from storage
-                const salt = await storage.getItem(`param_${address}-${positionString}-${nameRemaining[0]}-salt`)
+                const salt = await storage.getItem<number>(
+                    `param_${address}-${positionString}-${nameRemaining[0]}-salt`,
+                )
                 param.value = salt
                 console.log("saltout:", param.value)
                 param.systemOnly = true
@@ -146,22 +152,22 @@ export async function prepareParams(interaction: DojoInteraction, rawParams: Par
     return result
 }
 
-export default function getParams(
-    manifest: Manifest,
-    contractName: string,
-    methodName: string,
-    strict?: boolean,
-): Param[] {
-    const interfaceName = `I${convertSnakeToPascal(contractName)}`
-    const contract = findContract(manifest, contractName)
-    if (!contract) return []
-
-    const functionDef = findFunctionDefinition(contract.abi, interfaceName, methodName, strict)
-    if (!functionDef) return []
-
-    const rawParams = extractParameters(functionDef, contract.abi)
-    console.log("rawParams", rawParams[0])
-    const params = prepareParams(rawParams, contract.abi)
-    console.log("params", params[0])
-    return params
-}
+// export default function getParams(
+//     manifest: Manifest,
+//     contractName: string,
+//     methodName: string,
+//     strict?: boolean,
+// ): Param[] {
+//     const interfaceName = `I${convertSnakeToPascal(contractName)}`
+//     const contract = findContract(manifest, contractName)
+//     if (!contract) return []
+//
+//     const functionDef = findFunctionDefinition(contract.abi, interfaceName, methodName, strict)
+//     if (!functionDef) return []
+//
+//     const rawParams = extractParameters(functionDef)
+//     console.log("rawParams", rawParams[0])
+//     const params = prepareParams(rawParams, contract.abi)
+//     console.log("params", params[0])
+//     return params
+// }
