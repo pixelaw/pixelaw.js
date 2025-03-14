@@ -1,7 +1,7 @@
 {
   "name": "@pixelaw/core",
   "private": false,
-  "version": "0.6.3",
+  "version": "0.6.4",
   "type": "module",
   "author": "thiscaspar",
   "license": "MIT",
@@ -14,6 +14,7 @@
     "check": "biome check --apply ."
   },
   "dependencies": {
+    "@types/node": "^18.19.50",
     "@types/upng-js": "^2.1.5",
     "autoprefixer": "^10.4.20",
     "browserify-zlib": "^0.2.0",

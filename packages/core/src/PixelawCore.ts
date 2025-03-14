@@ -26,6 +26,7 @@ import nullDriver from "unstorage/drivers/null"
 import { BrowserCanvas2DRenderer } from "./renderers"
 import { NodeCanvas2DRenderer } from "./renderers/Canvas2DRenderer/NodeCanvas2DRenderer.ts"
 import type { AbstractCanvas2DRenderer } from "./renderers/Canvas2DRenderer/AbstractCanvas2DRenderer.ts"
+import {Canvas2DRenderer} from "./renderers/Canvas2DRenderer/Canvas2DRenderer.ts";
 
 export class PixelawCore {
     status: CoreStatus = "uninitialized"
@@ -35,7 +36,7 @@ export class PixelawCore {
     tileStore: TileStore = null!
     appStore: AppStore = null!
     updateService: UpdateService = null!
-    viewPort: AbstractCanvas2DRenderer = null!
+    viewPort: Canvas2DRenderer = null!
     events = mitt<PixelCoreEvents>()
     queue: QueueStore = null!
 
@@ -134,23 +135,15 @@ export class PixelawCore {
             this.setZoom(defaults.zoom)
         }
 
-        if (IS_BROWSER) {
-            this.viewPort = new BrowserCanvas2DRenderer(
+
+            this.viewPort = new Canvas2DRenderer(
                 this.events,
                 this.tileStore,
                 this.pixelStore,
                 this.zoom,
                 this.center,
             )
-        } else {
-            this.viewPort = new NodeCanvas2DRenderer(
-                this.events,
-                this.tileStore,
-                this.pixelStore,
-                this.zoom,
-                this.center,
-            )
-        }
+
 
         this.worldConfig = worldConfig
 

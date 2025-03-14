@@ -87,6 +87,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@types/node':
+        specifier: ^18.19.50
+        version: 18.19.80
       '@types/upng-js':
         specifier: ^2.1.5
         version: 2.1.5
