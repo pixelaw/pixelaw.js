@@ -44,7 +44,7 @@ export const PixelawProvider = ({
     children: ReactNode
     worldsRegistry: WorldsRegistry
     world: string
-    engines: EngineConstructor<Engine>[]
+    engines: Record<string, EngineConstructor<Engine>>
     coreDefaults?: CoreDefaults
 }) => {
     const [pixelawCore] = useState(

@@ -46,18 +46,18 @@ export class PixelawCore {
     private zoom = 1
     private center: Coordinate = [0, 0]
     private world: string
-    private engines: Set<EngineConstructor<Engine>> = new Set()
+
+    private engines: Record<string, EngineConstructor<Engine>> = {}
+
     private wallet: Wallet | BaseWallet | null = null
     readonly storage: Storage<StorageValue>
 
     constructor(
-        engines: EngineConstructor<Engine>[],
+        engines: Record<string, EngineConstructor<Engine>>,
         worldsRegistry: WorldsRegistry,
         storage: Storage<StorageValue> = createStorage({ driver: nullDriver() }),
     ) {
-        for (const engine of engines) {
-            this.engines.add(engine)
-        }
+        this.engines = engines
 
         this.worldsRegistry = worldsRegistry
 
@@ -108,15 +108,16 @@ export class PixelawCore {
         this.setStatus("loadConfig")
         const worldConfig = this.worldsRegistry[world]
 
-        const engineClass = Array.from(this.engines).find((engine) => {
-            return engine.name.toLowerCase() === worldConfig.engine
-        })
+
+        const engineClass = this.engines[worldConfig.engine.toLowerCase()]
 
         if (!engineClass) {
             throw new Error(`Unsupported engine: ${worldConfig.engine}`)
         }
 
+
         this.engine = new engineClass(this)
+
 
         this.setStatus("initializing")
 

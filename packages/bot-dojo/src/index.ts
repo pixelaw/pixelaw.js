@@ -22,4 +22,4 @@ const storage = createStorage({
     }),
 })
 
-const agent = await PixelawAgent.new([DojoEngine], worldsRegistry, storage)
+const agent = await PixelawAgent.new({"dojoengine": DojoEngine}, worldsRegistry, storage)

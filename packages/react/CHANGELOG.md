@@ -1,5 +1,15 @@
 # @pixelaw/react
 
+## 0.6.6
+
+### Patch Changes
+
+- engines
+- Updated dependencies
+  - @pixelaw/core@0.6.6
+  - @pixelaw/react-dojo@0.6.6
+  - @pixelaw/core-dojo@0.6.6
+
 ## 0.6.5
 
 ### Patch Changes

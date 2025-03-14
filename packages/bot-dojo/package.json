@@ -3,7 +3,7 @@
   "private": false,
   "description": "A CLI nodejs based bot for pixelaw. Can be used by AI or for executing Queue items.",
   "module": "index.ts",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "type": "module",
   "main": "src/index.ts",
   "author": "thiscaspar",
@@ -17,7 +17,8 @@
   },
   "devDependencies": {
     "tsx": "^4.19.3",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.7",
+    "@types/node": "^18.19.50"
   },
   "dependencies": {
     "@pixelaw/core": "workspace:*",
