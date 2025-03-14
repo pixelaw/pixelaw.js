@@ -75,7 +75,7 @@ class DojoSqlPixelStore implements PixelStore {
                 const path = await import("node:path")
                 const __filename = fileURLToPath(import.meta.url)
                 const __dirname = path.dirname(__filename)
-                const workerPath = path.resolve(__dirname, "./DojoSqlPixelStore.webworker.ts")
+                const workerPath = path.resolve(__dirname, "./DojoSqlPixelStore.webworker.js")
                 DojoSqlPixelStore.instance.worker = new Worker(workerPath, { workerData: { toriiUrl } })
             }
 

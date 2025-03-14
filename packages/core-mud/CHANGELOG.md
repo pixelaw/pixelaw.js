@@ -1,5 +1,12 @@
 # @pixelaw/core-mud
 
+## 0.6.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @pixelaw/core@0.6.3
+
 ## 0.6.2
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 import {defineConfig} from "tsup"
 
 export default defineConfig({
-    entry: ["src/index.ts", "src/DojoEngine.ts", "src/DojoSqlPixelStore.webworker.ts"],
+    entry: ["src/index.ts", "src/DojoEngine.ts", "src/DojoSqlPixelStore.webworker.js"],
     esbuildPlugins: [
         // alias({
         //     "@": "./src",
