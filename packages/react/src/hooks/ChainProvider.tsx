@@ -1,26 +1,11 @@
-import type { Engine } from "@pixelaw/core"
-import { type ReactNode, Suspense, lazy } from "react"
+import { type ReactNode, Suspense } from "react"
 
-// TODO future mud support
-// const MudProvider = lazy(() => import('@pixelaw/react-mud'));
+interface ChainProviderProps {
+    children: ReactNode
+    ProviderComponent: React.ComponentType<{ children: ReactNode }>
+}
 
-const StarknetChainProvider = lazy(() =>
-    import("@pixelaw/react-dojo").then((module) => ({ default: module.StarknetChainProvider })),
-)
-
-export const ChainProvider = ({ engine, children }: { engine: Engine; children: ReactNode }) => {
-    // biome-ignore lint/suspicious/noImplicitAnyLet: TODO
-    let ProviderComponent
-    switch (engine.id) {
-        // case 'mud':
-        //     ProviderComponent = MudProvider;
-        //     break;
-        case "dojo":
-            ProviderComponent = StarknetChainProvider
-            break
-        default:
-            throw new Error("Unknown provider type")
-    }
+export const ChainProvider = ({ children, ProviderComponent }: ChainProviderProps) => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <ProviderComponent>{children}</ProviderComponent>

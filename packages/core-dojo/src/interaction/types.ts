@@ -1,5 +1,4 @@
-import type { Pixel } from "@/generated/models.gen"
-import type React from "react"
+import type { Pixel } from "../generated/models.gen"
 
 export enum Active_Page {
     Home = 0,

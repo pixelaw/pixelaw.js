@@ -1,15 +1,18 @@
 {
   "name": "@pixelaw/react",
   "private": false,
-  "version": "0.6.7",
+  "version": "0.6.8",
   "description": "pixelaw: React components and hooks",
   "license": "MIT",
   "source": "src/index.ts",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
+  "types": "dist/index.d.ts",
   "author": "thiscaspar",
   "type": "module",
   "scripts": {
-    "build": "tsup --dts-resolve",
+    "build:deps": "tsup --dts-resolve",
+    "build": "pnpm build:deps",
+    "dev": "tsup --watch",
     "test": "vitest run --coverage"
   },
   "peerDependencies": {
@@ -27,13 +30,14 @@
   "dependencies": {
     "@pixelaw/core": "workspace:*",
     "@pixelaw/core-dojo": "workspace:*",
-    "@pixelaw/react-dojo": "workspace:*",
     "unstorage": "^1.14.4",
     "postcss": "^8.4.49",
     "react-router-dom": "^7.1.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
-    "access": "public"
+    "access": "public",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts"
   }
 }

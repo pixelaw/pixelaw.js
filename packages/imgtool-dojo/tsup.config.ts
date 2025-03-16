@@ -1,12 +1,7 @@
-import {defineConfig} from "tsup"
+import { type Options, defineConfig } from "tsup"
+
+import { tsupConfig } from "../../tsup.config"
 
 export default defineConfig({
-    entry: ["src/index.ts"],
-    minify: false,
-    splitting: false,
-    loader: {},
-    dts: true, // Enable declaration file generation
-    format: ["esm"],
-    watch: process.env.WATCH === "true",
-    clean: true,
+    ...(tsupConfig as Options),
 })

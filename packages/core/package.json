@@ -1,14 +1,17 @@
 {
   "name": "@pixelaw/core",
   "private": false,
-  "version": "0.6.7",
+  "version": "0.6.8",
   "type": "module",
   "author": "thiscaspar",
   "license": "MIT",
   "source": "src/index.ts",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsup",
+    "build:deps": "tsup --dts-resolve",
+    "build": "pnpm build:deps",
+    "dev": "tsup --dts-resolve --watch",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check --apply ."
@@ -37,6 +40,8 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
-    "access": "public"
+    "access": "public",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts"
   }
 }

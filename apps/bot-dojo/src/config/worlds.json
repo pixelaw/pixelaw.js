@@ -1,6 +1,6 @@
 {
   "local": {
-    "engine": "dojoengine",
+    "engine": "dojo",
     "description": "Local empty world",
     "defaults": {
       "color": 123123,
@@ -25,7 +25,7 @@
     }
   },
   "tunnel": {
-    "engine": "dojoengine",
+    "engine": "dojo",
     "description": "Tunneled world",
     "defaults": {
       "color": 123123,
@@ -50,7 +50,7 @@
     }
   },
   "mud-empty": {
-    "engine": "mudengine",
+    "engine": "mud",
     "description": "Local empty world",
     "config": {
       "serverUrl": "http://127.0.0.1:3000",
@@ -74,7 +74,7 @@
     }
   },
   "sepolia": {
-    "engine": "dojoengine",
+    "engine": "dojo",
     "description": "Sepolia: https://sepolia.pixelaw.xyz",
     "config": {
       "serverUrl": "https://sepolia.pixelaw.xyz",
@@ -93,7 +93,7 @@
     }
   },
   "dev": {
-    "engine": "dojoengine",
+    "engine": "dojo",
     "description": "Dev server: https://dev.pixelaw.xyz",
     "config": {
       "serverUrl": "https://dev.pixelaw.xyz",
@@ -117,7 +117,7 @@
     }
   },
   "mainnet": {
-    "engine": "dojoengine",
+    "engine": "dojo",
     "description": "Mainnet server: https://mainnet.pixelaw.xyz",
     "config": {
       "serverUrl": "https://mainnet.pixelaw.xyz",

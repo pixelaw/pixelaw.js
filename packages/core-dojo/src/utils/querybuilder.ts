@@ -1,6 +1,6 @@
-import type {SchemaType} from "@/generated/models.gen.ts"
-import {ToriiQueryBuilder} from "@dojoengine/sdk"
-import {type Bounds, MAX_DIMENSION, QUERY_BUFFER} from "@pixelaw/core"
+import type { SchemaType } from "../generated/models.gen.ts"
+import { ToriiQueryBuilder } from "@dojoengine/sdk"
+import { type Bounds, MAX_DIMENSION, QUERY_BUFFER } from "@pixelaw/core"
 
 export function getQueryBounds(viewBounds: Bounds): Bounds {
     const [[left, top], [right, bottom]] = viewBounds
