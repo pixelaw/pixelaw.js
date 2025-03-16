@@ -5,3 +5,5 @@
 .DS_Store
 .npmrc
 lerna-debug.log
+.turbo
+apps/bot-dojo/db.sqlite
