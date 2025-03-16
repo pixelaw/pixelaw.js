@@ -7,12 +7,11 @@ import type {
     Wallet,
     WorldsRegistry,
 } from "@pixelaw/core"
-import {type BaseWallet, PixelawCore} from "@pixelaw/core"
-import {createContext, type ReactNode, useContext, useEffect, useState} from "react"
+import { type BaseWallet, PixelawCore } from "@pixelaw/core"
+import { createContext, type ReactNode, useContext, useEffect, useState } from "react"
 
-import {createStorage} from "unstorage"
+import { createStorage } from "unstorage"
 import localStorageDriver from "unstorage/drivers/localstorage"
-import {ChainProvider} from "./ChainProvider"
 
 export type IPixelawContext = {
     pixelawCore: PixelawCore
@@ -126,11 +125,7 @@ export const PixelawProvider = ({
 
     return (
         <PixelawContext.Provider value={contextValues}>
-            {contextValues.engine === null ? (
-                <div>Error: Engine is not initialized.</div>
-            ) : (
-                <ChainProvider engine={contextValues.engine}>{children}</ChainProvider>
-            )}
+            {contextValues.engine === null ? <div>Error: Engine is not initialized.</div> : children}
         </PixelawContext.Provider>
     )
 }

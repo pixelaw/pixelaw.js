@@ -33,5 +33,8 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
+  },
+  "patchedDependencies": {
+    "@dojoengine/torii-wasm@1.2.5": "patches/@dojoengine__torii-wasm@1.2.5.patch"
   }
 }

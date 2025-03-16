@@ -13,7 +13,8 @@
     "prettier-check": "pnpx prettier --check packages examples",
     "prettier": "pnpx prettier --write packages examples",
     "lint": "pnpm lint",
-    "release": "pnpm build && pnpm -F './packages/**' publish -r --force",
+    "release": "pnpm build && pnpm -F './packages/**' publish -r --force --no-git-checks",
+    "release:dry-run": "pnpm -F './packages/**' publish -r --force --dry-run --no-git-checks",
     "p": "pnpm -F './packages/**' publish -r --force",
     "docs": "npx typedoc --out docs",
     "prepare_NOPE": "husky install"
@@ -32,10 +33,5 @@
   },
   "dependencies": {
     "@changesets/cli": "^2.27.11"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@dojoengine/torii-wasm@1.2.5": "patches/@dojoengine__torii-wasm@1.2.5.patch"
-    }
   }
 }
