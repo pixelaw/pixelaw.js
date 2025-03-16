@@ -1,5 +1,5 @@
 packages:
-  - packages/*
+  - packages/**
   - apps/**
 catalog:
   '@types/react': ^18.3.1
