@@ -1,437 +1,542 @@
-import type {SchemaType as ISchemaType} from "@dojoengine/sdk";
+import type { SchemaType as ISchemaType } from "@dojoengine/sdk";
 
-import type {BigNumberish} from 'starknet';
-
-type RemoveFieldOrder<T> = T extends object
-    ? Omit<
-          {
-              [K in keyof T]: T[K] extends object ? RemoveFieldOrder<T[K]> : T[K]
-          },
-          "fieldOrder"
-      >
-    : T
-// Type definition for `pixelaw::core::models::registry::App` struct
-export interface App {
-    fieldOrder: string[]
-    system: string
-    name: BigNumberish
-    icon: BigNumberish
-    action: BigNumberish
-}
-export type InputApp = RemoveFieldOrder<App>
-
-// Type definition for `pixelaw::core::models::registry::AppValue` struct
-export interface AppValue {
-    fieldOrder: string[]
-    name: BigNumberish
-    icon: BigNumberish
-    action: BigNumberish
-}
-export type InputAppValue = RemoveFieldOrder<AppValue>
-
-// Type definition for `pixelaw::core::models::registry::AppName` struct
-export interface AppName {
-    fieldOrder: string[]
-    name: BigNumberish
-    system: string
-}
-export type InputAppName = RemoveFieldOrder<AppName>
-
-// Type definition for `pixelaw::core::models::registry::AppNameValue` struct
-export interface AppNameValue {
-    fieldOrder: string[]
-    system: string
-}
-export type InputAppNameValue = RemoveFieldOrder<AppNameValue>
-
-// Type definition for `pixelaw::core::models::registry::AppUser` struct
-export interface AppUser {
-    fieldOrder: string[]
-    system: string
-    player: string
-    action: BigNumberish
-}
-export type InputAppUser = RemoveFieldOrder<AppUser>
-
-// Type definition for `pixelaw::core::models::registry::AppUserValue` struct
-export interface AppUserValue {
-    fieldOrder: string[]
-    action: BigNumberish
-}
-export type InputAppUserValue = RemoveFieldOrder<AppUserValue>
-
-// Type definition for `pixelaw::core::models::area::AreaValue` struct
-export interface AreaValue {
-    fieldOrder: string[]
-    app: string
-    owner: string
-    color: BigNumberish
-}
-export type InputAreaValue = RemoveFieldOrder<AreaValue>
-
-// Type definition for `pixelaw::core::models::area::Area` struct
-export interface Area {
-    fieldOrder: string[]
-    id: BigNumberish
-    app: string
-    owner: string
-    color: BigNumberish
-}
-export type InputArea = RemoveFieldOrder<Area>
-
-// Type definition for `pixelaw::core::models::registry::CoreActionsAddress` struct
-export interface CoreActionsAddress {
-    fieldOrder: string[]
-    key: BigNumberish
-    value: string
-}
-export type InputCoreActionsAddress = RemoveFieldOrder<CoreActionsAddress>
-
-// Type definition for `pixelaw::core::models::registry::CoreActionsAddressValue` struct
-export interface CoreActionsAddressValue {
-    fieldOrder: string[]
-    value: string
-}
-export type InputCoreActionsAddressValue = RemoveFieldOrder<CoreActionsAddressValue>
-
-// Type definition for `pixelaw::core::models::pixel::Pixel` struct
-export interface Pixel {
-    fieldOrder: string[]
-    x: BigNumberish
-    y: BigNumberish
-    app: string
-    color: BigNumberish
-    created_at: BigNumberish
-    updated_at: BigNumberish
-    timestamp: BigNumberish
-    owner: string
-    text: BigNumberish
-    action: BigNumberish
-}
-export type InputPixel = RemoveFieldOrder<Pixel>
-
-// Type definition for `pixelaw::core::models::pixel::PixelValue` struct
-export interface PixelValue {
-    fieldOrder: string[]
-    app: string
-    color: BigNumberish
-    created_at: BigNumberish
-    updated_at: BigNumberish
-    timestamp: BigNumberish
-    owner: string
-    text: BigNumberish
-    action: BigNumberish
-}
-export type InputPixelValue = RemoveFieldOrder<PixelValue>
-
-// Type definition for `pixelaw::core::models::queue::QueueItem` struct
-export interface QueueItem {
-    fieldOrder: string[]
-    id: BigNumberish
-    valid: boolean
-}
-export type InputQueueItem = RemoveFieldOrder<QueueItem>
-
-// Type definition for `pixelaw::core::models::queue::QueueItemValue` struct
-export interface QueueItemValue {
-    fieldOrder: string[]
-    valid: boolean
-}
-export type InputQueueItemValue = RemoveFieldOrder<QueueItemValue>
-
-// Type definition for `pixelaw::core::models::area::RTree` struct
-export interface RTree {
-    fieldOrder: string[]
-    id: BigNumberish
-    children: BigNumberish
-}
-export type InputRTree = RemoveFieldOrder<RTree>
-
-// Type definition for `pixelaw::core::models::area::RTreeValue` struct
-export interface RTreeValue {
-    fieldOrder: string[]
-    children: BigNumberish
-}
-export type InputRTreeValue = RemoveFieldOrder<RTreeValue>
+import { CairoCustomEnum, CairoOption, CairoOptionVariant, BigNumberish } from 'starknet';
 
 // Type definition for `pixelaw::apps::snake::app::Snake` struct
 export interface Snake {
-    fieldOrder: string[]
-    owner: string
-    length: BigNumberish
-    first_segment_id: BigNumberish
-    last_segment_id: BigNumberish
-    direction: Direction
-    color: BigNumberish
-    text: BigNumberish
-    is_dying: boolean
+	owner: string;
+	length: BigNumberish;
+	first_segment_id: BigNumberish;
+	last_segment_id: BigNumberish;
+	direction: DirectionEnum;
+	color: BigNumberish;
+	text: BigNumberish;
+	is_dying: boolean;
 }
-export type InputSnake = RemoveFieldOrder<Snake>
-
-// Type definition for `pixelaw::apps::snake::app::SnakeValue` struct
-export interface SnakeValue {
-    fieldOrder: string[]
-    length: BigNumberish
-    first_segment_id: BigNumberish
-    last_segment_id: BigNumberish
-    direction: Direction
-    color: BigNumberish
-    text: BigNumberish
-    is_dying: boolean
-}
-export type InputSnakeValue = RemoveFieldOrder<SnakeValue>
-
-// Type definition for `pixelaw::apps::snake::app::SnakeSegmentValue` struct
-export interface SnakeSegmentValue {
-    fieldOrder: string[]
-    previous_id: BigNumberish
-    next_id: BigNumberish
-    x: BigNumberish
-    y: BigNumberish
-    pixel_original_color: BigNumberish
-    pixel_original_text: BigNumberish
-    pixel_original_app: string
-}
-export type InputSnakeSegmentValue = RemoveFieldOrder<SnakeSegmentValue>
 
 // Type definition for `pixelaw::apps::snake::app::SnakeSegment` struct
 export interface SnakeSegment {
-    fieldOrder: string[]
-    id: BigNumberish
-    previous_id: BigNumberish
-    next_id: BigNumberish
-    x: BigNumberish
-    y: BigNumberish
-    pixel_original_color: BigNumberish
-    pixel_original_text: BigNumberish
-    pixel_original_app: string
+	id: BigNumberish;
+	previous_id: BigNumberish;
+	next_id: BigNumberish;
+	x: BigNumberish;
+	y: BigNumberish;
+	pixel_original_color: BigNumberish;
+	pixel_original_text: BigNumberish;
+	pixel_original_app: string;
 }
-export type InputSnakeSegment = RemoveFieldOrder<SnakeSegment>
+
+// Type definition for `pixelaw::apps::snake::app::SnakeSegmentValue` struct
+export interface SnakeSegmentValue {
+	previous_id: BigNumberish;
+	next_id: BigNumberish;
+	x: BigNumberish;
+	y: BigNumberish;
+	pixel_original_color: BigNumberish;
+	pixel_original_text: BigNumberish;
+	pixel_original_app: string;
+}
+
+// Type definition for `pixelaw::apps::snake::app::SnakeValue` struct
+export interface SnakeValue {
+	length: BigNumberish;
+	first_segment_id: BigNumberish;
+	last_segment_id: BigNumberish;
+	direction: DirectionEnum;
+	color: BigNumberish;
+	text: BigNumberish;
+	is_dying: boolean;
+}
+
+// Type definition for `pixelaw::core::models::area::Area` struct
+export interface Area {
+	id: BigNumberish;
+	app: string;
+	owner: string;
+	color: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::area::AreaValue` struct
+export interface AreaValue {
+	app: string;
+	owner: string;
+	color: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::area::RTree` struct
+export interface RTree {
+	id: BigNumberish;
+	children: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::area::RTreeValue` struct
+export interface RTreeValue {
+	children: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::dummy::Dummy` struct
+export interface Dummy {
+	id: BigNumberish;
+	defaultParams: DefaultParameters;
+	bounds: Bounds;
+	pixelUpdate: PixelUpdate;
+}
+
+// Type definition for `pixelaw::core::models::dummy::DummyValue` struct
+export interface DummyValue {
+	defaultParams: DefaultParameters;
+	bounds: Bounds;
+	pixelUpdate: PixelUpdate;
+}
+
+// Type definition for `pixelaw::core::models::pixel::Pixel` struct
+export interface Pixel {
+	x: BigNumberish;
+	y: BigNumberish;
+	app: string;
+	color: BigNumberish;
+	created_at: BigNumberish;
+	updated_at: BigNumberish;
+	timestamp: BigNumberish;
+	owner: string;
+	text: BigNumberish;
+	action: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::pixel::PixelUpdate` struct
+export interface PixelUpdate {
+	x: BigNumberish;
+	y: BigNumberish;
+	color: CairoOption<BigNumberish>;
+	owner: CairoOption<string>;
+	app: CairoOption<string>;
+	text: CairoOption<BigNumberish>;
+	timestamp: CairoOption<BigNumberish>;
+	action: CairoOption<BigNumberish>;
+}
+
+// Type definition for `pixelaw::core::models::pixel::PixelValue` struct
+export interface PixelValue {
+	app: string;
+	color: BigNumberish;
+	created_at: BigNumberish;
+	updated_at: BigNumberish;
+	timestamp: BigNumberish;
+	owner: string;
+	text: BigNumberish;
+	action: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::queue::QueueItem` struct
+export interface QueueItem {
+	id: BigNumberish;
+	valid: boolean;
+}
+
+// Type definition for `pixelaw::core::models::queue::QueueItemValue` struct
+export interface QueueItemValue {
+	valid: boolean;
+}
+
+// Type definition for `pixelaw::core::models::registry::App` struct
+export interface App {
+	system: string;
+	name: BigNumberish;
+	icon: BigNumberish;
+	action: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::registry::AppName` struct
+export interface AppName {
+	name: BigNumberish;
+	system: string;
+}
+
+// Type definition for `pixelaw::core::models::registry::AppNameValue` struct
+export interface AppNameValue {
+	system: string;
+}
+
+// Type definition for `pixelaw::core::models::registry::AppUser` struct
+export interface AppUser {
+	system: string;
+	player: string;
+	action: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::registry::AppUserValue` struct
+export interface AppUserValue {
+	action: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::registry::AppValue` struct
+export interface AppValue {
+	name: BigNumberish;
+	icon: BigNumberish;
+	action: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::registry::CoreActionsAddress` struct
+export interface CoreActionsAddress {
+	key: BigNumberish;
+	value: string;
+}
+
+// Type definition for `pixelaw::core::models::registry::CoreActionsAddressValue` struct
+export interface CoreActionsAddressValue {
+	value: string;
+}
+
+// Type definition for `pixelaw::core::utils::Bounds` struct
+export interface Bounds {
+	x_min: BigNumberish;
+	y_min: BigNumberish;
+	x_max: BigNumberish;
+	y_max: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::utils::DefaultParameters` struct
+export interface DefaultParameters {
+	player_override: CairoOption<string>;
+	system_override: CairoOption<string>;
+	area_hint: CairoOption<BigNumberish>;
+	position: Position;
+	color: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::utils::Position` struct
+export interface Position {
+	x: BigNumberish;
+	y: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::events::Alert` struct
+export interface Alert {
+	position: Position;
+	caller: string;
+	player: string;
+	message: BigNumberish;
+	timestamp: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::events::AlertValue` struct
+export interface AlertValue {
+	caller: string;
+	player: string;
+	message: BigNumberish;
+	timestamp: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::events::QueueProcessed` struct
+export interface QueueProcessed {
+	id: BigNumberish;
+	result: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::events::QueueProcessedValue` struct
+export interface QueueProcessedValue {
+	result: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::events::QueueScheduled` struct
+export interface QueueScheduled {
+	id: BigNumberish;
+	timestamp: BigNumberish;
+	called_system: string;
+	selector: BigNumberish;
+	calldata: Array<BigNumberish>;
+}
+
+// Type definition for `pixelaw::core::events::QueueScheduledValue` struct
+export interface QueueScheduledValue {
+	timestamp: BigNumberish;
+	called_system: string;
+	selector: BigNumberish;
+	calldata: Array<BigNumberish>;
+}
 
 // Type definition for `pixelaw::core::utils::Direction` enum
-export enum Direction {
-    None = 0,
-    Left = 1,
-    Right = 2,
-    Up = 3,
-    Down = 4,
-}
+export const direction = [
+	'None',
+	'Left',
+	'Right',
+	'Up',
+	'Down',
+] as const;
+export type Direction = { [key in typeof direction[number]]: string };
+export type DirectionEnum = CairoCustomEnum;
 
 export interface SchemaType extends ISchemaType {
-    pixelaw: {
-        App: App
-        AppValue: AppValue
-        AppName: AppName
-        AppNameValue: AppNameValue
-        AppUser: AppUser
-        AppUserValue: AppUserValue
-        AreaValue: AreaValue
-        Area: Area
-        CoreActionsAddress: CoreActionsAddress
-        CoreActionsAddressValue: CoreActionsAddressValue
-        Pixel: Pixel
-        PixelValue: PixelValue
-        QueueItem: QueueItem
-        QueueItemValue: QueueItemValue
-        RTree: RTree
-        RTreeValue: RTreeValue
-        Snake: Snake
-        SnakeValue: SnakeValue
-        SnakeSegmentValue: SnakeSegmentValue
-        SnakeSegment: SnakeSegment
-    }
+	pixelaw: {
+		Snake: Snake,
+		SnakeSegment: SnakeSegment,
+		SnakeSegmentValue: SnakeSegmentValue,
+		SnakeValue: SnakeValue,
+		Area: Area,
+		AreaValue: AreaValue,
+		RTree: RTree,
+		RTreeValue: RTreeValue,
+		Dummy: Dummy,
+		DummyValue: DummyValue,
+		Pixel: Pixel,
+		PixelUpdate: PixelUpdate,
+		PixelValue: PixelValue,
+		QueueItem: QueueItem,
+		QueueItemValue: QueueItemValue,
+		App: App,
+		AppName: AppName,
+		AppNameValue: AppNameValue,
+		AppUser: AppUser,
+		AppUserValue: AppUserValue,
+		AppValue: AppValue,
+		CoreActionsAddress: CoreActionsAddress,
+		CoreActionsAddressValue: CoreActionsAddressValue,
+		Bounds: Bounds,
+		DefaultParameters: DefaultParameters,
+		Position: Position,
+		Alert: Alert,
+		AlertValue: AlertValue,
+		QueueProcessed: QueueProcessed,
+		QueueProcessedValue: QueueProcessedValue,
+		QueueScheduled: QueueScheduled,
+		QueueScheduledValue: QueueScheduledValue,
+	},
 }
 export const schema: SchemaType = {
-    pixelaw: {
-        App: {
-            fieldOrder: ["system", "name", "icon", "action"],
-            system: "",
-            name: 0,
-            icon: 0,
-            action: 0,
-        },
-        AppValue: {
-            fieldOrder: ["name", "icon", "action"],
-            name: 0,
-            icon: 0,
-            action: 0,
-        },
-        AppName: {
-            fieldOrder: ["name", "system"],
-            name: 0,
-            system: "",
-        },
-        AppNameValue: {
-            fieldOrder: ["system"],
-            system: "",
-        },
-        AppUser: {
-            fieldOrder: ["system", "player", "action"],
-            system: "",
-            player: "",
-            action: 0,
-        },
-        AppUserValue: {
-            fieldOrder: ["action"],
-            action: 0,
-        },
-        AreaValue: {
-            fieldOrder: ["app", "owner", "color"],
-            app: "",
-            owner: "",
-            color: 0,
-        },
-        Area: {
-            fieldOrder: ["id", "app", "owner", "color"],
-            id: 0,
-            app: "",
-            owner: "",
-            color: 0,
-        },
-        CoreActionsAddress: {
-            fieldOrder: ["key", "value"],
-            key: 0,
-            value: "",
-        },
-        CoreActionsAddressValue: {
-            fieldOrder: ["value"],
-            value: "",
-        },
-        Pixel: {
-            fieldOrder: ["x", "y", "app", "color", "created_at", "updated_at", "timestamp", "owner", "text", "action"],
-            x: 0,
-            y: 0,
-            app: "",
-            color: 0,
-            created_at: 0,
-            updated_at: 0,
-            timestamp: 0,
-            owner: "",
-            text: 0,
-            action: 0,
-        },
-        PixelValue: {
-            fieldOrder: ["app", "color", "created_at", "updated_at", "timestamp", "owner", "text", "action"],
-            app: "",
-            color: 0,
-            created_at: 0,
-            updated_at: 0,
-            timestamp: 0,
-            owner: "",
-            text: 0,
-            action: 0,
-        },
-        QueueItem: {
-            fieldOrder: ["id", "valid"],
-            id: 0,
-            valid: false,
-        },
-        QueueItemValue: {
-            fieldOrder: ["valid"],
-            valid: false,
-        },
-        RTree: {
-            fieldOrder: ["id", "children"],
-            id: 0,
-            children: 0,
-        },
-        RTreeValue: {
-            fieldOrder: ["children"],
-            children: 0,
-        },
-        Snake: {
-            fieldOrder: [
-                "owner",
-                "length",
-                "first_segment_id",
-                "last_segment_id",
-                "direction",
-                "color",
-                "text",
-                "is_dying",
-            ],
-            owner: "",
-            length: 0,
-            first_segment_id: 0,
-            last_segment_id: 0,
-            direction: Direction.None,
-            color: 0,
-            text: 0,
-            is_dying: false,
-        },
-        SnakeValue: {
-            fieldOrder: ["length", "first_segment_id", "last_segment_id", "direction", "color", "text", "is_dying"],
-            length: 0,
-            first_segment_id: 0,
-            last_segment_id: 0,
-            direction: Direction.None,
-            color: 0,
-            text: 0,
-            is_dying: false,
-        },
-        SnakeSegmentValue: {
-            fieldOrder: [
-                "previous_id",
-                "next_id",
-                "x",
-                "y",
-                "pixel_original_color",
-                "pixel_original_text",
-                "pixel_original_app",
-            ],
-            previous_id: 0,
-            next_id: 0,
-            x: 0,
-            y: 0,
-            pixel_original_color: 0,
-            pixel_original_text: 0,
-            pixel_original_app: "",
-        },
-        SnakeSegment: {
-            fieldOrder: [
-                "id",
-                "previous_id",
-                "next_id",
-                "x",
-                "y",
-                "pixel_original_color",
-                "pixel_original_text",
-                "pixel_original_app",
-            ],
-            id: 0,
-            previous_id: 0,
-            next_id: 0,
-            x: 0,
-            y: 0,
-            pixel_original_color: 0,
-            pixel_original_text: 0,
-            pixel_original_app: "",
-        },
-    },
-}
-// Type definition for ERC__Balance struct
-export type ERC__Type = "ERC20" | "ERC721"
-export interface ERC__Balance {
-    fieldOrder: string[]
-    balance: string
-    type: string
-    tokenMetadata: ERC__Token
-}
-export interface ERC__Token {
-    fieldOrder: string[]
-    name: string
-    symbol: string
-    tokenId: string
-    decimals: string
-    contractAddress: string
-}
-export interface ERC__Transfer {
-    fieldOrder: string[]
-    from: string
-    to: string
-    amount: string
-    type: string
-    executedAt: string
-    tokenMetadata: ERC__Token
-    transactionHash: string
+	pixelaw: {
+		Snake: {
+			owner: "",
+			length: 0,
+			first_segment_id: 0,
+			last_segment_id: 0,
+		direction: new CairoCustomEnum({ 
+					None: "",
+				Left: undefined,
+				Right: undefined,
+				Up: undefined,
+				Down: undefined, }),
+			color: 0,
+			text: 0,
+			is_dying: false,
+		},
+		SnakeSegment: {
+			id: 0,
+			previous_id: 0,
+			next_id: 0,
+			x: 0,
+			y: 0,
+			pixel_original_color: 0,
+			pixel_original_text: 0,
+			pixel_original_app: "",
+		},
+		SnakeSegmentValue: {
+			previous_id: 0,
+			next_id: 0,
+			x: 0,
+			y: 0,
+			pixel_original_color: 0,
+			pixel_original_text: 0,
+			pixel_original_app: "",
+		},
+		SnakeValue: {
+			length: 0,
+			first_segment_id: 0,
+			last_segment_id: 0,
+		direction: new CairoCustomEnum({ 
+					None: "",
+				Left: undefined,
+				Right: undefined,
+				Up: undefined,
+				Down: undefined, }),
+			color: 0,
+			text: 0,
+			is_dying: false,
+		},
+		Area: {
+			id: 0,
+			app: "",
+			owner: "",
+			color: 0,
+		},
+		AreaValue: {
+			app: "",
+			owner: "",
+			color: 0,
+		},
+		RTree: {
+			id: 0,
+			children: 0,
+		},
+		RTreeValue: {
+			children: 0,
+		},
+		Dummy: {
+			id: 0,
+		defaultParams: { player_override: new CairoOption(CairoOptionVariant.None), system_override: new CairoOption(CairoOptionVariant.None), area_hint: new CairoOption(CairoOptionVariant.None), position: { x: 0, y: 0, }, color: 0, },
+		bounds: { x_min: 0, y_min: 0, x_max: 0, y_max: 0, },
+		pixelUpdate: { x: 0, y: 0, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
+		},
+		DummyValue: {
+		defaultParams: { player_override: new CairoOption(CairoOptionVariant.None), system_override: new CairoOption(CairoOptionVariant.None), area_hint: new CairoOption(CairoOptionVariant.None), position: { x: 0, y: 0, }, color: 0, },
+		bounds: { x_min: 0, y_min: 0, x_max: 0, y_max: 0, },
+		pixelUpdate: { x: 0, y: 0, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
+		},
+		Pixel: {
+			x: 0,
+			y: 0,
+			app: "",
+			color: 0,
+			created_at: 0,
+			updated_at: 0,
+			timestamp: 0,
+			owner: "",
+			text: 0,
+			action: 0,
+		},
+		PixelUpdate: {
+			x: 0,
+			y: 0,
+		color: new CairoOption(CairoOptionVariant.None),
+		owner: new CairoOption(CairoOptionVariant.None),
+		app: new CairoOption(CairoOptionVariant.None),
+		text: new CairoOption(CairoOptionVariant.None),
+		timestamp: new CairoOption(CairoOptionVariant.None),
+		action: new CairoOption(CairoOptionVariant.None),
+		},
+		PixelValue: {
+			app: "",
+			color: 0,
+			created_at: 0,
+			updated_at: 0,
+			timestamp: 0,
+			owner: "",
+			text: 0,
+			action: 0,
+		},
+		QueueItem: {
+			id: 0,
+			valid: false,
+		},
+		QueueItemValue: {
+			valid: false,
+		},
+		App: {
+			system: "",
+			name: 0,
+			icon: 0,
+			action: 0,
+		},
+		AppName: {
+			name: 0,
+			system: "",
+		},
+		AppNameValue: {
+			system: "",
+		},
+		AppUser: {
+			system: "",
+			player: "",
+			action: 0,
+		},
+		AppUserValue: {
+			action: 0,
+		},
+		AppValue: {
+			name: 0,
+			icon: 0,
+			action: 0,
+		},
+		CoreActionsAddress: {
+			key: 0,
+			value: "",
+		},
+		CoreActionsAddressValue: {
+			value: "",
+		},
+		Bounds: {
+			x_min: 0,
+			y_min: 0,
+			x_max: 0,
+			y_max: 0,
+		},
+		DefaultParameters: {
+		player_override: new CairoOption(CairoOptionVariant.None),
+		system_override: new CairoOption(CairoOptionVariant.None),
+		area_hint: new CairoOption(CairoOptionVariant.None),
+		position: { x: 0, y: 0, },
+			color: 0,
+		},
+		Position: {
+			x: 0,
+			y: 0,
+		},
+		Alert: {
+		position: { x: 0, y: 0, },
+			caller: "",
+			player: "",
+			message: 0,
+			timestamp: 0,
+		},
+		AlertValue: {
+			caller: "",
+			player: "",
+			message: 0,
+			timestamp: 0,
+		},
+		QueueProcessed: {
+			id: 0,
+			result: 0,
+		},
+		QueueProcessedValue: {
+			result: 0,
+		},
+		QueueScheduled: {
+			id: 0,
+			timestamp: 0,
+			called_system: "",
+			selector: 0,
+			calldata: [0],
+		},
+		QueueScheduledValue: {
+			timestamp: 0,
+			called_system: "",
+			selector: 0,
+			calldata: [0],
+		},
+	},
+};
+export enum ModelsMapping {
+	Snake = 'pixelaw-Snake',
+	SnakeSegment = 'pixelaw-SnakeSegment',
+	SnakeSegmentValue = 'pixelaw-SnakeSegmentValue',
+	SnakeValue = 'pixelaw-SnakeValue',
+	Area = 'pixelaw-Area',
+	AreaValue = 'pixelaw-AreaValue',
+	RTree = 'pixelaw-RTree',
+	RTreeValue = 'pixelaw-RTreeValue',
+	Dummy = 'pixelaw-Dummy',
+	DummyValue = 'pixelaw-DummyValue',
+	Pixel = 'pixelaw-Pixel',
+	PixelUpdate = 'pixelaw-PixelUpdate',
+	PixelValue = 'pixelaw-PixelValue',
+	QueueItem = 'pixelaw-QueueItem',
+	QueueItemValue = 'pixelaw-QueueItemValue',
+	App = 'pixelaw-App',
+	AppName = 'pixelaw-AppName',
+	AppNameValue = 'pixelaw-AppNameValue',
+	AppUser = 'pixelaw-AppUser',
+	AppUserValue = 'pixelaw-AppUserValue',
+	AppValue = 'pixelaw-AppValue',
+	CoreActionsAddress = 'pixelaw-CoreActionsAddress',
+	CoreActionsAddressValue = 'pixelaw-CoreActionsAddressValue',
+	Bounds = 'pixelaw-Bounds',
+	DefaultParameters = 'pixelaw-DefaultParameters',
+	Direction = 'pixelaw-Direction',
+	Position = 'pixelaw-Position',
+	Alert = 'pixelaw-Alert',
+	AlertValue = 'pixelaw-AlertValue',
+	QueueProcessed = 'pixelaw-QueueProcessed',
+	QueueProcessedValue = 'pixelaw-QueueProcessedValue',
+	QueueScheduled = 'pixelaw-QueueScheduled',
+	QueueScheduledValue = 'pixelaw-QueueScheduledValue',
 }
