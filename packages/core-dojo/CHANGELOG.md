@@ -1,5 +1,13 @@
 # @pixelaw/core-dojo
 
+## 0.6.9
+
+### Patch Changes
+
+- fix bug
+- Updated dependencies
+  - @pixelaw/core@0.6.9
+
 ## 0.6.8
 
 ### Patch Changes
