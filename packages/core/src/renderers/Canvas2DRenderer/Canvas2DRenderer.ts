@@ -54,8 +54,8 @@ export class Canvas2DRenderer {
             this.setZoom(initialZoom)
             this.setCenter(initialCenter)
             this.setupEventListeners()
-
-
+            this.subscribeToEvents()
+            this.requestRender()
         } else {
             import("canvas").then(({ createCanvas }) => {
                 this.canvas = createCanvas(800, 600) // Default size, adjust as needed
@@ -72,12 +72,7 @@ export class Canvas2DRenderer {
                 this.subscribeToEvents()
                 this.requestRender()
             })
-
         }
-
-
-
-
     }
 
     private requestRender() {

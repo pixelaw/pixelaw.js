@@ -1,5 +1,5 @@
-import {KeysClause, type SDK} from "@dojoengine/sdk"
-import type {EntityKeysClause} from "@dojoengine/torii-client"
+import { KeysClause, type SDK } from "@dojoengine/sdk"
+import type { EntityKeysClause } from "@dojoengine/torii-client"
 import {
     areBoundsEqual,
     type Bounds,
@@ -11,9 +11,9 @@ import {
     type PixelStoreEvents,
 } from "@pixelaw/core"
 import mitt from "mitt"
-import type {SchemaType} from "./generated/models.gen.ts"
-import {getQueryBounds} from "./utils/querybuilder.ts"
-import {convertFullHexString} from "./utils/utils.ts"
+import type { SchemaType } from "./generated/models.gen.ts"
+import { getQueryBounds } from "./utils/querybuilder.ts"
+import { convertFullHexString } from "./utils/utils.ts"
 
 type State = { [key: string]: Pixel | undefined }
 
