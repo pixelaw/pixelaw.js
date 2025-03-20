@@ -1,5 +1,13 @@
 # @pixelaw/imgtool-dojo
 
+## 0.6.10
+
+### Patch Changes
+
+- bindings
+- Updated dependencies
+  - @pixelaw/core@0.6.10
+
 ## 0.6.9
 
 ### Patch Changes

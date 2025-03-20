@@ -1,5 +1,15 @@
 # @pixelaw/react-dojo
 
+## 0.6.10
+
+### Patch Changes
+
+- bindings
+- Updated dependencies
+  - @pixelaw/core@0.6.10
+  - @pixelaw/core-dojo@0.6.10
+  - @pixelaw/react@0.6.10
+
 ## 0.6.9
 
 ### Patch Changes
