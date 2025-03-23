@@ -1,5 +1,13 @@
 # @pixelaw/core-dojo
 
+## 0.6.11
+
+### Patch Changes
+
+- no more splitting
+- Updated dependencies
+  - @pixelaw/core@0.6.11
+
 ## 0.6.10
 
 ### Patch Changes

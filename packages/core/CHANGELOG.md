@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.6.11
+
+### Patch Changes
+
+- no more splitting
+
 ## 0.6.10
 
 ### Patch Changes
