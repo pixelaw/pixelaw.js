@@ -104,8 +104,7 @@ export const PixelawProvider = ({
                 console.error("Failed to load world:", error)
                 setContextValues((prev) => ({
                     ...prev,
-                    clientState: "error",
-                    clientError: error,
+                    coreStatus: "error",
                 }))
             })
         }
@@ -123,11 +122,7 @@ export const PixelawProvider = ({
         }
     }, [pixelawCore, world, coreDefaults])
 
-    return (
-        <PixelawContext.Provider value={contextValues}>
-            {contextValues.engine === null ? <div>Error: Engine is not initialized.</div> : children}
-        </PixelawContext.Provider>
-    )
+    return <PixelawContext.Provider value={contextValues}>{children}</PixelawContext.Provider>
 }
 
 export const usePixelawProvider = (): IPixelawContext => {

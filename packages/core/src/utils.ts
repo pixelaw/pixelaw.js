@@ -1,4 +1,4 @@
-import type {Bounds} from "./types.ts";
+import type { Bounds } from "./types.ts"
 
 export function areBoundsEqual(boundsA: Bounds, boundsB: Bounds): boolean {
     // Compare top-left coordinates
@@ -10,4 +10,8 @@ export function areBoundsEqual(boundsA: Bounds, boundsB: Bounds): boolean {
         return false
     }
     return true
+}
+
+export function sleepMs(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms))
 }

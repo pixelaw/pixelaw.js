@@ -1,32 +1,28 @@
-import {
-    type AppStore,
-    type BaseWallet,
-    type Coordinate,
-    type CoreDefaults,
-    type CoreStatus,
-    type Engine,
-    type EngineConstructor,
-    type Interaction,
-    IS_BROWSER,
-    type Pixel,
-    type PixelCoreEvents,
-    type PixelStore,
-    type QueueItem,
-    type QueueStore,
-    type TileStore,
-    type UpdateService,
-    type Wallet,
-    type WorldConfig,
-    type WorldsRegistry,
+import type {
+    AppStore,
+    BaseWallet,
+    Coordinate,
+    CoreDefaults,
+    CoreStatus,
+    Engine,
+    EngineConstructor,
+    Interaction,
+    Pixel,
+    PixelCoreEvents,
+    PixelStore,
+    QueueItem,
+    QueueStore,
+    TileStore,
+    UpdateService,
+    Wallet,
+    WorldConfig,
+    WorldsRegistry,
 } from "./types.ts"
 
 import mitt from "mitt"
 import { createStorage, type Storage, type StorageValue } from "unstorage"
 import nullDriver from "unstorage/drivers/null"
-import { BrowserCanvas2DRenderer } from "./renderers"
-import { NodeCanvas2DRenderer } from "./renderers/Canvas2DRenderer/NodeCanvas2DRenderer.ts"
-import type { AbstractCanvas2DRenderer } from "./renderers/Canvas2DRenderer/AbstractCanvas2DRenderer.ts"
-import {Canvas2DRenderer} from "./renderers/Canvas2DRenderer/Canvas2DRenderer.ts";
+import { Canvas2DRenderer } from "./renderers/Canvas2DRenderer/Canvas2DRenderer.ts"
 
 export class PixelawCore {
     status: CoreStatus = "uninitialized"
@@ -108,16 +104,13 @@ export class PixelawCore {
         this.setStatus("loadConfig")
         const worldConfig = this.worldsRegistry[world]
 
-
         const engineClass = this.engines[worldConfig.engine.toLowerCase()]
 
         if (!engineClass) {
             throw new Error(`Unsupported engine: ${worldConfig.engine}`)
         }
 
-
         this.engine = new engineClass(this)
-
 
         this.setStatus("initializing")
 
@@ -136,15 +129,7 @@ export class PixelawCore {
             this.setZoom(defaults.zoom)
         }
 
-
-            this.viewPort = new Canvas2DRenderer(
-                this.events,
-                this.tileStore,
-                this.pixelStore,
-                this.zoom,
-                this.center,
-            )
-
+        this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore, this.zoom, this.center)
 
         this.worldConfig = worldConfig
 
