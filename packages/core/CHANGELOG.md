@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.6.13
+
+### Patch Changes
+
+- zoomlevels
+
 ## 0.6.12
 
 ### Patch Changes

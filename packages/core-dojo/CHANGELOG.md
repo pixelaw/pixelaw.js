@@ -1,5 +1,13 @@
 # @pixelaw/core-dojo
 
+## 0.6.13
+
+### Patch Changes
+
+- zoomlevels
+- Updated dependencies
+  - @pixelaw/core@0.6.13
+
 ## 0.6.12
 
 ### Patch Changes
