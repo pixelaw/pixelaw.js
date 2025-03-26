@@ -5,8 +5,8 @@ import { drawOutline } from "./drawOutline.ts"
 import { drawPixels } from "./drawPixels.ts"
 import { applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges } from "./utils.ts"
 
-import type { Emitter } from "mitt"
 import type { PixelawCore } from "../../PixelawCore.ts"
+import { areBoundsEqual } from "../../utils.ts"
 
 const isBrowser = typeof window !== "undefined" && typeof document !== "undefined"
 
@@ -18,10 +18,10 @@ export class Canvas2DRenderer {
     private pixelOffset: Coordinate = [0, 0]
     private worldOffset: Coordinate = [0, 0]
     private hoveredCell: Coordinate | undefined
-    // private worldView: Bounds = [
-    //     [0, 0],
-    //     [0, 0],
-    // ]
+    private worldViewBounds: Bounds = [
+        [0, 0],
+        [0, 0],
+    ]
 
     private lastDragPoint: Coordinate = [0, 0]
     private dragStart = 0
@@ -85,8 +85,6 @@ export class Canvas2DRenderer {
         this.canvas.width = container.clientWidth
         this.canvas.height = container.clientHeight
         container.appendChild(this.canvas)
-        this.core.pixelStore.prepare(this.calculateWorldViewBounds())
-        this.core.pixelStore.refresh()
         this.requestRender()
     }
 
@@ -362,21 +360,25 @@ export class Canvas2DRenderer {
         if (this.zoom === newZoom || newZoom < 500) return
         this.zoom = newZoom
         this.core.events.emit("zoomChanged", newZoom)
+        this.updateWorldView()
     }
 
     public setCenter(newCenter: Coordinate) {
         if (this.center === newCenter) return
         this.center = newCenter
         this.core.events.emit("centerChanged", newCenter)
-        this.core.pixelStore.prepare(this.calculateWorldViewBounds())
+        this.updateWorldView()
         this.core.pixelStore.refresh()
         this.requestRender()
     }
 
-    // private setWorldView(newBounds: Bounds) {
-    //     this.worldView = newBounds
-    //     this.pixelCoreEvents.emit("worldViewChanged", newBounds)
-    // }
+    private updateWorldView() {
+        const newBounds = this.calculateWorldViewBounds()
+        if (!areBoundsEqual(this.worldViewBounds, newBounds)) {
+            this.worldViewBounds = newBounds
+            this.core.events.emit("worldViewChanged", newBounds)
+        }
+    }
 
     public destroy() {
         this.canvas.removeEventListener("mousedown", this.handleMouseDown.bind(this))

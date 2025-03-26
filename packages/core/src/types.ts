@@ -60,6 +60,20 @@ export type QueueItem = {
     calldata: string
 }
 
+export type Alert = {
+    id: string
+    position: Position
+    caller: string
+    player: string | null
+    message: string
+    timestamp: number
+}
+
+export type AlertStoreEvents = {
+    updated: number
+    added: Alert
+}
+
 export type QueueStoreEvents = {
     updated: number
     scheduled: QueueItem
@@ -68,6 +82,12 @@ export type QueueStoreEvents = {
 export interface QueueStore {
     eventEmitter: ReturnType<typeof mitt<QueueStoreEvents>>
     getAll: () => QueueItem[]
+}
+
+export interface AlertStore {
+    eventEmitter: ReturnType<typeof mitt<AlertStoreEvents>>
+    getAll: () => Alert[]
+    getLastForPosition: (position: Position) => Alert[]
 }
 
 export interface TileStore {

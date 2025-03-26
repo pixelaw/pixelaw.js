@@ -19,37 +19,6 @@ import type { DojoEngine } from "./DojoEngine.ts"
 
 type State = { [key: string]: Pixel | undefined }
 
-export function createSqlQuery(bounds: Bounds) {
-    const [[left, top], [right, bottom]] = bounds
-    const xWraps = right - left < 0
-    const yWraps = bottom - top < 0
-    let result = `SELECT
-                      json_array(P.color, ltrim(substr(P.text, 3), '0'), ltrim(substr(P.action, 3), '0'), (P.x << 16) | P.y, ltrim(substr(A.name, 4), '0' )) as d
-                  FROM "pixelaw-Pixel" as P
-                           INNER JOIN "Pixelaw-App" as A
-                                      ON P.app = A.system
-                  WHERE( 1 = 0 ) 
-                  `
-    const ZERO = 0
-
-    if (xWraps && yWraps) {
-        result += ` OR(x >= ${left} AND y >= ${top} AND x <= ${MAX_DIMENSION} AND y <= ${MAX_DIMENSION} )`
-        result += ` OR(x >= ${left} AND y >= ${ZERO} AND x <= ${MAX_DIMENSION} AND y <= ${bottom} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${top} AND x <= ${right} AND y <= ${MAX_DIMENSION} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
-    } else if (xWraps) {
-        result += ` OR(x >= ${left} AND y >= ${ZERO} AND x <= ${MAX_DIMENSION} AND y <= ${bottom} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
-    } else if (yWraps) {
-        result += ` OR(x >= ${ZERO} AND y >= ${top} AND x <= ${right} AND y <= ${MAX_DIMENSION} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
-    } else {
-        result += ` OR(x >= ${top} AND y >= ${top} AND x <= ${right} AND y <= ${bottom} )`
-    }
-    result += ";"
-    return result
-}
-
 class DojoSqlPixelStore implements PixelStore {
     public readonly eventEmitter = mitt<PixelStoreEvents>()
     private static instance: DojoSqlPixelStore
@@ -68,6 +37,12 @@ class DojoSqlPixelStore implements PixelStore {
         this.sdk = engine.dojoSetup.sdk
         this.toriiUrl = engine.dojoSetup.toriiUrl
         this.core = core
+
+        this.core.events.on("worldViewChanged", (newBounds: Bounds) => {
+            this.prepare(newBounds)
+            this.refresh()
+            console.log("jaja")
+        })
     }
 
     public static async getInstance(core: PixelawCore): Promise<DojoSqlPixelStore> {
@@ -236,6 +211,37 @@ class DojoSqlPixelStore implements PixelStore {
     public getCacheUpdated(): number {
         return this.cacheUpdated
     }
+}
+
+export function createSqlQuery(bounds: Bounds) {
+    const [[left, top], [right, bottom]] = bounds
+    const xWraps = right - left < 0
+    const yWraps = bottom - top < 0
+    let result = `SELECT
+                      json_array(P.color, ltrim(substr(P.text, 3), '0'), ltrim(substr(P.action, 3), '0'), (P.x << 16) | P.y, ltrim(substr(A.name, 4), '0' )) as d
+                  FROM "pixelaw-Pixel" as P
+                           INNER JOIN "Pixelaw-App" as A
+                                      ON P.app = A.system
+                  WHERE( 1 = 0 ) 
+                  `
+    const ZERO = 0
+
+    if (xWraps && yWraps) {
+        result += ` OR(x >= ${left} AND y >= ${top} AND x <= ${MAX_DIMENSION} AND y <= ${MAX_DIMENSION} )`
+        result += ` OR(x >= ${left} AND y >= ${ZERO} AND x <= ${MAX_DIMENSION} AND y <= ${bottom} )`
+        result += ` OR(x >= ${ZERO} AND y >= ${top} AND x <= ${right} AND y <= ${MAX_DIMENSION} )`
+        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
+    } else if (xWraps) {
+        result += ` OR(x >= ${left} AND y >= ${ZERO} AND x <= ${MAX_DIMENSION} AND y <= ${bottom} )`
+        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
+    } else if (yWraps) {
+        result += ` OR(x >= ${ZERO} AND y >= ${top} AND x <= ${right} AND y <= ${MAX_DIMENSION} )`
+        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
+    } else {
+        result += ` OR(x >= ${top} AND y >= ${top} AND x <= ${right} AND y <= ${bottom} )`
+    }
+    result += ";"
+    return result
 }
 
 export default DojoSqlPixelStore
