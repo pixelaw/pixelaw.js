@@ -56,4 +56,8 @@ export class DojoAppStore implements AppStore {
     getByName(name: string): App | undefined {
         return this.dojoStuff!.apps.find((app) => app.name === name)
     }
+
+    getBySystem(system: string): App | undefined {
+        return this.dojoStuff!.apps.find((app) => app.system === system)
+    }
 }

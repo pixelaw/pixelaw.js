@@ -10,14 +10,14 @@ import {
     type QueueItem,
     WsUpdateService,
 } from "@pixelaw/core"
-import {Account} from "starknet"
-import {DojoAppStore} from "./DojoAppStore.ts"
-import {dojoInit, type DojoStuff} from "./DojoEngine.init.ts"
-import {DojoInteraction} from "./DojoInteraction.ts"
-import {DojoQueueStore} from "./DojoQueueStore.ts"
+import { Account } from "starknet"
+import { DojoAppStore } from "./DojoAppStore.ts"
+import { dojoInit, type DojoStuff } from "./DojoEngine.init.ts"
+import { DojoInteraction } from "./DojoInteraction.ts"
+import { DojoQueueStore } from "./DojoQueueStore.ts"
 import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
-import {DojoWallet} from "./DojoWallet.ts"
-import {type DojoConfig, ENGINE_ID} from "./types.ts"
+import { DojoWallet } from "./DojoWallet.ts"
+import { type DojoConfig, ENGINE_ID } from "./types.ts"
 
 export class DojoEngine implements Engine {
     id: Engines = ENGINE_ID
@@ -41,7 +41,7 @@ export class DojoEngine implements Engine {
             this.core.appStore = await DojoAppStore.getInstance(this.dojoSetup)
 
             // Setup PixelStore
-            this.core.pixelStore = await DojoSqlPixelStore.getInstance(this.config.toriiUrl, this.dojoSetup!.sdk!)
+            this.core.pixelStore = await DojoSqlPixelStore.getInstance(this.core)
 
             // Setup UpdateService
             this.core.updateService = new WsUpdateService(config.serverUrl)

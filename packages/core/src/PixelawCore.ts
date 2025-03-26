@@ -129,7 +129,7 @@ export class PixelawCore {
             this.setZoom(defaults.zoom)
         }
 
-        this.viewPort = new Canvas2DRenderer(this.events, this.tileStore, this.pixelStore, this.zoom, this.center)
+        this.viewPort = new Canvas2DRenderer(this, this.zoom, this.center)
 
         this.worldConfig = worldConfig
 

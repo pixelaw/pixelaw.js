@@ -7,6 +7,7 @@ import {
     makeString,
     MAX_DIMENSION,
     type Pixel,
+    type PixelawCore,
     type PixelStore,
     type PixelStoreEvents,
 } from "@pixelaw/core"
@@ -14,6 +15,7 @@ import mitt from "mitt"
 import type { SchemaType } from "./generated/models.gen.ts"
 import { getQueryBounds } from "./utils/querybuilder.ts"
 import { convertFullHexString } from "./utils/utils.ts"
+import type { DojoEngine } from "./DojoEngine.ts"
 
 type State = { [key: string]: Pixel | undefined }
 
@@ -21,7 +23,13 @@ export function createSqlQuery(bounds: Bounds) {
     const [[left, top], [right, bottom]] = bounds
     const xWraps = right - left < 0
     const yWraps = bottom - top < 0
-    let result = `SELECT json_array(color, ltrim(substr(text, 3), '0'), ltrim(substr(action, 3), '0'), (x << 16) | y ) as d FROM "pixelaw-Pixel" WHERE( 1 = 0 ) `
+    let result = `SELECT
+                      json_array(P.color, ltrim(substr(P.text, 3), '0'), ltrim(substr(P.action, 3), '0'), (P.x << 16) | P.y, ltrim(substr(A.name, 4), '0' )) as d
+                  FROM "pixelaw-Pixel" as P
+                           INNER JOIN "Pixelaw-App" as A
+                                      ON P.app = A.system
+                  WHERE( 1 = 0 ) 
+                  `
     const ZERO = 0
 
     if (xWraps && yWraps) {
@@ -53,15 +61,19 @@ class DojoSqlPixelStore implements PixelStore {
     private sdk: SDK<SchemaType>
     private worker: any
     private toriiUrl: string
+    private core: PixelawCore
 
-    protected constructor(toriiUrl: string, sdk: SDK<SchemaType>) {
-        this.sdk = sdk
-        this.toriiUrl = toriiUrl
+    protected constructor(core: PixelawCore) {
+        const engine = core.engine as DojoEngine
+        this.sdk = engine.dojoSetup.sdk
+        this.toriiUrl = engine.dojoSetup.toriiUrl
+        this.core = core
     }
 
-    public static async getInstance(toriiUrl: string, sdk: SDK<SchemaType>): Promise<DojoSqlPixelStore> {
+    public static async getInstance(core: PixelawCore): Promise<DojoSqlPixelStore> {
         if (!DojoSqlPixelStore.instance) {
-            DojoSqlPixelStore.instance = new DojoSqlPixelStore(toriiUrl, sdk)
+            DojoSqlPixelStore.instance = new DojoSqlPixelStore(core)
+            const engine = core.engine as DojoEngine
 
             if (typeof window !== "undefined" && Object.keys(window).length !== 0) {
                 // Browser environment
@@ -76,7 +88,9 @@ class DojoSqlPixelStore implements PixelStore {
                 const __filename = fileURLToPath(import.meta.url)
                 const __dirname = path.dirname(__filename)
                 const workerPath = path.resolve(__dirname, "./DojoSqlPixelStore.webworker.js")
-                DojoSqlPixelStore.instance.worker = new Worker(workerPath, { workerData: { toriiUrl } })
+                DojoSqlPixelStore.instance.worker = new Worker(workerPath, {
+                    workerData: { toriiUrl: engine.dojoSetup.toriiUrl },
+                })
             }
 
             DojoSqlPixelStore.instance.worker.onmessage = DojoSqlPixelStore.instance.handleRefreshWorker.bind(
@@ -102,12 +116,18 @@ class DojoSqlPixelStore implements PixelStore {
                             this.deletePixel(this.idLookupTable[id])
                             delete this.idLookupTable[id]
                         } else {
+                            console.log(p)
+                            const app =
+                                p.app.value !== "0x0000000000000000000000000000000000000000000000000000000000000000"
+                                    ? this.core.appStore.getBySystem(p.app.value).name
+                                    : ""
                             const pixel: Pixel = {
                                 action: convertFullHexString(p.action.value),
                                 color: p.color.value,
                                 owner: "",
                                 text: convertFullHexString(p.text.value),
                                 timestamp: p.timestamp.value,
+                                app,
                                 x: p.x.value,
                                 y: p.y.value,
                             }
@@ -142,7 +162,6 @@ class DojoSqlPixelStore implements PixelStore {
             this.state = { ...this.state, ...data }
 
             this.eventEmitter.emit("cacheUpdated", Date.now())
-            // console.log("pixels in cache: ", Object.keys(this.state).length)
         } else {
             console.error("RefreshWorker error:", error)
         }

@@ -3,6 +3,7 @@ import type { PixelawCore } from "./PixelawCore.ts"
 
 export type Pixel = {
     action: string
+    app: string
     color: number | string
     owner: string
     text: string
@@ -46,6 +47,7 @@ export interface UpdateService {
 
 export interface AppStore {
     getByName: (name: string) => App | undefined
+    getBySystem: (system: string) => App | undefined
     getAll: () => App[]
 }
 

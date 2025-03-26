@@ -1,4 +1,4 @@
-import { ZOOM_FACTOR } from "./constants.ts"
+import { ZOOM_FACTOR } from "./zoom.ts"
 
 import {
     type Bounds,

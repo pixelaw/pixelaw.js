@@ -1,6 +1,16 @@
 import type { Coordinate, Dimension, PixelStore } from "../../types.ts"
-import { ZOOM_TILEMODE } from "./constants.ts"
+import {
+    ZOOM_CLOSE,
+    ZOOM_CLOSE_MAX,
+    ZOOM_FAR,
+    type ZOOM_LEVEL,
+    ZOOM_MID,
+    ZOOM_MID_MAX,
+    ZOOM_TILEMODE,
+    getZoomLevel,
+} from "./zoom.ts"
 import { applyWorldOffset, getCellSize, numRGBAToHex } from "./utils.ts"
+import type { PixelawCore } from "../../PixelawCore.ts"
 
 export function drawPixels(
     // biome-ignore lint/suspicious/noExplicitAny: TODO fix later
@@ -10,7 +20,7 @@ export function drawPixels(
     dimensions: Dimension,
     worldTranslation: Coordinate,
     _hoveredCell: Coordinate | undefined,
-    pixelStore: PixelStore,
+    core: PixelawCore,
 ) {
     const cellSize = getCellSize(zoom)
     const gridDimensions = [Math.ceil(dimensions[0] / cellSize), Math.ceil(dimensions[1] / cellSize)]
@@ -23,7 +33,7 @@ export function drawPixels(
     const drawPixel = (cellX: number, cellY: number, sizeAdjustment = 0) => {
         const worldCoords = applyWorldOffset(worldTranslation, [cellX, cellY])
 
-        const pixel = pixelStore.getPixel(worldCoords)
+        const pixel = core.pixelStore.getPixel(worldCoords)
         if (!pixel) return
 
         context.fillStyle = numRGBAToHex(pixel.color as number)
@@ -35,14 +45,32 @@ export function drawPixels(
         // const emojis = ["R", "O", "😍", "😎", "🤔", "😢", "😜", "😇", "😡", "🥳"]
         // pixel.text = emojis[Math.floor(Math.random() * emojis.length)]
 
-        if (!pixel.text) return
+        const zoomlevel = getZoomLevel(zoom)
+        if (zoomlevel === "close") {
+            // The icon
+            const fontWeight = "300"
+            context.font = `${fontWeight} ${cellSize * 0.2}px "Noto Emoji", serif`
+            context.textAlign = "center"
+            context.textBaseline = "middle"
+            context.fillStyle = "#000000"
+            context.fillText(pixel.text, x + w / 2, y + h * 0.55)
 
-        const fontWeight = "300"
-        context.font = `${fontWeight} ${cellSize * 0.8}px "Noto Emoji", serif`
-        context.textAlign = "center"
-        context.textBaseline = "middle"
-        context.fillStyle = "#000000"
-        context.fillText(pixel.text, x + w / 2, y + h * 0.55)
+            // The app name
+            context.font = `${fontWeight} ${cellSize * 0.2}px Arial, sans-serif`
+            context.textAlign = "center"
+            context.textBaseline = "middle"
+            context.fillStyle = "#000000"
+            context.fillText(pixel.app, x + w / 2, y + h * 0.1)
+        } else if (zoomlevel === "mid") {
+            if (!pixel.text) return
+
+            const fontWeight = "300"
+            context.font = `${fontWeight} ${cellSize * 0.8}px "Noto Emoji", serif`
+            context.textAlign = "center"
+            context.textBaseline = "middle"
+            context.fillStyle = "#000000"
+            context.fillText(pixel.text, x + w / 2, y + h * 0.55)
+        }
     }
 
     for (let x = 0; x <= gridDimensions[0]; x++) {

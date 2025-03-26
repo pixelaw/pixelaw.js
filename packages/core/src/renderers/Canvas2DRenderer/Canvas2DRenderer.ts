@@ -1,11 +1,12 @@
-import type { Bounds, Coordinate, PixelCoreEvents, PixelStore, TileStore } from "../../types.ts"
-import { ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE } from "./constants.ts"
+import type { Bounds, Coordinate } from "../../types.ts"
+import { ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE } from "./zoom.ts"
 import { drawGrid } from "./drawGrid.ts"
 import { drawOutline } from "./drawOutline.ts"
 import { drawPixels } from "./drawPixels.ts"
 import { applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges } from "./utils.ts"
 
 import type { Emitter } from "mitt"
+import type { PixelawCore } from "../../PixelawCore.ts"
 
 const isBrowser = typeof window !== "undefined" && typeof document !== "undefined"
 
@@ -25,31 +26,21 @@ export class Canvas2DRenderer {
     private lastDragPoint: Coordinate = [0, 0]
     private dragStart = 0
     private dragStartPoint: Coordinate | null = null
-    private tileStore: TileStore
-    private pixelStore: PixelStore
+    private core: PixelawCore
     private zoom = 2000
     private center: Coordinate = [0, 0]
-    private pixelCoreEvents: Emitter<PixelCoreEvents>
     private isRendering = false
     private initialPinchDistance: number | null = null
     private initialZoom: number = this.zoom
 
-    constructor(
-        pixelCoreEvents: Emitter<PixelCoreEvents>,
-        tileStore: TileStore,
-        pixelStore: PixelStore,
-        initialZoom: number,
-        initialCenter: Coordinate,
-    ) {
+    constructor(core: PixelawCore, initialZoom: number, initialCenter: Coordinate) {
         if (isBrowser) {
             this.canvas = document.createElement("canvas")
             this.bufferCanvas = document.createElement("canvas")
             this.context = this.canvas.getContext("2d")
             this.bufferContext = this.bufferCanvas.getContext("2d")
 
-            this.tileStore = tileStore
-            this.pixelStore = pixelStore
-            this.pixelCoreEvents = pixelCoreEvents
+            this.core = core
 
             this.setZoom(initialZoom)
             this.setCenter(initialCenter)
@@ -63,9 +54,7 @@ export class Canvas2DRenderer {
                 this.context = this.canvas.getContext("2d")
                 this.bufferContext = this.bufferCanvas.getContext("2d")
 
-                this.tileStore = tileStore
-                this.pixelStore = pixelStore
-                this.pixelCoreEvents = pixelCoreEvents
+                this.core = core
 
                 this.setZoom(initialZoom)
                 this.setCenter(initialCenter)
@@ -96,24 +85,24 @@ export class Canvas2DRenderer {
         this.canvas.width = container.clientWidth
         this.canvas.height = container.clientHeight
         container.appendChild(this.canvas)
-        this.pixelStore.prepare(this.calculateWorldViewBounds())
-        this.pixelStore.refresh()
+        this.core.pixelStore.prepare(this.calculateWorldViewBounds())
+        this.core.pixelStore.refresh()
         this.requestRender()
     }
 
     private subscribeToEvents() {
-        if (!this.pixelStore) throw new Error("PixelStore not initialized")
+        if (!this.core.pixelStore) throw new Error("PixelStore not initialized")
         // TODO decide on whether pixelstore cacheupdated goes to a global event bus or not
-        this.pixelStore.eventEmitter.on("cacheUpdated", (timestamp: number) => {
+        this.core.pixelStore.eventEmitter.on("cacheUpdated", (_timestamp: number) => {
             this.requestRender()
         })
 
-        this.pixelCoreEvents.on("pixelStoreUpdated", (timestamp: number) => {
+        this.core.events.on("pixelStoreUpdated", (timestamp: number) => {
             console.log(`pixelStoreUpdated at: ${timestamp}`)
 
             this.requestRender()
         })
-        this.pixelCoreEvents.on("tileStoreUpdated", (timestamp: number) => {
+        this.core.events.on("tileStoreUpdated", (timestamp: number) => {
             console.log(`tileStoreUpdated at: ${timestamp}`)
 
             this.requestRender()
@@ -162,7 +151,7 @@ export class Canvas2DRenderer {
                 ) {
                     this.hoveredCell = hoveredWorldCell
 
-                    this.pixelCoreEvents.emit("cellHovered", viewportCell)
+                    this.core.events.emit("cellHovered", viewportCell)
                 }
             }
         }
@@ -170,7 +159,7 @@ export class Canvas2DRenderer {
 
     private handleMouseLeave(_event: MouseEvent) {
         this.hoveredCell = undefined
-        this.pixelCoreEvents.emit("cellHovered", undefined)
+        this.core.events.emit("cellHovered", undefined)
     }
 
     private handleMouseUp(event: MouseEvent) {
@@ -191,7 +180,7 @@ export class Canvas2DRenderer {
             ])
             const worldClicked = applyWorldOffset(this.worldOffset, viewportCell)
 
-            this.pixelCoreEvents.emit("cellClicked", worldClicked)
+            this.core.events.emit("cellClicked", worldClicked)
         } else {
             // It's the end of a drag
             const mouse: Coordinate = [event.clientX, event.clientY]
@@ -306,10 +295,14 @@ export class Canvas2DRenderer {
             [this.canvas.width, this.canvas.height],
             this.worldOffset,
             this.hoveredCell,
-            this.pixelStore,
+            this.core,
         )
         drawOutline(this.bufferContext, [this.canvas.width, this.canvas.height])
-        drawGrid(this.bufferContext, this.zoom, this.pixelOffset, [this.canvas.width, this.canvas.height])
+
+        if (this.zoom > ZOOM_TILEMODE) {
+            drawGrid(this.bufferContext, this.zoom, this.pixelOffset, [this.canvas.width, this.canvas.height])
+        }
+
         this.context.drawImage(this.bufferCanvas, 0, 0)
     }
 
@@ -368,15 +361,15 @@ export class Canvas2DRenderer {
     public setZoom(newZoom: number) {
         if (this.zoom === newZoom || newZoom < 500) return
         this.zoom = newZoom
-        this.pixelCoreEvents.emit("zoomChanged", newZoom)
+        this.core.events.emit("zoomChanged", newZoom)
     }
 
     public setCenter(newCenter: Coordinate) {
         if (this.center === newCenter) return
         this.center = newCenter
-        this.pixelCoreEvents.emit("centerChanged", newCenter)
-        this.pixelStore.prepare(this.calculateWorldViewBounds())
-        this.pixelStore.refresh()
+        this.core.events.emit("centerChanged", newCenter)
+        this.core.pixelStore.prepare(this.calculateWorldViewBounds())
+        this.core.pixelStore.refresh()
         this.requestRender()
     }
 

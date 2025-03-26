@@ -1,4 +1,4 @@
-import {parseText} from "./utils/utils.ts"
+import { parseText } from "./utils/utils.ts"
 
 let postMessageFunction
 
@@ -35,7 +35,8 @@ async function handleMessage(event) {
             const y = d[3] & 0xffff
             const text = parseText(d[1])
             const action = parseText(d[2])
-            const pixel = { color, x, y, text, action }
+            const app = parseText(d[4])
+            const pixel = { color, x, y, text, action, app }
             const key = `${x}_${y}`
             result[key] = pixel
         }

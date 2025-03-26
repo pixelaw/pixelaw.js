@@ -1,11 +1,11 @@
-import type {Coordinate, PixelCoreEvents, PixelStore, TileStore} from "../../types.ts"
-import {ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE} from "./constants.ts"
-import {drawGrid} from "./drawGrid.ts"
-import {drawOutline} from "./drawOutline.ts"
-import {drawPixels} from "./drawPixels.ts"
-import {applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges} from "./utils.ts"
-import {AbstractCanvas2DRenderer} from "./AbstractCanvas2DRenderer.ts"
-import type {Emitter} from "mitt"
+import type { Coordinate, PixelCoreEvents, PixelStore, TileStore } from "../../types.ts"
+import { ZOOM_MAX, ZOOM_MIN, ZOOM_SCALEFACTOR, ZOOM_TILEMODE } from "./zoom.ts"
+import { drawGrid } from "./drawGrid.ts"
+import { drawOutline } from "./drawOutline.ts"
+import { drawPixels } from "./drawPixels.ts"
+import { applyWorldOffset, cellForPosition, getCellSize, handlePixelChanges } from "./utils.ts"
+import { AbstractCanvas2DRenderer } from "./AbstractCanvas2DRenderer.ts"
+import type { Emitter } from "mitt"
 
 export class BrowserCanvas2DRenderer extends AbstractCanvas2DRenderer {
     private canvas: HTMLCanvasElement
