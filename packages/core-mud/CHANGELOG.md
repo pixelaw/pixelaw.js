@@ -1,5 +1,13 @@
 # @pixelaw/core-mud
 
+## 0.6.12
+
+### Patch Changes
+
+- error msgs
+- Updated dependencies
+  - @pixelaw/core@0.6.12
+
 ## 0.6.11
 
 ### Patch Changes

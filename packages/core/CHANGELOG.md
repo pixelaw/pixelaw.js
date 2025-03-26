@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.6.12
+
+### Patch Changes
+
+- error msgs
+
 ## 0.6.11
 
 ### Patch Changes
