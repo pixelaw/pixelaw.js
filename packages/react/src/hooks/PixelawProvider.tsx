@@ -10,7 +10,7 @@ import type {
 import { type BaseWallet, PixelawCore } from "@pixelaw/core"
 import { createContext, type ReactNode, useContext, useEffect, useState } from "react"
 
-import { createStorage } from "unstorage"
+import { createStorage, type StorageValue } from "unstorage"
 import localStorageDriver from "unstorage/drivers/localstorage"
 
 export type IPixelawContext = {
@@ -51,7 +51,7 @@ export const PixelawProvider = ({
             new PixelawCore(
                 engines,
                 worldsRegistry,
-                createStorage({
+                createStorage<StorageValue>({
                     driver: localStorageDriver({}),
                 }),
             ),

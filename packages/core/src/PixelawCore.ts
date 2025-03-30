@@ -7,6 +7,7 @@ import type {
     Engine,
     EngineConstructor,
     Interaction,
+    InteractParams,
     Pixel,
     PixelCoreEvents,
     PixelStore,
@@ -217,11 +218,19 @@ export class PixelawCore {
         return this.world
     }
 
-    public async handleInteraction(coordinate: Coordinate): Promise<Interaction> {
-        const pixel = this.pixelStore.getPixel(coordinate) ?? ({ x: coordinate[0], y: coordinate[1] } as Pixel)
-        const app = this.appStore.getByName(this.app)
-        return await this.engine.handleInteraction(app, pixel, this.color)
+    public async prepInteraction(coordinate: Coordinate): Promise<Interaction> {
+        return await this.engine.prepInteraction(coordinate)
     }
+
+    // public async executeInteraction(interaction: Interaction): Promise<void> {
+    //     return await this.engine.executeInteraction(interaction)
+    // }
+
+    // public async handleInteraction(coordinate: Coordinate): Promise<Interaction> {
+    //     const pixel = this.pixelStore.getPixel(coordinate) ?? ({ x: coordinate[0], y: coordinate[1] } as Pixel)
+    //     const app = this.appStore.getByName(this.app)
+    //     return await this.engine.handleInteraction(app, pixel, this.color)
+    // }
 
     // TODO finalize return type etc
     public async executeQueueItem(queueItem: QueueItem): Promise<boolean> {

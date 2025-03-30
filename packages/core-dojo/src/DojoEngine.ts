@@ -1,9 +1,11 @@
 import {
     type App,
+    type Coordinate,
     type Engine,
     type Engines,
     type EngineStatus,
     type Interaction,
+    type InteractParams,
     NAMESPACE,
     type Pixel,
     type PixelawCore,
@@ -18,6 +20,14 @@ import { DojoQueueStore } from "./DojoQueueStore.ts"
 import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
 import { DojoWallet } from "./DojoWallet.ts"
 import { type DojoConfig, ENGINE_ID } from "./types.ts"
+import {
+    convertSnakeToPascal,
+    extractParameters,
+    findContract,
+    findFunctionDefinition,
+    prepareParams,
+    prepareParams2,
+} from "./interaction/params.ts"
 
 export class DojoEngine implements Engine {
     id: Engines = ENGINE_ID
@@ -60,9 +70,47 @@ export class DojoEngine implements Engine {
             // TODO Load interaction from somewhere else (experimental)
             return
         }
-        const interaction: Interaction = await DojoInteraction.new(this, app, pixel, color)
+        const interaction: Interaction = await DojoInteraction.create(this, app, pixel, color)
 
         return interaction
+    }
+
+    async prepInteraction(coordinate: Coordinate): Promise<Interaction> {
+        const pixel = this.core.pixelStore.getPixel(coordinate) ?? ({ x: coordinate[0], y: coordinate[1] } as Pixel)
+        const app = this.core.appStore.getByName(this.core.getApp())
+        const color = this.core.getColor()
+
+        const interaction: Interaction = await DojoInteraction.create(this, app, pixel, color)
+
+        return interaction
+    }
+
+    // async executeInteraction(interaction: Interaction): Promise<void> {
+    //     console.log("TODO executeInteraction")
+    //     for (const p of interactParams) {
+    //         // Call the transformer if it's there. This will ensure params are ready for submission to chain.
+    //         if (p.transformer) await p.transformer()
+    //     }
+    //     this.action(params)
+    // }
+
+    async prepInteraction2(pixel: Pixel | null): Promise<InteractParams> {
+        const functionName = pixel?.action ? pixel.action : "interact"
+        const contractName = `${this.core.getApp()}_actions`
+        const position = { x: pixel.x, y: pixel.y }
+        const manifest = this.dojoSetup.manifest
+
+        const contract = findContract(manifest, contractName)
+        if (!contract) return
+
+        const functionDef = findFunctionDefinition(contract.abi, `I${convertSnakeToPascal(contractName)}`, functionName)
+        if (!functionDef) return
+
+        const rawParams = extractParameters(functionDef)
+
+        const params = await prepareParams2(this, position, rawParams, contract.abi)
+
+        return params
     }
 
     async executeQueueItem(item: QueueItem): Promise<boolean> {

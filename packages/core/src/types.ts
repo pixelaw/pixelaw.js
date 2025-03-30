@@ -28,13 +28,15 @@ export type Variant = {
     value: number
 }
 
-export type Param = {
+export type InteractParams = InteractParam[]
+
+export type InteractParam = {
     name: string
-    type: "string" | "number" | "enum"
+    type: "string" | "number" | "enum" | "emoji"
     typeName: string | null
     variants: Variant[]
     transformer: () => void
-    value?: number | null
+    value?: number | string | null
     systemOnly?: boolean
 }
 
@@ -102,8 +104,10 @@ export interface TileStore {
 }
 
 export interface Interaction {
-    action: (params: Param[]) => void
-    dialog: HTMLDialogElement | null
+    // action: (params: InteractParams) => void
+    getUserParams: () => InteractParams
+    setUserParam: (name: string, value: unknown) => void
+    execute: () => Promise<void>
 }
 
 export interface Tileset {
@@ -174,7 +178,9 @@ export interface Engine {
 
     init(engineConfig: unknown): Promise<void>
     // setAccount(account: unknown): void
-    handleInteraction(app: App, pixel: Pixel, color: number): Promise<Interaction | undefined>
+    // handleInteraction(app: App, pixel: Pixel, color: number): Promise<Interaction | undefined>
+    prepInteraction(coordinate: Coordinate): Promise<Interaction>
+    // executeInteraction(interaction: Interaction): Promise<void>
     executeQueueItem(queueItem: QueueItem): Promise<boolean>
 }
 

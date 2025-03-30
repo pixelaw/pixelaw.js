@@ -30,9 +30,9 @@
   "dependencies": {
     "@pixelaw/core": "workspace:*",
     "@pixelaw/core-dojo": "workspace:*",
-    "unstorage": "^1.14.4",
-    "postcss": "^8.4.49",
-    "react-router-dom": "^7.1.0"
+    "emoji-picker-react": "^4.12.2",
+    "react-router-dom": "^7.1.0",
+    "unstorage": "^1.14.4"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",

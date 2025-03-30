@@ -41,7 +41,6 @@ class DojoSqlPixelStore implements PixelStore {
         this.core.events.on("worldViewChanged", (newBounds: Bounds) => {
             this.prepare(newBounds)
             this.refresh()
-            console.log("jaja")
         })
     }
 
@@ -91,7 +90,6 @@ class DojoSqlPixelStore implements PixelStore {
                             this.deletePixel(this.idLookupTable[id])
                             delete this.idLookupTable[id]
                         } else {
-                            console.log(p)
                             const app =
                                 p.app.value !== "0x0000000000000000000000000000000000000000000000000000000000000000"
                                     ? this.core.appStore.getBySystem(p.app.value).name
@@ -218,7 +216,7 @@ export function createSqlQuery(bounds: Bounds) {
     const xWraps = right - left < 0
     const yWraps = bottom - top < 0
     let result = `SELECT
-                      json_array(P.color, ltrim(substr(P.text, 3), '0'), ltrim(substr(P.action, 3), '0'), (P.x << 16) | P.y, ltrim(substr(A.name, 4), '0' )) as d
+                      json_array(P.color, ltrim(substr(P.text, 32), '0'), ltrim(substr(P.action, 3), '0'), (P.x << 16) | P.y, ltrim(substr(A.name, 4), '0' )) as d
                   FROM "pixelaw-Pixel" as P
                            INNER JOIN "Pixelaw-App" as A
                                       ON P.app = A.system

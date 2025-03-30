@@ -1,6 +1,6 @@
-import type {Param} from "./types.ts"
+import type { InteractParam, InteractParams } from "./types.ts"
 
-function formElementForParam(param: Param): HTMLElement {
+function formElementForParam(param: InteractParam): HTMLElement {
     switch (param.type) {
         case "string":
             return createStringInput(param)
@@ -12,7 +12,7 @@ function formElementForParam(param: Param): HTMLElement {
             throw new Error(`Unsupported type: ${param.type}`)
     }
 }
-export function createDialog(action, params: Param[]): HTMLDialogElement {
+export function createDialog(action, params: InteractParams): HTMLDialogElement {
     const dialog = document.createElement("dialog")
     dialog.className = "dialog"
 
@@ -64,7 +64,7 @@ export function createDialog(action, params: Param[]): HTMLDialogElement {
 
     return dialog
 }
-function createStringInput(param: Param): HTMLInputElement {
+function createStringInput(param: InteractParam): HTMLInputElement {
     const input = document.createElement("input")
     input.type = "text"
     input.name = param.name
@@ -72,7 +72,7 @@ function createStringInput(param: Param): HTMLInputElement {
     return input
 }
 
-function createNumberInput(param: Param): HTMLInputElement {
+function createNumberInput(param: InteractParam): HTMLInputElement {
     const input = document.createElement("input")
     input.type = "number"
     input.name = param.name
@@ -83,7 +83,22 @@ function createNumberInput(param: Param): HTMLInputElement {
     return input
 }
 
-function createEnumSelect(param: Param): HTMLSelectElement {
+function createEnumSelect(param: InteractParam): HTMLSelectElement {
+    const select = document.createElement("select")
+    select.name = param.name
+    select.className = "enum-select"
+
+    for (const variant of param.variants) {
+        const option = document.createElement("option")
+        option.value = variant.value.toString()
+        option.textContent = variant.name
+        select.appendChild(option)
+    }
+
+    return select
+}
+
+function createEmojiSelect(param: InteractParam): HTMLSelectElement {
     const select = document.createElement("select")
     select.name = param.name
     select.className = "enum-select"

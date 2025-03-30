@@ -1,10 +1,10 @@
-import {getContractByName, type Manifest} from "@dojoengine/core"
-import {NAMESPACE, type Param, type Position} from "@pixelaw/core"
-import type {Call} from "starknet"
+import { getContractByName, type Manifest } from "@dojoengine/core"
+import { NAMESPACE, type InteractParam, type Position } from "@pixelaw/core"
+import type { Call } from "starknet"
 
 export default function generateDojoCall(
     manifest: Manifest,
-    params: Param[],
+    params: InteractParam[],
     contractName: string,
     action: string,
     position: Position,
