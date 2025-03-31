@@ -17,25 +17,13 @@
     "check": "biome check --apply ."
   },
   "dependencies": {
-    "@types/node": "^22.13.14",
-    "@types/upng-js": "^2.1.5",
-    "autoprefixer": "^10.4.20",
-    "browserify-zlib": "^0.2.0",
     "canvas": "^3.1.0",
-    "dotenv": "^16.4.7",
     "idb-keyval": "^6.2.1",
-    "immer": "^10.1.1",
     "mitt": "^3.0.1",
-    "pngjs3": "^6.1.1",
-    "unstorage": "^1.14.4",
-    "upng-js": "^2.1.0",
-    "zustand": "^5.0.2"
+    "unstorage": "^1.14.4"
   },
   "devDependencies": {
-    "esbuild-plugin-alias": "^0.2.1",
-    "globals": "^16.0.0",
     "tsup": "^8.3.6",
-    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
   "publishConfig": {
