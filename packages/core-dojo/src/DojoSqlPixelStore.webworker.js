@@ -1,4 +1,4 @@
-import { parseText } from "./utils/utils.ts"
+import { convertFullHexString, parseText } from "./utils/utils.ts"
 
 let postMessageFunction
 
@@ -30,10 +30,11 @@ async function handleMessage(event) {
 
         for (const j of json) {
             const d = JSON.parse(j.d)
+            console.log(d)
             const color = d[0]
             const x = d[3] >> 16
             const y = d[3] & 0xffff
-            const text = parseText(d[1])
+            const text = convertFullHexString(d[1])
             const action = parseText(d[2])
             const app = parseText(d[4])
             const pixel = { color, x, y, text, action, app }

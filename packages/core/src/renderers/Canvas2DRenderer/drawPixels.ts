@@ -63,7 +63,6 @@ export function drawPixels(
             context.fillText(pixel.app, x + w / 2, y + h * 0.1)
         } else if (zoomlevel === "mid") {
             if (!pixel.text) return
-
             const fontWeight = "300"
             context.font = `${fontWeight} ${cellSize * 0.8}px "Noto Emoji", serif`
             context.textAlign = "center"

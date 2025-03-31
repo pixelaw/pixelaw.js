@@ -1,6 +1,7 @@
 import type React from "react"
+import { useState } from "react"
 import type { Interaction, InteractParam } from "@pixelaw/core"
-// import { dialog, overlay } from "./InteractionDialog.module.css"
+import EmojiPicker, { type EmojiClickData } from "emoji-picker-react"
 
 export interface InteractionDialogProps {
     interaction: Interaction
@@ -9,6 +10,7 @@ export interface InteractionDialogProps {
 }
 
 export const InteractionDialog: React.FC<InteractionDialogProps> = ({ interaction, onSubmit, onCancel }) => {
+    const [emojiPickerForParam, setEmojiPickerForParam] = useState<string | null>(null)
     const params = interaction.getUserParams()
 
     const handleCancel = () => onCancel(interaction)
@@ -52,6 +54,17 @@ export const InteractionDialog: React.FC<InteractionDialogProps> = ({ interactio
                         ))}
                     </select>
                 )
+            case "emoji":
+                return (
+                    <input
+                        type="text"
+                        value={param.value || "👶"}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+                            interaction.setUserParam(param.name, e.target.value)
+                        }
+                        onClick={() => setEmojiPickerForParam(param.name)}
+                    />
+                )
             default:
                 return null
         }
@@ -59,27 +72,42 @@ export const InteractionDialog: React.FC<InteractionDialogProps> = ({ interactio
 
     return (
         <div className="overlay">
-            <form
-                className="dialog"
-                onSubmit={(e) => {
-                    e.preventDefault()
-                    handleSubmit()
-                }}
-            >
-                {params.map((param) => (
-                    <div key={param.name}>
-                        {/* biome-ignore lint/a11y/noLabelWithoutControl: Label is wrapping values, so implemented correctly */}
-                        <label>
-                            {param.name}
-                            {renderInput(param)}
-                        </label>
-                    </div>
-                ))}
-                <button type="button" onClick={handleCancel}>
-                    Cancel
-                </button>
-                <button type="submit">Submit</button>
-            </form>
+            {emojiPickerForParam ? (
+                <div className="dialog">
+                    <EmojiPicker
+                        searchDisabled={true}
+                        height={300}
+                        width={300}
+                        onEmojiClick={(emojiData: EmojiClickData, _event: MouseEvent) => {
+                            console.log("eo", emojiData)
+                            interaction.setUserParam(emojiPickerForParam, emojiData.emoji)
+                            setEmojiPickerForParam(null)
+                        }}
+                    />
+                </div>
+            ) : (
+                <form
+                    className="dialog"
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        handleSubmit()
+                    }}
+                >
+                    {params.map((param) => (
+                        <div key={param.name}>
+                            {/* biome-ignore lint/a11y/noLabelWithoutControl: Nested correctly */}
+                            <label>
+                                {param.name}
+                                {renderInput(param)}
+                            </label>
+                        </div>
+                    ))}
+                    <button type="button" onClick={handleCancel}>
+                        Cancel
+                    </button>
+                    <button type="submit">Submit</button>
+                </form>
+            )}
         </div>
     )
 }

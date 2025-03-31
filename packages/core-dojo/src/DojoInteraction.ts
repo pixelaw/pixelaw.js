@@ -51,11 +51,11 @@ export class DojoInteraction implements Interaction {
     }
 
     public setUserParam(name: string, value: string | number): void {
-        const param = this.params.find((item: InteractParam) => item.name === name && !item.systemOnly);
+        const param = this.params.find((item: InteractParam) => item.name === name && !item.systemOnly)
         if (param) {
-            param.value = value;
+            param.value = value
         } else {
-            console.warn(`Parameter with name ${name} not found or is system-only.`);
+            console.warn(`Parameter with name ${name} not found or is system-only.`)
         }
     }
 
@@ -65,13 +65,12 @@ export class DojoInteraction implements Interaction {
     }
 
     public async execute(): Promise<void> {
-
         // Run the transformer on each param
         await Promise.all(
             this.params.map(async (param) => {
-                if (param.transformer) await param.transformer();
+                if (param.transformer) await param.transformer()
             }),
-        );
+        )
 
         // Execute the action
         await this.action(this.params)
@@ -94,6 +93,7 @@ export class DojoInteraction implements Interaction {
 
     private initializeAction(): void {
         this.action = async (params) => {
+            console.log(params)
             try {
                 const dojoCall = generateDojoCall(
                     this.engine.dojoSetup.manifest,

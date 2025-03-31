@@ -26,7 +26,7 @@ import {
     findContract,
     findFunctionDefinition,
     prepareParams,
-    prepareParams2,
+    // prepareParams2,
 } from "./interaction/params.ts"
 
 export class DojoEngine implements Engine {
@@ -94,24 +94,24 @@ export class DojoEngine implements Engine {
     //     this.action(params)
     // }
 
-    async prepInteraction2(pixel: Pixel | null): Promise<InteractParams> {
-        const functionName = pixel?.action ? pixel.action : "interact"
-        const contractName = `${this.core.getApp()}_actions`
-        const position = { x: pixel.x, y: pixel.y }
-        const manifest = this.dojoSetup.manifest
-
-        const contract = findContract(manifest, contractName)
-        if (!contract) return
-
-        const functionDef = findFunctionDefinition(contract.abi, `I${convertSnakeToPascal(contractName)}`, functionName)
-        if (!functionDef) return
-
-        const rawParams = extractParameters(functionDef)
-
-        const params = await prepareParams2(this, position, rawParams, contract.abi)
-
-        return params
-    }
+    // async prepInteraction2(pixel: Pixel | null): Promise<InteractParams> {
+    //     const functionName = pixel?.action ? pixel.action : "interact"
+    //     const contractName = `${this.core.getApp()}_actions`
+    //     const position = { x: pixel.x, y: pixel.y }
+    //     const manifest = this.dojoSetup.manifest
+    //
+    //     const contract = findContract(manifest, contractName)
+    //     if (!contract) return
+    //
+    //     const functionDef = findFunctionDefinition(contract.abi, `I${convertSnakeToPascal(contractName)}`, functionName)
+    //     if (!functionDef) return
+    //
+    //     const rawParams = extractParameters(functionDef)
+    //
+    //     const params = await prepareParams(this, position, rawParams, contract.abi)
+    //
+    //     return params
+    // }
 
     async executeQueueItem(item: QueueItem): Promise<boolean> {
         const dojoCall = {

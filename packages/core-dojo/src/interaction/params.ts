@@ -2,7 +2,7 @@ import type { Manifest } from "@dojoengine/core"
 import type { InteractParam, InteractParams, Position } from "@pixelaw/core"
 import { poseidonHashMany } from "@scure/starknet"
 import type { DojoInteraction } from "../DojoInteraction.ts"
-import { generateRandomFelt252 } from "../utils/utils.ts"
+import { convertTextToHex, generateRandomFelt252 } from "../utils/utils.ts"
 import type { InterfaceType } from "./types.ts"
 import type { DojoEngine } from "../DojoEngine.ts"
 
@@ -148,100 +148,14 @@ export async function prepareParams(
                     }
                 }
                 param.type = "enum"
-            }
-        } else if (param.type === "core::felt252") {
-            param.type = "string"
-        }
-        result.push(param)
-    }
-    return result
-}
-
-export async function prepareParams2(
-    engine: DojoEngine,
-    position: Position,
-    rawParams: InteractParams,
-    abi: any[],
-): Promise<InteractParams> {
-    const result: InteractParam[] = []
-    const storage = engine.core.storage
-    const address = engine.core.getWallet().address
-    const positionString = `${position.x}_${position.y}`
-
-    for (const rawParam of rawParams) {
-        const param = { ...rawParam }
-
-        const [nameFirst, ...nameRemaining] = rawParam.name.split("_")
-
-        // Check if the name as a prefix
-        if (nameRemaining.length > 0) {
-            if (nameFirst === "crc") {
-                // TODO check that nameRemaining has 2 elements, for varname and vartype
-                param.name = nameRemaining[0]
-                // @ts-ignore TODO
-                param.type = nameRemaining[1]
-
-                // setup a "transformer" that, after choosing a value, encodes it and calls the right function name.
-                param.transformer = async () => {
-                    const salt = `0x${generateRandomFelt252().toString(16)}`
-                    // Store the original values
-                    await storage.setItem(`param_${address}-${positionString}-${param.name}`, param.value)
-                    await storage.setItem(`param_${address}-${positionString}-${param.name}-salt`, salt)
-                    param.name = rawParam.name
-                    param.type = rawParam.type
-                    param.variants = rawParam.variants
-
-                    // @ts-ignore TODO
-                    param.value = `0x${poseidonHashMany([BigInt(param.value), BigInt(salt)]).toString(16)}`
-                    console.log("hash:", param.value)
-                    console.log("salt:", salt)
-                }
-            } else if (nameFirst === "crv") {
-                // TODO check that nameRemaining has 1 elements, for varname
-                const originalParamName = nameRemaining[0]
-
-                // TODO this param does not require user input, but is read from storage
-                const origValue = await storage.getItem<number>(
-                    `param_${address}-${positionString}-${originalParamName}`,
-                )
-
-                param.value = origValue
-                param.systemOnly = true
-            } else if (nameFirst === "crs") {
-                // TODO check that nameRemaining has 1 elements, for varname
-                // param.name = nameRemaining[0]
-
-                // this param does not require user input, but is read from storage
-                const salt = await storage.getItem<number>(
-                    `param_${address}-${positionString}-${nameRemaining[0]}-salt`,
-                )
-                param.value = salt
-                console.log("saltout:", param.value)
-                param.systemOnly = true
             } else {
-                // Nothing, the name just had underscores but no special prefix
-            }
-        }
-
-        param.variants = []
-        // const transformer = undefined
-
-        if (!isPrimitive(param.type)) {
-            // If the type is not a primitive, let's look for an Enum with this name
-            const typeDefinition = abi.find((x) => {
-                return x.type === "enum" && x.name.endsWith(param.type)
-            })
-            if (typeDefinition?.type === "enum") {
-                for (const index in typeDefinition.variants) {
-                    const variant = typeDefinition.variants[index]
-                    if (variant.name !== "None") {
-                        param.variants.push({
-                            name: variant.name,
-                            value: Number.parseInt(index),
-                        })
+                // @ts-ignore pre-processing
+                if (param.type === "pixelaw::core::utils::Emoji") {
+                    param.type = "emoji"
+                    param.transformer = async () => {
+                        param.value = convertTextToHex(param.value as string)
                     }
                 }
-                param.type = "enum"
             }
         } else if (param.type === "core::felt252") {
             param.type = "string"
@@ -250,23 +164,3 @@ export async function prepareParams2(
     }
     return result
 }
-
-// export default function getParams(
-//     manifest: Manifest,
-//     contractName: string,
-//     methodName: string,
-//     strict?: boolean,
-// ): Param[] {
-//     const interfaceName = `I${convertSnakeToPascal(contractName)}`
-//     const contract = findContract(manifest, contractName)
-//     if (!contract) return []
-//
-//     const functionDef = findFunctionDefinition(contract.abi, interfaceName, methodName, strict)
-//     if (!functionDef) return []
-//
-//     const rawParams = extractParameters(functionDef)
-//     console.log("rawParams", rawParams[0])
-//     const params = prepareParams(rawParams, contract.abi)
-//     console.log("params", params[0])
-//     return params
-// }

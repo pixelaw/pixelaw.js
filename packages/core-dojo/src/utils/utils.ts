@@ -25,9 +25,12 @@ export function sleep(ms: number): Promise<void> {
 
 // takes a "0x000000000000000000" string and turns it into utf8 emoji
 export function convertFullHexString(str) {
+    // debugger
     const result = str.replace("0x", "").replace(/^0+/, "")
     if (!result.length) return ""
-    return parseText(result)
+    const r = parseText(result)
+    console.log("r", r, str.length)
+    return r
 }
 
 export function parseText(str: string): string {
@@ -40,4 +43,17 @@ export function parseText(str: string): string {
     // Decode the byte array to a string using UTF-8
     const decoder = new TextDecoder("utf-8")
     return decoder.decode(bytes)
+}
+
+export function convertTextToHex(str: string): string {
+    if (!str.length) return str
+
+    // Encode the string to a Uint8Array using UTF-8
+    const encoder = new TextEncoder()
+    const bytes = encoder.encode(str)
+
+    // Convert the byte array to a hex string
+    return `0x${Array.from(bytes)
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("")}`
 }
