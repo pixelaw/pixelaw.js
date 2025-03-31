@@ -29,7 +29,6 @@ export function convertFullHexString(str) {
     const result = str.replace("0x", "").replace(/^0+/, "")
     if (!result.length) return ""
     const r = parseText(result)
-    console.log("r", r, str.length)
     return r
 }
 

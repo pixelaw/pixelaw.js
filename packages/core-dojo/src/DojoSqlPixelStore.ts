@@ -85,6 +85,7 @@ class DojoSqlPixelStore implements PixelStore {
                     if (id === "0x0") return
                     try {
                         const p = data["pixelaw-Pixel"]
+
                         if (Object.keys(data).length === 0) {
                             // Pixel got deleted
                             this.deletePixel(this.idLookupTable[id])

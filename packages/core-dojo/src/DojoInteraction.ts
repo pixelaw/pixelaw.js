@@ -30,7 +30,7 @@ export class DojoInteraction implements Interaction {
     private action!: (params: InteractParams) => void
 
     constructor(engine: DojoEngine, app: App, pixel: Pixel | undefined, color: number) {
-        this.functionName = pixel?.action ?? "interact"
+        this.functionName = pixel?.action && pixel.action.length > 0 ? pixel.action : "interact"
         this.contractName = `${app.name}_actions`
         this.position = { x: pixel?.x ?? 0, y: pixel?.y ?? 0 }
         this.manifest = engine.dojoSetup.manifest
@@ -93,7 +93,7 @@ export class DojoInteraction implements Interaction {
 
     private initializeAction(): void {
         this.action = async (params) => {
-            console.log(params)
+            console.info(params, this.contractName, this.functionName, this.position, this.color)
             try {
                 const dojoCall = generateDojoCall(
                     this.engine.dojoSetup.manifest,

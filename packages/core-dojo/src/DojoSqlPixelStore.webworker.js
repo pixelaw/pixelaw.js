@@ -30,7 +30,7 @@ async function handleMessage(event) {
 
         for (const j of json) {
             const d = JSON.parse(j.d)
-            console.log(d)
+
             const color = d[0]
             const x = d[3] >> 16
             const y = d[3] & 0xffff
