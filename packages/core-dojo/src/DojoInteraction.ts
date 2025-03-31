@@ -105,7 +105,9 @@ export class DojoInteraction implements Interaction {
                 )
                 const wallet = this.engine.core.getWallet() as DojoWallet
                 const account = wallet.getAccount()
-                const res = await this.engine.dojoSetup.provider.execute(account!, dojoCall, NAMESPACE, {})
+                const res = await this.engine.dojoSetup.provider.execute(account!, dojoCall, NAMESPACE, {
+                    version: 3,
+                })
                 console.log("tx", res)
                 // TODO: Implement pixel flickering animation
             } catch (error) {
