@@ -1,5 +1,13 @@
 # @pixelaw/core-dojo
 
+## 0.6.14
+
+### Patch Changes
+
+- emoji
+- Updated dependencies
+  - @pixelaw/core@0.6.14
+
 ## 0.6.13
 
 ### Patch Changes

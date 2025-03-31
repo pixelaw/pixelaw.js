@@ -13,7 +13,7 @@
     "prettier-check": "pnpx prettier --check packages examples",
     "prettier": "pnpx prettier --write packages examples",
     "lint": "pnpm lint",
-    "release": "pnpm build && pnpm -F './packages/**' publish -r --force --no-git-checks",
+    "release": "pnpm -F './packages/**' publish -r --force --no-git-checks",
     "release:dry-run": "pnpm -F './packages/**' publish -r --force --dry-run --no-git-checks",
     "publish_all": "pnpm -F './packages/**' publish -r --force",
     "docs": "npx typedoc --out docs",

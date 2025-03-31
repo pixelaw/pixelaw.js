@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.6.14
+
+### Patch Changes
+
+- emoji
+
 ## 0.6.13
 
 ### Patch Changes

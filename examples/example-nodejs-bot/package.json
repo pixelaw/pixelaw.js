@@ -8,7 +8,7 @@
   "devDependencies": {
     "tsx": "^4.19.3",
     "vitest": "^3.0.7",
-    "@types/node": "^18.19.50"
+    "@types/node": "^22.13.14"
   },
   "dependencies": {
     "@pixelaw/core": "workspace:*",
