@@ -65,16 +65,6 @@ export class DojoEngine implements Engine {
         }
     }
 
-    async handleInteraction(app: App, pixel: Pixel | undefined, color: number): Promise<Interaction> {
-        if (app.plugin) {
-            // TODO Load interaction from somewhere else (experimental)
-            return
-        }
-        const interaction: Interaction = await DojoInteraction.create(this, app, pixel, color)
-
-        return interaction
-    }
-
     async prepInteraction(coordinate: Coordinate): Promise<Interaction> {
         const pixel = this.core.pixelStore.getPixel(coordinate) ?? ({ x: coordinate[0], y: coordinate[1] } as Pixel)
         const app = this.core.appStore.getByName(this.core.getApp())
@@ -84,34 +74,6 @@ export class DojoEngine implements Engine {
 
         return interaction
     }
-
-    // async executeInteraction(interaction: Interaction): Promise<void> {
-    //     console.log("TODO executeInteraction")
-    //     for (const p of interactParams) {
-    //         // Call the transformer if it's there. This will ensure params are ready for submission to chain.
-    //         if (p.transformer) await p.transformer()
-    //     }
-    //     this.action(params)
-    // }
-
-    // async prepInteraction2(pixel: Pixel | null): Promise<InteractParams> {
-    //     const functionName = pixel?.action ? pixel.action : "interact"
-    //     const contractName = `${this.core.getApp()}_actions`
-    //     const position = { x: pixel.x, y: pixel.y }
-    //     const manifest = this.dojoSetup.manifest
-    //
-    //     const contract = findContract(manifest, contractName)
-    //     if (!contract) return
-    //
-    //     const functionDef = findFunctionDefinition(contract.abi, `I${convertSnakeToPascal(contractName)}`, functionName)
-    //     if (!functionDef) return
-    //
-    //     const rawParams = extractParameters(functionDef)
-    //
-    //     const params = await prepareParams(this, position, rawParams, contract.abi)
-    //
-    //     return params
-    // }
 
     async executeQueueItem(item: QueueItem): Promise<boolean> {
         const dojoCall = {
@@ -135,7 +97,7 @@ export class DojoEngine implements Engine {
         const account = wallet.getAccount()
 
         this.dojoSetup.provider
-            .execute(account!, dojoCall, NAMESPACE, {})
+            .execute(account!, dojoCall, NAMESPACE, { version: 3 })
             .then((res) => {
                 console.log("dojocall after exec", res)
             })
