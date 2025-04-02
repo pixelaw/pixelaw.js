@@ -1,3 +1,3 @@
-import { BrowserCanvas2DRenderer } from "./Canvas2DRenderer/BrowserCanvas2DRenderer.ts"
+import Canvas2DRenderer from "./Canvas2DRenderer/index.ts"
 
-export { BrowserCanvas2DRenderer }
+export { Canvas2DRenderer }

@@ -3,41 +3,19 @@ import { ToriiQueryBuilder } from "@dojoengine/sdk"
 import { type Bounds, MAX_DIMENSION, QUERY_BUFFER } from "@pixelaw/core"
 
 export function getQueryBounds(viewBounds: Bounds): Bounds {
-    const [[left, top], [right, bottom]] = viewBounds
-    let l = 0
-    let t = 0
-    let r = 0
-    let b = 0
+    let [[left, top], [right, bottom]] = viewBounds
 
-    if (left < QUERY_BUFFER) {
-        l = MAX_DIMENSION + 1 - QUERY_BUFFER
-    } else {
-        l = left - (left % QUERY_BUFFER)
-    }
-
-    if (top < QUERY_BUFFER) {
-        t = MAX_DIMENSION + 1 - QUERY_BUFFER
-    } else {
-        t = top - (top % QUERY_BUFFER)
-    }
-
-    if (right > MAX_DIMENSION - QUERY_BUFFER + 1) {
-        r = 0
-    } else {
-        r = right + (QUERY_BUFFER - (right % QUERY_BUFFER))
-    }
-
-    if (bottom > MAX_DIMENSION - QUERY_BUFFER + 1) {
-        b = 0
-    } else {
-        b = bottom + (QUERY_BUFFER - (bottom % QUERY_BUFFER))
-    }
+    left = Math.max(left - (left % QUERY_BUFFER), 0)
+    right = Math.min(right + (QUERY_BUFFER - (right % QUERY_BUFFER)), MAX_DIMENSION)
+    top = Math.max(top - (top % QUERY_BUFFER), 0)
+    bottom = Math.min(bottom + (QUERY_BUFFER - (bottom % QUERY_BUFFER)), MAX_DIMENSION)
 
     return [
-        [l, t],
-        [r, b],
+        [left, top],
+        [right, bottom],
     ]
 }
+
 export function buildSubscriptionQuery(): ToriiQueryBuilder<SchemaType> {
     const builder = new ToriiQueryBuilder<SchemaType>()
     const timestamp = Date.now()

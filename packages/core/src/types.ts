@@ -119,23 +119,21 @@ export interface Tileset {
 
 export type Dimension = [width: number, height: number]
 
-// Used internally
-export type Coordinate = [number, number]
-
 // Used for SmartContracts
 export type Position = {
     x: number
     y: number
 }
 
+export type Coordinate = [number, number]
+
 export type Bounds = [topLeft: Coordinate, bottomRight: Coordinate]
 
-// export const MAX_DIMENSION: number = 4_294_967_295
 export const MAX_DIMENSION: number = 32_767 // 2**15 -1
 
 // Don't query everytime bounds change, but only when the buffer resolution changes
 // So when bounds change from 5 to 6, but Buffer is 10, no requery happens
-export const QUERY_BUFFER: number = 10
+export const QUERY_BUFFER: number = 20
 
 export const TILESIZE = 100
 
@@ -153,7 +151,7 @@ export type PixelCoreEvents = {
     cellClicked: Coordinate
     cellHovered: Coordinate | undefined
     centerChanged: Coordinate
-    worldViewChanged: Bounds
+    boundsChanged: Bounds
     engineChanged: Engine
     statusChanged: CoreStatus
     walletChanged: Wallet

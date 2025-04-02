@@ -45,7 +45,6 @@ export async function dojoInit(worldConfig: DojoConfig, core: PixelawCore): Prom
             revision: "1",
         },
     }
-
     const sdk = await init<SchemaType>(sdkSetup)
 
     const { apps, manifest, coreAddress } = await fetchAppsAndManifest(worldConfig, sdk)
@@ -73,17 +72,17 @@ async function fetchAppsAndManifest(
     sdk: SDK<SchemaType>,
 ): Promise<{ apps: App[]; manifest: Manifest; coreAddress: string }> {
     try {
-        const [initialEntities, subscription] = await sdk.subscribeEntityQuery({
-            historical: false,
-            query: new ToriiQueryBuilder()
-                .withClause(KeysClause([], [undefined], "VariableLen").build())
-                .addEntityModel("pixelaw-App")
-                .includeHashedKeys(),
-            callback(response: { data?: ToriiResponse<SchemaType, false>; error?: Error }): void {
-                if (response.data[0].entityId === "0x0") return
-                console.log("jaja", response.data[0])
-            },
-        })
+        // const [initialEntities, subscription] = await sdk.subscribeEntityQuery({
+        //     historical: false,
+        //     query: new ToriiQueryBuilder()
+        //         .withClause(KeysClause([], [undefined], "VariableLen").build())
+        //         .addEntityModel("pixelaw-App")
+        //         .includeHashedKeys(),
+        //     callback(response: { data?: ToriiResponse<SchemaType, false>; error?: Error }): void {
+        //         if (response.data[0].entityId === "0x0") return
+        //         console.log("jaja", response.data[0])
+        //     },
+        // })
 
         const query = "SELECT internal_entity_id, name, system, action, icon FROM 'pixelaw-App';"
 

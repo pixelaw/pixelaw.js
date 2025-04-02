@@ -38,9 +38,8 @@ class DojoSqlPixelStore implements PixelStore {
         this.toriiUrl = engine.dojoSetup.toriiUrl
         this.core = core
 
-        this.core.events.on("worldViewChanged", (newBounds: Bounds) => {
+        this.core.events.on("boundsChanged", (newBounds: Bounds) => {
             this.prepare(newBounds)
-            this.refresh()
         })
     }
 
@@ -70,6 +69,7 @@ class DojoSqlPixelStore implements PixelStore {
             DojoSqlPixelStore.instance.worker.onmessage = DojoSqlPixelStore.instance.handleRefreshWorker.bind(
                 DojoSqlPixelStore.instance,
             )
+            console.log("subbing")
             DojoSqlPixelStore.instance.subscribe()
         }
         return DojoSqlPixelStore.instance
@@ -85,7 +85,7 @@ class DojoSqlPixelStore implements PixelStore {
                     if (id === "0x0") return
                     try {
                         const p = data["pixelaw-Pixel"]
-
+                        console.log("pixel from sub", p)
                         if (Object.keys(data).length === 0) {
                             // Pixel got deleted
                             this.deletePixel(this.idLookupTable[id])
@@ -155,6 +155,7 @@ class DojoSqlPixelStore implements PixelStore {
 
         if (!this.queryBounds || !areBoundsEqual(this.queryBounds, newQueryBounds)) {
             this.queryBounds = newQueryBounds
+            this.refresh()
         }
     }
 
@@ -168,6 +169,7 @@ class DojoSqlPixelStore implements PixelStore {
     }
 
     public setPixel(key: string, pixel: Pixel): void {
+        console.log("setPixel", key, pixel)
         this.state[key] = pixel
     }
 
@@ -211,34 +213,17 @@ class DojoSqlPixelStore implements PixelStore {
         return this.cacheUpdated
     }
 }
-
 export function createSqlQuery(bounds: Bounds) {
     const [[left, top], [right, bottom]] = bounds
-    const xWraps = right - left < 0
-    const yWraps = bottom - top < 0
+
     let result = `SELECT
                       json_array(P.color, ltrim(substr(P.text, 32), '0'), ltrim(substr(P.action, 3), '0'), (P.x << 16) | P.y, ltrim(substr(A.name, 4), '0' )) as d
                   FROM "pixelaw-Pixel" as P
                            INNER JOIN "Pixelaw-App" as A
                                       ON P.app = A.system
-                  WHERE( 1 = 0 ) 
+                  WHERE (P.x >= ${left} AND P.y >= ${top} AND P.x <= ${right} AND P.y <= ${bottom} )
                   `
-    const ZERO = 0
 
-    if (xWraps && yWraps) {
-        result += ` OR(x >= ${left} AND y >= ${top} AND x <= ${MAX_DIMENSION} AND y <= ${MAX_DIMENSION} )`
-        result += ` OR(x >= ${left} AND y >= ${ZERO} AND x <= ${MAX_DIMENSION} AND y <= ${bottom} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${top} AND x <= ${right} AND y <= ${MAX_DIMENSION} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
-    } else if (xWraps) {
-        result += ` OR(x >= ${left} AND y >= ${ZERO} AND x <= ${MAX_DIMENSION} AND y <= ${bottom} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
-    } else if (yWraps) {
-        result += ` OR(x >= ${ZERO} AND y >= ${top} AND x <= ${right} AND y <= ${MAX_DIMENSION} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
-    } else {
-        result += ` OR(x >= ${top} AND y >= ${top} AND x <= ${right} AND y <= ${bottom} )`
-    }
     result += ";"
     return result
 }

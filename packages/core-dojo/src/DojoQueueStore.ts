@@ -1,10 +1,10 @@
-import {KeysClause, type SDK} from "@dojoengine/sdk"
-import {queryTorii} from "@dojoengine/sdk/sql"
-import type {QueueItem, QueueStore, QueueStoreEvents} from "@pixelaw/core"
+import { KeysClause, type SDK } from "@dojoengine/sdk"
+import { queryTorii } from "@dojoengine/sdk/sql"
+import type { QueueItem, QueueStore, QueueStoreEvents } from "@pixelaw/core"
 import mitt from "mitt"
-import type {DojoStuff} from "./DojoEngine.init.ts"
-import type {SchemaType} from "./generated/models.gen.ts"
-import type {EntityKeysClause} from "@dojoengine/torii-client"
+import type { DojoStuff } from "./DojoEngine.init.ts"
+import type { SchemaType } from "./generated/models.gen.ts"
+import type { EntityKeysClause } from "@dojoengine/torii-client"
 
 type State = { [key: string]: QueueItem | undefined }
 
@@ -30,12 +30,12 @@ export class DojoQueueStore implements QueueStore {
             DojoQueueStore.instance = new DojoQueueStore(toriiUrl, dojoStuff)
 
             await DojoQueueStore.instance.subscribe()
-            await DojoQueueStore.instance.initialize()
+            await DojoQueueStore.instance.retrieve()
         }
         return DojoQueueStore.instance
     }
 
-    private async initialize() {
+    public async retrieve() {
         try {
             const items = await queryTorii(
                 this.toriiUrl,
@@ -54,6 +54,7 @@ export class DojoQueueStore implements QueueStore {
                 },
             )
             for (const item of items) {
+                console.log("scheduling")
                 this.setQueueItem(item.id, item)
                 this.eventEmitter.emit("scheduled", item)
             }
@@ -74,7 +75,6 @@ export class DojoQueueStore implements QueueStore {
                         "VariableLen",
                     ).build() as unknown as EntityKeysClause,
                 ],
-                false,
                 (id, data) => {
                     if (id === "0x0") return
                     try {

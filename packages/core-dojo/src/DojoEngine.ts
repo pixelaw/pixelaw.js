@@ -53,8 +53,8 @@ export class DojoEngine implements Engine {
             // Setup PixelStore
             this.core.pixelStore = await DojoSqlPixelStore.getInstance(this.core)
 
-            // Setup UpdateService
-            this.core.updateService = new WsUpdateService(config.serverUrl)
+            // // Setup UpdateService
+            // this.core.updateService = new WsUpdateService(config.serverUrl)
 
             // Setup TileStore
             // this.core.tileStore = new RestTileStore(config.serverUrl)
@@ -77,7 +77,7 @@ export class DojoEngine implements Engine {
 
     async executeQueueItem(item: QueueItem): Promise<boolean> {
         const dojoCall = {
-            contractAddress: "0x074d62337ea2319f3e65d75cda97bc8691a3e0e6c5efc12ceb3e982c3caf62f8", //this.dojoSetup.coreAddress,
+            contractAddress: "0x52cf765ad094d9edb5787f47cfd3a0682ff35006995e8146b55e73c3c600be4", // TODO properly configure pixelaw_actions contract,
             entrypoint: "process_queue",
             calldata: [
                 item.id,

@@ -23,7 +23,7 @@ import type {
 import mitt from "mitt"
 import { createStorage, type Storage, type StorageValue } from "unstorage"
 import nullDriver from "unstorage/drivers/null"
-import { Canvas2DRenderer } from "./renderers/Canvas2DRenderer/Canvas2DRenderer.ts"
+import { Canvas2DRenderer } from "./renderers"
 
 export class PixelawCore {
     status: CoreStatus = "uninitialized"
@@ -130,7 +130,7 @@ export class PixelawCore {
             this.setZoom(defaults.zoom)
         }
 
-        this.viewPort = new Canvas2DRenderer(this, this.zoom, this.center)
+        this.viewPort = new Canvas2DRenderer(this)
 
         this.worldConfig = worldConfig
 
