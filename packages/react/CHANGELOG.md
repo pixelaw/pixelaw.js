@@ -1,5 +1,12 @@
 # @pixelaw/react
 
+## 0.6.18
+
+### Patch Changes
+
+- Updated dependencies
+  - @pixelaw/core@0.6.18
+
 ## 0.6.17
 
 ### Patch Changes

@@ -1,5 +1,5 @@
 import { type Coordinate, type Bounds, type Pixel, MAX_DIMENSION } from "../../types"
-
+import { areBoundsEqual, areCoordinatesEqual, numRGBAToHex } from "../../utils.ts"
 import type { PixelawCore } from "../../PixelawCore.ts"
 
 export const ZOOM_CLOSE_MAX = 20
@@ -14,8 +14,6 @@ export function getZoomLevel(zoom: number): ZOOM_LEVEL {
     if (zoom < ZOOM_CLOSE_MAX) return "mid"
     return "close"
 }
-
-import { areBoundsEqual, areCoordinatesEqual, numRGBAToHex } from "../../utils.ts"
 
 /**
  * Configuration options for the grid renderer
