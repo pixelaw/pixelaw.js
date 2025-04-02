@@ -1,5 +1,14 @@
 # @pixelaw/react-dojo
 
+## 0.6.19
+
+### Patch Changes
+
+- grid
+- Updated dependencies
+  - @pixelaw/core-dojo@0.6.19
+  - @pixelaw/react@0.6.19
+
 ## 0.6.18
 
 ### Patch Changes

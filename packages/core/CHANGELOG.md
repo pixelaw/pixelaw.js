@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.6.19
+
+### Patch Changes
+
+- grid
+
 ## 0.6.18
 
 ### Patch Changes
