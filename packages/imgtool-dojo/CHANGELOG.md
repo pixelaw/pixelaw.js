@@ -1,5 +1,23 @@
 # @pixelaw/imgtool-dojo
 
+## 0.6.17
+
+### Patch Changes
+
+- exports
+
+## 0.6.16
+
+### Patch Changes
+
+- exports
+
+## 0.6.15
+
+### Patch Changes
+
+- new renderer
+
 ## 0.6.14
 
 ### Patch Changes

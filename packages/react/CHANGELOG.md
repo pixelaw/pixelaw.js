@@ -1,5 +1,29 @@
 # @pixelaw/react
 
+## 0.6.17
+
+### Patch Changes
+
+- exports
+- Updated dependencies
+  - @pixelaw/core@0.6.17
+
+## 0.6.16
+
+### Patch Changes
+
+- exports
+- Updated dependencies
+  - @pixelaw/core@0.6.16
+
+## 0.6.15
+
+### Patch Changes
+
+- new renderer
+- Updated dependencies
+  - @pixelaw/core@0.6.15
+
 ## 0.6.14
 
 ### Patch Changes

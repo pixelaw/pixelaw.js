@@ -10,7 +10,6 @@ import {
     type Pixel,
     type PixelawCore,
     type QueueItem,
-    WsUpdateService,
 } from "@pixelaw/core"
 import { Account } from "starknet"
 import { DojoAppStore } from "./DojoAppStore.ts"
@@ -20,14 +19,6 @@ import { DojoQueueStore } from "./DojoQueueStore.ts"
 import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
 import { DojoWallet } from "./DojoWallet.ts"
 import { type DojoConfig, ENGINE_ID } from "./types.ts"
-import {
-    convertSnakeToPascal,
-    extractParameters,
-    findContract,
-    findFunctionDefinition,
-    prepareParams,
-    // prepareParams2,
-} from "./interaction/params.ts"
 
 export class DojoEngine implements Engine {
     id: Engines = ENGINE_ID

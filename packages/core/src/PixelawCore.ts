@@ -23,7 +23,7 @@ import type {
 import mitt from "mitt"
 import { createStorage, type Storage, type StorageValue } from "unstorage"
 import nullDriver from "unstorage/drivers/null"
-import { Canvas2DRenderer } from "./renderers"
+import Canvas2DRenderer from "./renderers/Canvas2DRenderer"
 
 export class PixelawCore {
     status: CoreStatus = "uninitialized"

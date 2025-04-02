@@ -1,8 +1,20 @@
-import type { Coordinate, Bounds, Pixel } from "../../types"
+import { type Coordinate, type Bounds, type Pixel, MAX_DIMENSION } from "../../types"
 
 import type { PixelawCore } from "../../PixelawCore.ts"
 
-import { getZoomLevel } from "./zoom.ts"
+export const ZOOM_CLOSE_MAX = 20
+export const ZOOM_MID_MAX = 5
+export const ZOOM_FAR_MAX = 0.25
+export const ZOOM_DEFAULT = 0.25
+
+export type ZOOM_LEVEL = "far" | "mid" | "close"
+
+export function getZoomLevel(zoom: number): ZOOM_LEVEL {
+    if (zoom < ZOOM_MID_MAX) return "far"
+    if (zoom < ZOOM_CLOSE_MAX) return "mid"
+    return "close"
+}
+
 import { areBoundsEqual, areCoordinatesEqual, numRGBAToHex } from "../../utils.ts"
 
 /**
@@ -23,11 +35,11 @@ export interface Canvas2DRendererOptions {
  */
 const DEFAULT_OPTIONS: Canvas2DRendererOptions = {
     cellSize: 10,
-    defaultZoom: 1,
-    minZoom: 0.1,
-    maxZoom: 40,
+    defaultZoom: ZOOM_DEFAULT,
+    minZoom: ZOOM_FAR_MAX,
+    maxZoom: ZOOM_CLOSE_MAX,
     backgroundColor: "#000000",
-    gridLineColor: "#333333",
+    gridLineColor: "#444444",
     showGridLines: true,
 }
 const isBrowser = typeof window !== "undefined" && typeof document !== "undefined"
@@ -35,7 +47,7 @@ const isBrowser = typeof window !== "undefined" && typeof document !== "undefine
 /**
  * Manages the rendering of a grid of cells on a canvas
  */
-export default class {
+export default class Canvas2DRenderer {
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D
     private core: PixelawCore
@@ -348,11 +360,25 @@ export default class {
         }
     }
 
+    private getRenderableBounds(): Bounds {
+        let [[left, top], [right, bottom]] = this.getBounds()
+
+        left = Math.max(left, 0)
+        top = Math.max(top, 0)
+        right = Math.min(MAX_DIMENSION, right)
+        bottom = Math.min(MAX_DIMENSION, bottom)
+
+        return [
+            [left, top],
+            [right, bottom],
+        ]
+    }
+
     /**
      * Draws grid lines
      */
     private drawGridLines(): void {
-        const [[left, top], [right, bottom]] = this.getBounds()
+        const [[left, top], [right, bottom]] = this.getRenderableBounds()
 
         const { cellSize } = this.options
 
@@ -382,7 +408,7 @@ export default class {
      * Draws cells in the visible region using Bounds
      */
     private drawCells(): void {
-        const [[left, top], [right, bottom]] = this.getBounds()
+        const [[left, top], [right, bottom]] = this.getRenderableBounds()
 
         // Get all cells in the region
         for (let x = left; x <= right; x++) {

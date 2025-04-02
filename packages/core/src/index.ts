@@ -5,3 +5,5 @@ export { NAMESPACE } from "./constants.ts"
 export * from "./PixelawCore.ts"
 export * from "./types.ts"
 export * from "./utils.ts"
+
+export * from "./renderers/Canvas2DRenderer/index.ts"

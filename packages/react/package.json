@@ -1,7 +1,7 @@
 {
   "name": "@pixelaw/react",
   "private": false,
-  "version": "0.6.14",
+  "version": "0.6.17",
   "description": "pixelaw: React components and hooks",
   "license": "MIT",
   "source": "src/index.ts",
