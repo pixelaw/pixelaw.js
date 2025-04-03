@@ -2,8 +2,9 @@ import { type Coordinate, type Bounds, type Pixel, MAX_DIMENSION } from "../../t
 import { areBoundsEqual, areCoordinatesEqual, numRGBAToHex } from "../../utils.ts"
 import type { PixelawCore } from "../../PixelawCore.ts"
 
-export const ZOOM_CLOSE_MAX = 20
-export const ZOOM_MID_MAX = 5
+export const ZOOM_MAX = 30
+export const ZOOM_CLOSE_MAX = 22
+export const ZOOM_MID_MAX = 4
 export const ZOOM_FAR_MAX = 0.25
 export const ZOOM_DEFAULT = 0.25
 
@@ -35,7 +36,7 @@ const DEFAULT_OPTIONS: Canvas2DRendererOptions = {
     cellSize: 10,
     defaultZoom: ZOOM_DEFAULT,
     minZoom: ZOOM_FAR_MAX,
-    maxZoom: ZOOM_CLOSE_MAX,
+    maxZoom: ZOOM_MAX,
     backgroundColor: "#000000",
     gridLineColor: "#444444",
     showGridLines: true,
@@ -71,9 +72,14 @@ export default class Canvas2DRenderer {
     private initialPinchZoom: number
 
     // For panning "inertia"
-    private inertiaVelocity: [number, number]
-    private inertiaInterval: NodeJS.Timeout
-    private readonly decelerationFactor = 0.95 // Adjust for desired deceleration
+    private panInertiaVelocity: [number, number]
+    private panInertiaInterval: NodeJS.Timeout
+
+    // For zooming "inertia"
+    private zoomInertiaVelocity: number
+    private zoomInertiaInterval: NodeJS.Timeout
+
+    private readonly decelerationFactor = 0.9 // Adjust for desired deceleration
 
     // TODO do something useful with the options
     constructor(core: PixelawCore, options: Partial<Canvas2DRendererOptions> = {}) {
@@ -207,6 +213,7 @@ export default class Canvas2DRenderer {
 
         // Update zoom level
         const zoomDelta = event.deltaY > 0 ? 0.9 : 1.1
+        this.zoomInertiaVelocity = (zoomDelta - 1) * 0.1 // Adjust multiplier for desired speed
 
         const newZoom = Math.max(this.options.minZoom, Math.min(this.options.maxZoom, this.zoom * zoomDelta))
 
@@ -223,6 +230,7 @@ export default class Canvas2DRenderer {
         this.updateBounds()
 
         this.render()
+        this.startZoomInertia()
     }
 
     /**
@@ -230,8 +238,8 @@ export default class Canvas2DRenderer {
      */
     private handleMouseDown(event: MouseEvent): void {
         event.preventDefault()
-        clearInterval(this.inertiaInterval)
-        this.inertiaInterval = null
+        clearInterval(this.panInertiaInterval)
+        this.panInertiaInterval = null
 
         this.dragStartTime = Date.now()
         this.dragStartCoord = [event.clientX, event.clientY]
@@ -246,8 +254,6 @@ export default class Canvas2DRenderer {
     private handleMouseMove(event: MouseEvent): void {
         // TODO when doing hover effects, this has to be changed
         if (!this.dragStartTime) return
-
-        event.preventDefault()
 
         const currentTime = Date.now()
         const timeDiff = currentTime - this.lastDragTime
@@ -266,7 +272,8 @@ export default class Canvas2DRenderer {
 
         // Calculate velocity based on the change in position and time
         if (timeDiff > 0) {
-            this.inertiaVelocity = [(deltaX / timeDiff) * 15, (deltaY / timeDiff) * 15]
+            this.panInertiaVelocity = [(deltaX / timeDiff) * 15, (deltaY / timeDiff) * 15]
+            console.log("velo", this.panInertiaVelocity)
         }
 
         // Render with new offset
@@ -274,6 +281,7 @@ export default class Canvas2DRenderer {
 
         this.updateCenter()
         this.updateBounds()
+        event.preventDefault()
     }
 
     /**
@@ -287,22 +295,22 @@ export default class Canvas2DRenderer {
             const startPos = this.dragStartCoord
             const endPos: Coordinate = [event.clientX, event.clientY]
             totalDistance = Math.sqrt((endPos[0] - startPos[0]) ** 2 + (endPos[1] - startPos[1]) ** 2)
-            console.log(totalDistance)
-            // const distanceX = event.clientX - this.dragStartCoord[0]
-            // const distanceY = event.clientY - this.dragStartCoord[1]
 
-            // const VELOCITY_MULTIPLIER = 15
-            // // Calculate velocity
-            // this.inertiaVelocity = [
-            //     (distanceX / timeDiff) * VELOCITY_MULTIPLIER,
-            //     (distanceY / timeDiff) * VELOCITY_MULTIPLIER,
-            // ]
+            const deltaX = event.clientX - this.lastDragPoint[0]
+            const deltaY = event.clientY - this.lastDragPoint[1]
+
+            // Update last mouse position
+            this.lastDragPoint = [event.clientX, event.clientY]
+
+            // Update offset
+            this.offsetX += deltaX
+            this.offsetY += deltaY
 
             // Start inertia
-            this.startInertia()
+            this.startPanInertia()
         }
 
-        if (timeDiff < 500 && totalDistance < 10) {
+        if (timeDiff > 10 && timeDiff < 1500 && totalDistance < 10) {
             // Click!
             const rect = this.canvas.getBoundingClientRect()
             const mouseX = event.clientX - rect.left
@@ -318,25 +326,72 @@ export default class Canvas2DRenderer {
         this.dragStartCoord = null
     }
 
-    // Implement inertia
-    private startInertia(): void {
-        if (this.inertiaInterval) {
-            clearInterval(this.inertiaInterval)
+    // Implement the zoom inertia logic
+    private startZoomInertia(): void {
+        if (this.zoomInertiaInterval) {
+            clearInterval(this.zoomInertiaInterval)
         }
 
-        this.inertiaInterval = setInterval(() => {
+        this.zoomInertiaInterval = setInterval(() => {
+            if (Math.abs(this.zoomInertiaVelocity) < 0.001) {
+                clearInterval(this.zoomInertiaInterval)
+                this.zoomInertiaInterval = null
+                return
+            }
+
+            // Calculate new zoom level
+            const newZoom = Math.max(
+                this.options.minZoom,
+                Math.min(this.options.maxZoom, this.zoom * (1 + this.zoomInertiaVelocity)),
+            )
+
+            // Calculate the midpoint of the canvas as the zoom center
+            const midX = this.canvas.width / 2
+            const midY = this.canvas.height / 2
+
+            // Calculate world coordinates before zoom
+            const worldXBefore = (midX - this.offsetX) / this.zoom
+            const worldYBefore = (midY - this.offsetY) / this.zoom
+
+            // Calculate world coordinates after zoom
+            const worldXAfter = (midX - this.offsetX) / newZoom
+            const worldYAfter = (midY - this.offsetY) / newZoom
+
+            // Adjust offset to keep the midpoint fixed
+            this.offsetX += (worldXAfter - worldXBefore) * newZoom
+            this.offsetY += (worldYAfter - worldYBefore) * newZoom
+
+            // Update zoom and render
+            this.updateZoom(newZoom)
+            this.zoomInertiaVelocity *= this.decelerationFactor // Apply deceleration
+
+            this.render()
+            this.updateCenter()
+            this.updateBounds()
+        }, 30) // Approximately 60fps
+    }
+
+    // Implement inertia
+    private startPanInertia(): void {
+        if (this.panInertiaInterval) {
+            clearInterval(this.panInertiaInterval)
+        }
+
+        if (Math.abs(this.panInertiaVelocity[0]) < 4 && Math.abs(this.panInertiaVelocity[1]) < 4) return
+
+        this.panInertiaInterval = setInterval(() => {
             // Apply velocity to offset
-            this.offsetX += this.inertiaVelocity[0]
-            this.offsetY += this.inertiaVelocity[1]
+            this.offsetX += this.panInertiaVelocity[0]
+            this.offsetY += this.panInertiaVelocity[1]
 
             // Decelerate
-            this.inertiaVelocity[0] *= this.decelerationFactor
-            this.inertiaVelocity[1] *= this.decelerationFactor
+            this.panInertiaVelocity[0] *= this.decelerationFactor
+            this.panInertiaVelocity[1] *= this.decelerationFactor
 
             // Stop inertia when velocity is low
-            if (Math.abs(this.inertiaVelocity[0]) < 0.01 && Math.abs(this.inertiaVelocity[1]) < 0.01) {
-                clearInterval(this.inertiaInterval)
-                this.inertiaInterval = null
+            if (Math.abs(this.panInertiaVelocity[0]) < 0.01 && Math.abs(this.panInertiaVelocity[1]) < 0.01) {
+                clearInterval(this.panInertiaInterval)
+                this.panInertiaInterval = null
             }
 
             // Render with new offset
@@ -368,17 +423,7 @@ export default class Canvas2DRenderer {
      */
     private handleTouchMove(event: TouchEvent): void {
         if (event.touches.length === 1 && this.dragStartTime) {
-            event.preventDefault()
-            const deltaX = event.touches[0].clientX - this.lastDragPoint[0]
-            const deltaY = event.touches[0].clientY - this.lastDragPoint[1]
-
-            this.lastDragPoint = [event.touches[0].clientX, event.touches[0].clientY]
-
-            this.offsetX += deltaX
-            this.offsetY += deltaY
-            this.render()
-            this.updateCenter()
-            this.updateBounds()
+            this.handleMouseMove(event.touches[0] as unknown as MouseEvent)
         } else if (event.touches.length === 2 && this.initialPinchDistance !== null) {
             // Handle pinch move
             const [touch1, touch2] = Array.from(event.touches)
@@ -404,6 +449,10 @@ export default class Canvas2DRenderer {
 
             this.offsetX += (worldXAfter - worldXBefore) * newZoom
             this.offsetY += (worldYAfter - worldYBefore) * newZoom
+
+            // TODO fix
+            // Calculate zoom inertia velocity based on the change in zoom
+            this.zoomInertiaVelocity = (newZoom / this.zoom - 1) * 0.1 // Adjust multiplier for desired speed
 
             this.updateZoom(newZoom)
             this.updateCenter()
@@ -432,6 +481,7 @@ export default class Canvas2DRenderer {
             this.lastDragPoint = [event.touches[0].clientX, event.touches[0].clientY]
 
             console.log("handleTouchEnd-1", JSON.stringify(event))
+            this.startZoomInertia()
             // Handle as a mouse up event if there's still one touch remaining
         }
     }
