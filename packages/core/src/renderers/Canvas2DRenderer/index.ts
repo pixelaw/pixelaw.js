@@ -61,11 +61,19 @@ export default class Canvas2DRenderer {
 
     private offsetX = 0
     private offsetY = 0
-    private lastMouseX = 0
-    private lastMouseY = 0
     private isRendering = false
     private dragStartTime = 0
+    private lastDragTime = 0
+
     private dragStartCoord: Coordinate | null = null
+    private lastDragPoint: Coordinate = [0, 0]
+    private initialPinchDistance: number | null = null
+    private initialPinchZoom: number
+
+    // For panning "inertia"
+    private inertiaVelocity: [number, number]
+    private inertiaInterval: NodeJS.Timeout
+    private readonly decelerationFactor = 0.95 // Adjust for desired deceleration
 
     // TODO do something useful with the options
     constructor(core: PixelawCore, options: Partial<Canvas2DRendererOptions> = {}) {
@@ -222,11 +230,14 @@ export default class Canvas2DRenderer {
      */
     private handleMouseDown(event: MouseEvent): void {
         event.preventDefault()
+        clearInterval(this.inertiaInterval)
+        this.inertiaInterval = null
+
         this.dragStartTime = Date.now()
         this.dragStartCoord = [event.clientX, event.clientY]
-        this.lastMouseX = event.clientX
-        this.lastMouseY = event.clientY
-        this.canvas.style.cursor = "grabbing"
+        this.lastDragPoint = [event.clientX, event.clientY]
+
+        // this.canvas.style.cursor = "grabbing"
     }
 
     /**
@@ -238,17 +249,25 @@ export default class Canvas2DRenderer {
 
         event.preventDefault()
 
+        const currentTime = Date.now()
+        const timeDiff = currentTime - this.lastDragTime
+        this.lastDragTime = currentTime
+
         // Calculate the distance moved
-        const deltaX = event.clientX - this.lastMouseX
-        const deltaY = event.clientY - this.lastMouseY
+        const deltaX = event.clientX - this.lastDragPoint[0]
+        const deltaY = event.clientY - this.lastDragPoint[1]
 
         // Update last mouse position
-        this.lastMouseX = event.clientX
-        this.lastMouseY = event.clientY
+        this.lastDragPoint = [event.clientX, event.clientY]
 
         // Update offset
         this.offsetX += deltaX
         this.offsetY += deltaY
+
+        // Calculate velocity based on the change in position and time
+        if (timeDiff > 0) {
+            this.inertiaVelocity = [(deltaX / timeDiff) * 15, (deltaY / timeDiff) * 15]
+        }
 
         // Render with new offset
         this.render()
@@ -261,16 +280,30 @@ export default class Canvas2DRenderer {
      * Handles mouse up events for panning
      */
     private handleMouseUp(event: MouseEvent): void {
-        event.preventDefault()
-        let distance = 0
+        let totalDistance = 0
+        const timeDiff = Date.now() - this.dragStartTime
+
         if (this.dragStartCoord !== null) {
             const startPos = this.dragStartCoord
             const endPos: Coordinate = [event.clientX, event.clientY]
-            distance = Math.sqrt((endPos[0] - startPos[0]) ** 2 + (endPos[1] - startPos[1]) ** 2)
+            totalDistance = Math.sqrt((endPos[0] - startPos[0]) ** 2 + (endPos[1] - startPos[1]) ** 2)
+            console.log(totalDistance)
+            // const distanceX = event.clientX - this.dragStartCoord[0]
+            // const distanceY = event.clientY - this.dragStartCoord[1]
+
+            // const VELOCITY_MULTIPLIER = 15
+            // // Calculate velocity
+            // this.inertiaVelocity = [
+            //     (distanceX / timeDiff) * VELOCITY_MULTIPLIER,
+            //     (distanceY / timeDiff) * VELOCITY_MULTIPLIER,
+            // ]
+
+            // Start inertia
+            this.startInertia()
         }
 
-        const timeDiff = Date.now() - this.dragStartTime
-        if (timeDiff < 500 && distance < 10) {
+        if (timeDiff < 500 && totalDistance < 10) {
+            // Click!
             const rect = this.canvas.getBoundingClientRect()
             const mouseX = event.clientX - rect.left
             const mouseY = event.clientY - rect.top
@@ -285,6 +318,34 @@ export default class Canvas2DRenderer {
         this.dragStartCoord = null
     }
 
+    // Implement inertia
+    private startInertia(): void {
+        if (this.inertiaInterval) {
+            clearInterval(this.inertiaInterval)
+        }
+
+        this.inertiaInterval = setInterval(() => {
+            // Apply velocity to offset
+            this.offsetX += this.inertiaVelocity[0]
+            this.offsetY += this.inertiaVelocity[1]
+
+            // Decelerate
+            this.inertiaVelocity[0] *= this.decelerationFactor
+            this.inertiaVelocity[1] *= this.decelerationFactor
+
+            // Stop inertia when velocity is low
+            if (Math.abs(this.inertiaVelocity[0]) < 0.01 && Math.abs(this.inertiaVelocity[1]) < 0.01) {
+                clearInterval(this.inertiaInterval)
+                this.inertiaInterval = null
+            }
+
+            // Render with new offset
+            this.render()
+            this.updateCenter()
+            this.updateBounds()
+        }, 30) // Approximately 60fps
+    }
+
     /**
      * Handles touch start events for panning on mobile
      */
@@ -293,8 +354,12 @@ export default class Canvas2DRenderer {
             event.preventDefault()
             this.dragStartTime = Date.now()
             this.dragStartCoord = [event.touches[0].clientX, event.touches[0].clientY]
-            this.lastMouseX = event.touches[0].clientX
-            this.lastMouseY = event.touches[0].clientY
+            this.lastDragPoint = [event.touches[0].clientX, event.touches[0].clientY]
+        } else if (event.touches.length === 2) {
+            event.preventDefault()
+            const [touch1, touch2] = Array.from(event.touches)
+            this.initialPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY)
+            this.initialPinchZoom = this.zoom
         }
     }
 
@@ -302,28 +367,49 @@ export default class Canvas2DRenderer {
      * Handles touch move events for panning on mobile
      */
     private handleTouchMove(event: TouchEvent): void {
-        if (!this.dragStartTime || event.touches.length !== 1) return
+        if (event.touches.length === 1 && this.dragStartTime) {
+            event.preventDefault()
+            const deltaX = event.touches[0].clientX - this.lastDragPoint[0]
+            const deltaY = event.touches[0].clientY - this.lastDragPoint[1]
 
-        event.preventDefault()
+            this.lastDragPoint = [event.touches[0].clientX, event.touches[0].clientY]
 
-        // Calculate the distance moved
-        const deltaX = event.touches[0].clientX - this.lastMouseX
-        const deltaY = event.touches[0].clientY - this.lastMouseY
+            this.offsetX += deltaX
+            this.offsetY += deltaY
+            this.render()
+            this.updateCenter()
+            this.updateBounds()
+        } else if (event.touches.length === 2 && this.initialPinchDistance !== null) {
+            // Handle pinch move
+            const [touch1, touch2] = Array.from(event.touches)
 
-        // Update last touch position
-        this.dragStartCoord = [event.touches[0].clientX, event.touches[0].clientY]
-        this.lastMouseX = event.touches[0].clientX
-        this.lastMouseY = event.touches[0].clientY
+            const newPinchDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY)
+            const pinchRatio = newPinchDistance / this.initialPinchDistance
+            const newZoom = Math.max(
+                this.options.minZoom,
+                Math.min(this.options.maxZoom, this.initialPinchZoom * pinchRatio),
+            )
 
-        // Update offset
-        this.offsetX += deltaX
-        this.offsetY += deltaY
+            // Calculate the midpoint between the two touch points
+            const rect = this.canvas.getBoundingClientRect()
+            const midX = (touch1.clientX + touch2.clientX) / 2 - rect.left
+            const midY = (touch1.clientY + touch2.clientY) / 2 - rect.top
 
-        // Render with new offset
-        this.render()
+            // Adjust offset to keep the midpoint fixed
+            const worldXBefore = (midX - this.offsetX) / this.zoom
+            const worldYBefore = (midY - this.offsetY) / this.zoom
 
-        this.updateCenter()
-        this.updateBounds()
+            const worldXAfter = (midX - this.offsetX) / newZoom
+            const worldYAfter = (midY - this.offsetY) / newZoom
+
+            this.offsetX += (worldXAfter - worldXBefore) * newZoom
+            this.offsetY += (worldYAfter - worldYBefore) * newZoom
+
+            this.updateZoom(newZoom)
+            this.updateCenter()
+            this.updateBounds()
+            this.render()
+        }
     }
 
     /**
@@ -331,13 +417,22 @@ export default class Canvas2DRenderer {
      */
     private handleTouchEnd(event: TouchEvent): void {
         if (event.touches.length === 0) {
+            console.log("handleTouchEnd-0", JSON.stringify(event))
+
             // Reset pinch-related variables when all touches are lifted
             // TODO
             // this.initialPinchDistance = null
             // this.initialZoom = this.zoom
+            const mouseEvent = { clientX: this.lastDragPoint[0], clientY: this.lastDragPoint[1] }
+            this.handleMouseUp(mouseEvent as unknown as MouseEvent)
         } else if (event.touches.length === 1) {
+            // Still one touch remaining after pinching
+            this.dragStartTime = Date.now()
+            this.dragStartCoord = [event.touches[0].clientX, event.touches[0].clientY]
+            this.lastDragPoint = [event.touches[0].clientX, event.touches[0].clientY]
+
+            console.log("handleTouchEnd-1", JSON.stringify(event))
             // Handle as a mouse up event if there's still one touch remaining
-            this.handleMouseUp(event.touches[0] as unknown as MouseEvent)
         }
     }
 
