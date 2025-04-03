@@ -1,5 +1,14 @@
 # @pixelaw/react-dojo
 
+## 0.6.20
+
+### Patch Changes
+
+- mobile
+- Updated dependencies
+  - @pixelaw/core-dojo@0.6.20
+  - @pixelaw/react@0.6.20
+
 ## 0.6.19
 
 ### Patch Changes

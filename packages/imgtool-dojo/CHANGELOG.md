@@ -1,5 +1,11 @@
 # @pixelaw/imgtool-dojo
 
+## 0.6.19
+
+### Patch Changes
+
+- mobile
+
 ## 0.6.18
 
 ### Patch Changes
