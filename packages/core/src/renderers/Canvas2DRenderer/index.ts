@@ -185,7 +185,7 @@ export default class Canvas2DRenderer {
      */
     private resizeCanvas(): void {
         const container = this.canvas.parentElement
-        console.log("resizing")
+
         if (container) {
             this.canvas.width = container.clientWidth
             this.canvas.height = container.clientHeight
@@ -273,7 +273,7 @@ export default class Canvas2DRenderer {
         // Calculate velocity based on the change in position and time
         if (timeDiff > 0) {
             this.panInertiaVelocity = [(deltaX / timeDiff) * 15, (deltaY / timeDiff) * 15]
-            console.log("velo", this.panInertiaVelocity)
+            // console.log("velo", this.panInertiaVelocity)
         }
 
         // Render with new offset
@@ -466,8 +466,6 @@ export default class Canvas2DRenderer {
      */
     private handleTouchEnd(event: TouchEvent): void {
         if (event.touches.length === 0) {
-            console.log("handleTouchEnd-0", JSON.stringify(event))
-
             // Reset pinch-related variables when all touches are lifted
             // TODO
             // this.initialPinchDistance = null
@@ -480,7 +478,6 @@ export default class Canvas2DRenderer {
             this.dragStartCoord = [event.touches[0].clientX, event.touches[0].clientY]
             this.lastDragPoint = [event.touches[0].clientX, event.touches[0].clientY]
 
-            console.log("handleTouchEnd-1", JSON.stringify(event))
             this.startZoomInertia()
             // Handle as a mouse up event if there's still one touch remaining
         }
