@@ -35,7 +35,7 @@ export class DojoQueueStore implements QueueStore {
         return DojoQueueStore.instance
     }
 
-    public async retrieve() {
+    public async retrieve(): Promise<void> {
         try {
             const items = await queryTorii(
                 this.toriiUrl,

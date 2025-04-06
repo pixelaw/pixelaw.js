@@ -22,3 +22,36 @@ export const numRGBAToHex = (rgba: number | undefined) => {
     const color = rgba >>> 8
     return `#${color.toString(16).padStart(6, "0")}`
 }
+
+export function hexToRgb(input: string): [number, number, number] {
+    // Remove the hash at the start if it's there
+    const hex = input.replace(/^#/, "")
+
+    // Parse the r, g, b values
+    const bigint = Number.parseInt(hex, 16)
+    const r = (bigint >> 16) & 255
+    const g = (bigint >> 8) & 255
+    const b = bigint & 255
+
+    return [r, g, b]
+}
+
+export function parsePixelError(input: string): { coordinate: Coordinate; error: string } | null {
+    const regex = /^(\d+)_(\d+)\s+(.+)$/
+    const match = input.match(regex)
+
+    if (match) {
+        const x = Number.parseInt(match[1], 10)
+        const y = Number.parseInt(match[2], 10)
+        const error = match[3]
+
+        return {
+            coordinate: [x, y],
+            error,
+        }
+    }
+    return {
+        coordinate: null,
+        error: input,
+    }
+}

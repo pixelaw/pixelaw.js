@@ -1,6 +1,6 @@
-import {type BaseWallet, Wallet} from "@pixelaw/core"
-import type {AccountInterface} from "starknet"
-import {ENGINE_ID} from "./types.ts"
+import { type BaseWallet, Wallet } from "@pixelaw/core"
+import type { AccountInterface } from "starknet"
+import { ENGINE_ID } from "./types.ts"
 
 export type DojoWalletId =
     | "argentX"
@@ -12,7 +12,7 @@ export type DojoWalletId =
     | "controller"
 
 export class DojoWallet extends Wallet {
-    account: AccountInterface
+    private account: AccountInterface
 
     constructor(walletId: DojoWalletId, chainId: string, account: AccountInterface) {
         super(ENGINE_ID, walletId, account.address, chainId)

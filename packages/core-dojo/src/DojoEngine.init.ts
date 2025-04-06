@@ -107,6 +107,8 @@ async function fetchAppsAndManifest(
             apps.map((app) => getAbi(new RpcProvider({ nodeUrl: worldConfig.rpcUrl }), app)),
         )
 
+        // TODO Retrieve core actions manifest too, so we'll have the address for process_queue
+
         // TODO make this dynamic based on chain
         const base = baseManifest(worldConfig.world)
 

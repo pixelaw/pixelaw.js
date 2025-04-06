@@ -6,6 +6,7 @@ import type {
     CoreStatus,
     Engine,
     EngineConstructor,
+    Executor,
     Interaction,
     InteractParams,
     Pixel,
@@ -36,6 +37,7 @@ export class PixelawCore {
     viewPort: Canvas2DRenderer = null!
     events = mitt<PixelCoreEvents>()
     queue: QueueStore = null!
+    executor: Executor | null = null!
 
     private worldsRegistry: WorldsRegistry
     private app: string | null = null
@@ -61,6 +63,10 @@ export class PixelawCore {
         this.storage = storage
     }
 
+    public getExecutor(): Executor | null {
+        return this.executor
+    }
+
     public getWallet(): Wallet | BaseWallet | null {
         return this.wallet
     }
@@ -69,6 +75,7 @@ export class PixelawCore {
         this.wallet = wallet
         console.log("setWallet", this.wallet)
         this.events.emit("walletChanged", wallet)
+        this.executor.wallet = wallet
         this.storage.setItem(this.getStorageKey("wallet"), JSON.stringify(wallet)).catch(console.error)
     }
 

@@ -7,6 +7,7 @@ import {
     type Interaction,
     type InteractParams,
     NAMESPACE,
+    parsePixelError,
     type Pixel,
     type PixelawCore,
     type QueueItem,
@@ -19,6 +20,7 @@ import { DojoQueueStore } from "./DojoQueueStore.ts"
 import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
 import { DojoWallet } from "./DojoWallet.ts"
 import { type DojoConfig, ENGINE_ID } from "./types.ts"
+import { DojoExecutor } from "./DojoExecutor.ts"
 
 export class DojoEngine implements Engine {
     id: Engines = ENGINE_ID
@@ -50,6 +52,8 @@ export class DojoEngine implements Engine {
             // Setup TileStore
             // this.core.tileStore = new RestTileStore(config.serverUrl)
 
+            this.core.executor = new DojoExecutor(this.dojoSetup.provider, null)
+
             this.core.queue = await DojoQueueStore.getInstance(this.config.toriiUrl, this.dojoSetup)
         } catch (error) {
             console.error("Dojo init error:", error)
@@ -68,7 +72,7 @@ export class DojoEngine implements Engine {
 
     async executeQueueItem(item: QueueItem): Promise<boolean> {
         const dojoCall = {
-            contractAddress: "0x52cf765ad094d9edb5787f47cfd3a0682ff35006995e8146b55e73c3c600be4", // TODO properly configure pixelaw_actions contract,
+            contractAddress: "0x5386eb3153d91bd740a4e17933f26056ce10faddf9a06f56a2c23c0c4794cb5", // TODO properly configure pixelaw_actions contract,
             entrypoint: "process_queue",
             calldata: [
                 item.id,
@@ -80,22 +84,19 @@ export class DojoEngine implements Engine {
             ],
         }
 
-        const wallet = this.core.getWallet() as DojoWallet
-        if (!wallet || !wallet.account) {
-            console.log("executeQueueItem but no wallet")
-            return
-        }
-        const account = wallet.getAccount()
+        this.core.executor.enqueue(dojoCall, console.log, (e: Error) => {
+            let error = e.message
+            // console.error("Error executing DojoCall:", error)
 
-        this.dojoSetup.provider
-            .execute(account!, dojoCall, NAMESPACE, { version: 3 })
-            .then((res) => {
-                console.log("dojocall after exec", res)
-            })
-            .catch((error) => {
-                console.error("Error executing DojoCall:", error)
-                // TODO Handle the error appropriately here
-            })
+            const regex = /Failure reason:\s*"([^"]+)"/
+            const match = error.match(regex)
+
+            if (match) {
+                const failureReason = match[1]
+                error = failureReason
+            }
+            this.core.events.emit("error", { coordinate: null, error })
+        })
 
         return true
     }

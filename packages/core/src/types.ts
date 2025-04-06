@@ -84,6 +84,7 @@ export type QueueStoreEvents = {
 export interface QueueStore {
     eventEmitter: ReturnType<typeof mitt<QueueStoreEvents>>
     getAll: () => QueueItem[]
+    retrieve: () => Promise<void>
 }
 
 export interface AlertStore {
@@ -117,13 +118,19 @@ export interface Tileset {
     tileRows: (Tile | undefined | "")[][]
 }
 
-export type Dimension = [width: number, height: number]
+export interface Executor {
+    enqueue(call: unknown, onSuccess: (result: unknown) => void, onFail: (error: unknown) => void): void
+    get pendingCalls(): number
+    set wallet(wallet: Wallet)
+}
 
 // Used for SmartContracts
 export type Position = {
     x: number
     y: number
 }
+
+export type RGB = [number, number, number]
 
 export type Coordinate = [number, number]
 
@@ -147,6 +154,8 @@ export function makeString<Coordinate>(coordinate: Coordinate): string {
     return `${coordinate[0]}_${coordinate[1]}`
 }
 
+export type SimplePixelError = { coordinate: Coordinate | null; error: string }
+
 export type PixelCoreEvents = {
     cellClicked: Coordinate
     cellHovered: Coordinate | undefined
@@ -158,6 +167,7 @@ export type PixelCoreEvents = {
     pixelStoreUpdated: number
     tileStoreUpdated: number
     appStoreUpdated: number
+    error: SimplePixelError
     userScrolled: { bounds: Bounds }
     userZoomed: { bounds: Bounds }
     cacheUpdated: number
@@ -242,7 +252,6 @@ export class BaseWallet {
 
 export abstract class Wallet extends BaseWallet {
     abstract getAccount(): unknown
-    // abstract initialize(): void
     abstract toJSON(): unknown
 }
 export const IS_BROWSER = typeof window !== "undefined" && typeof window.document !== "undefined"

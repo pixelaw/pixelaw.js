@@ -7,6 +7,7 @@ import {
     type Position,
     type InteractParams,
     type InteractParam,
+    parsePixelError,
 } from "@pixelaw/core"
 import type { DojoEngine } from "./DojoEngine.ts"
 import type { DojoWallet } from "./DojoWallet.ts"
@@ -94,25 +95,31 @@ export class DojoInteraction implements Interaction {
     private initializeAction(): void {
         this.action = async (params) => {
             console.info(params, this.contractName, this.functionName, this.position, this.color)
-            try {
-                const dojoCall = generateDojoCall(
-                    this.engine.dojoSetup.manifest,
-                    params,
-                    this.contractName,
-                    this.functionName,
-                    this.position,
-                    this.color,
-                )
-                const wallet = this.engine.core.getWallet() as DojoWallet
-                const account = wallet.getAccount()
-                const res = await this.engine.dojoSetup.provider.execute(account!, dojoCall, NAMESPACE, {
-                    version: 3,
-                })
-                console.log("tx", res)
-                // TODO: Implement pixel flickering animation
-            } catch (error) {
-                console.error("Error executing DojoCall:", error)
-            }
+            const dojoCall = generateDojoCall(
+                this.engine.dojoSetup.manifest,
+                params,
+                this.contractName,
+                this.functionName,
+                this.position,
+                this.color,
+            )
+
+            this.engine.core.executor.enqueue(dojoCall, console.log, (e: Error) => {
+                const error = e.message
+                // console.error("Error executing DojoCall:", error)
+
+                const regex = /Failure reason: \\"([^"]+)\\"/
+                const match = error.match(regex)
+
+                if (!match) {
+                    this.engine.core.events.emit("error", { coordinate: null, error })
+                    return
+                }
+
+                const failureReason = match[1]
+                const pixelError = parsePixelError(failureReason)
+                this.engine.core.events.emit("error", pixelError)
+            })
         }
     }
 }

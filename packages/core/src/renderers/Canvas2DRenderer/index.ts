@@ -1,5 +1,5 @@
-import { type Coordinate, type Bounds, type Pixel, MAX_DIMENSION } from "../../types"
-import { areBoundsEqual, areCoordinatesEqual, numRGBAToHex } from "../../utils.ts"
+import { type Coordinate, type Bounds, type Pixel, MAX_DIMENSION, type RGB } from "../../types"
+import { areBoundsEqual, areCoordinatesEqual, hexToRgb, numRGBAToHex } from "../../utils.ts"
 import type { PixelawCore } from "../../PixelawCore.ts"
 
 export const ZOOM_MAX = 30
@@ -9,6 +9,14 @@ export const ZOOM_FAR_MAX = 0.25
 export const ZOOM_DEFAULT = 0.25
 
 export type ZOOM_LEVEL = "far" | "mid" | "close"
+
+interface GlowingCell {
+    intensity: number
+    duration: number
+    startTime: number
+    color: RGB
+    size: number
+}
 
 export function getZoomLevel(zoom: number): ZOOM_LEVEL {
     if (zoom < ZOOM_MID_MAX) return "far"
@@ -72,12 +80,16 @@ export default class Canvas2DRenderer {
     private initialPinchZoom: number
 
     // For panning "inertia"
-    private panInertiaVelocity: [number, number]
+    private panInertiaVelocity: [number, number] = [0, 0]
     private panInertiaInterval: NodeJS.Timeout
 
     // For zooming "inertia"
     private zoomInertiaVelocity: number
     private zoomInertiaInterval: NodeJS.Timeout
+
+    // Glow
+    private glowingCells: Map<string, GlowingCell> = new Map()
+    private glowInterval: NodeJS.Timeout | null = null
 
     private readonly decelerationFactor = 0.9 // Adjust for desired deceleration
 
@@ -189,7 +201,7 @@ export default class Canvas2DRenderer {
         if (container) {
             this.canvas.width = container.clientWidth
             this.canvas.height = container.clientHeight
-            this.render()
+            this.requestRender()
 
             this.updateBounds()
             this.setCenter(this.center)
@@ -229,7 +241,7 @@ export default class Canvas2DRenderer {
         this.updateCenter()
         this.updateBounds()
 
-        this.render()
+        this.requestRender()
         this.startZoomInertia()
     }
 
@@ -277,7 +289,7 @@ export default class Canvas2DRenderer {
         }
 
         // Render with new offset
-        this.render()
+        this.requestRender()
 
         this.updateCenter()
         this.updateBounds()
@@ -365,7 +377,7 @@ export default class Canvas2DRenderer {
             this.updateZoom(newZoom)
             this.zoomInertiaVelocity *= this.decelerationFactor // Apply deceleration
 
-            this.render()
+            this.requestRender()
             this.updateCenter()
             this.updateBounds()
         }, 30) // Approximately 60fps
@@ -395,7 +407,7 @@ export default class Canvas2DRenderer {
             }
 
             // Render with new offset
-            this.render()
+            this.requestRender()
             this.updateCenter()
             this.updateBounds()
         }, 30) // Approximately 60fps
@@ -457,7 +469,7 @@ export default class Canvas2DRenderer {
             this.updateZoom(newZoom)
             this.updateCenter()
             this.updateBounds()
-            this.render()
+            this.requestRender()
         }
     }
 
@@ -498,6 +510,9 @@ export default class Canvas2DRenderer {
         if (this.options.showGridLines && getZoomLevel(this.zoom) !== "far") {
             this.drawGridLines()
         }
+
+        // Draw glowing cells last to ensure glow is on top
+        this.drawGlowingCells()
     }
 
     private getRenderableBounds(): Bounds {
@@ -541,6 +556,31 @@ export default class Canvas2DRenderer {
             this.ctx.moveTo(left * cellSize * this.zoom + this.offsetX, screenY)
             this.ctx.lineTo((right + 1) * cellSize * this.zoom + this.offsetX, screenY)
             this.ctx.stroke()
+        }
+    }
+
+    private drawGlowingCells(): void {
+        for (const [key, glow] of this.glowingCells.entries()) {
+            const [x, y] = key.split(",").map(Number)
+            const pixel = this.core.pixelStore.getPixel([x, y])
+
+            if (!pixel) continue
+
+            const { cellSize } = this.options
+            const screenX = x * cellSize * this.zoom + this.offsetX
+            const screenY = y * cellSize * this.zoom + this.offsetY
+            const screenSize = cellSize * this.zoom
+
+            // Apply glow effect
+            this.ctx.shadowBlur = glow.size * glow.intensity
+            this.ctx.shadowColor = `rgba(${glow.color[0]}, ${glow.color[1]}, ${glow.color[2]}, ${glow.intensity})`
+
+            // Draw cell with glow
+            this.ctx.fillStyle = numRGBAToHex(pixel.color as number)
+            this.ctx.fillRect(screenX, screenY, screenSize, screenSize)
+
+            // Reset shadow settings
+            this.ctx.shadowBlur = 0
         }
     }
 
@@ -688,5 +728,47 @@ export default class Canvas2DRenderer {
             this.bounds = newBounds
             this.core.events.emit("boundsChanged", newBounds)
         }
+    }
+
+    public startGlow(coordinate: Coordinate, duration: number, htmlColor: string, intensity: number, size: number) {
+        const rgb = hexToRgb(htmlColor)
+
+        const key = `${coordinate[0]},${coordinate[1]}`
+        const existingCell = this.glowingCells.get(key)
+        if (existingCell) {
+            existingCell.startTime = Date.now()
+            existingCell.duration = duration
+        } else {
+            this.glowingCells.set(key, {
+                intensity,
+                duration,
+                startTime: Date.now(),
+                color: rgb,
+                size,
+            })
+        }
+        if (!this.glowInterval) {
+            this.startGlowInterval()
+        }
+    }
+
+    private startGlowInterval() {
+        this.glowInterval = setInterval(() => {
+            const currentTime = Date.now()
+            for (const [key, cell] of this.glowingCells.entries()) {
+                const elapsed = currentTime - cell.startTime
+                cell.intensity = Math.max(0, 1 - elapsed / cell.duration)
+                if (cell.intensity <= 0) {
+                    this.glowingCells.delete(key)
+                }
+            }
+
+            if (this.glowingCells.size === 0) {
+                clearInterval(this.glowInterval!)
+                this.glowInterval = null
+            }
+
+            this.requestRender()
+        }, 50) // 20fps
     }
 }
