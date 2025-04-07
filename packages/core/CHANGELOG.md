@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.6.21
+
+### Patch Changes
+
+- executor, errors, glowing
+
 ## 0.6.20
 
 ### Patch Changes

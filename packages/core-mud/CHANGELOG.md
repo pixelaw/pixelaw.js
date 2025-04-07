@@ -1,5 +1,13 @@
 # @pixelaw/core-mud
 
+## 0.6.21
+
+### Patch Changes
+
+- executor, errors, glowing
+- Updated dependencies
+  - @pixelaw/core@0.6.21
+
 ## 0.6.20
 
 ### Patch Changes

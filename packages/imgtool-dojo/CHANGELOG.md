@@ -1,5 +1,11 @@
 # @pixelaw/imgtool-dojo
 
+## 0.6.20
+
+### Patch Changes
+
+- executor, errors, glowing
+
 ## 0.6.19
 
 ### Patch Changes

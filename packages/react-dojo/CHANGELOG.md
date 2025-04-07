@@ -1,5 +1,14 @@
 # @pixelaw/react-dojo
 
+## 0.6.21
+
+### Patch Changes
+
+- executor, errors, glowing
+- Updated dependencies
+  - @pixelaw/core-dojo@0.6.21
+  - @pixelaw/react@0.6.21
+
 ## 0.6.20
 
 ### Patch Changes
