@@ -21,6 +21,7 @@ import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
 import { DojoWallet } from "./DojoWallet.ts"
 import { type DojoConfig, ENGINE_ID } from "./types.ts"
 import { DojoExecutor } from "./DojoExecutor.ts"
+import { DojoAlertStore } from "./DojoAlertStore.ts"
 
 export class DojoEngine implements Engine {
     id: Engines = ENGINE_ID
@@ -55,6 +56,8 @@ export class DojoEngine implements Engine {
             this.core.executor = new DojoExecutor(this.dojoSetup.provider, null)
 
             this.core.queue = await DojoQueueStore.getInstance(this.config.toriiUrl, this.dojoSetup)
+
+            this.core.alerts = await DojoAlertStore.getInstance(this.core)
         } catch (error) {
             console.error("Dojo init error:", error)
         }

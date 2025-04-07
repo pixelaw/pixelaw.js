@@ -9,6 +9,7 @@ import {
     MAX_DIMENSION,
     areBoundsEqual,
     type PixelawCore,
+    type Coordinate,
 } from "@pixelaw/core"
 import mitt from "mitt"
 import type { DojoStuff } from "./DojoEngine.init.ts"
@@ -16,8 +17,11 @@ import type { SchemaType } from "./generated/models.gen.ts"
 import type { EntityKeysClause } from "@dojoengine/torii-client"
 import { getQueryBounds } from "./utils/querybuilder.ts"
 import type { DojoEngine } from "./DojoEngine.ts"
+import { convertFullHexString } from "./utils/utils.ts"
 
 type State = { [key: string]: Alert | undefined }
+
+const QUERY_RADIUS = 20
 
 export class DojoAlertStore implements AlertStore {
     public readonly eventEmitter = mitt<AlertStoreEvents>()
@@ -51,19 +55,24 @@ export class DojoAlertStore implements AlertStore {
 
     private async initialize() {
         try {
-            const items = await queryTorii(this.toriiUrl, createSqlQuery(this.queryBounds), (rows: any[]) => {
-                return rows.map((item) => {
-                    return {
-                        ...item,
-                        calldata: JSON.parse(item.calldata),
-                    }
-                })
-            })
+            const items = await queryTorii(
+                this.toriiUrl,
+                createSqlQueryByRadius(this.core.getCenter(), QUERY_RADIUS),
+                (rows: any[]) => {
+                    return rows.map((item) => {
+                        // const item = JSON.parse(str.d)
+                        return {
+                            ...item,
+                            message: convertFullHexString(item.message),
+                            timestamp: Number.parseInt(item.timestamp, 16),
+                        } as Alert
+                    })
+                },
+            )
             for (const item of items) {
                 this.setAlert(item.id, item)
                 this.eventEmitter.emit("added", item)
             }
-            // console.log({ items })
         } catch (e) {
             console.error(e)
         }
@@ -73,28 +82,25 @@ export class DojoAlertStore implements AlertStore {
         if (this.isSubscribed) return
         try {
             const subscription = this.sdk.client.onEventMessageUpdated(
-                [
-                    KeysClause(
-                        ["pixelaw-QueueScheduled"],
-                        [undefined],
-                        "VariableLen",
-                    ).build() as unknown as EntityKeysClause,
-                ],
-                false,
+                [KeysClause(["pixelaw-Alert"], [undefined], "VariableLen").build() as unknown as EntityKeysClause],
                 (id, data) => {
                     if (id === "0x0") return
                     try {
-                        const item = data["pixelaw-QueueScheduled"]
-
-                        const Alert: Alert = {
-                            calldata: item.calldata.value.map((val) => val.value),
-                            called_system: item.called_system.value,
-                            id: item.id.value,
-                            selector: item.selector.value,
-                            timestamp: item.timestamp.value,
+                        const item = data["pixelaw-Alert"]
+                        const alert: Alert = {
+                            caller: item.caller.value,
+                            player: item.player.value,
+                            position: {
+                                x: item.position.value.x.value,
+                                y: item.position.value.y.value,
+                            },
+                            message: convertFullHexString(item.message.value),
+                            timestamp: Number.parseInt(item.timestamp.value, 16),
                         }
-                        this.setAlert(item.id.value, Alert)
-                        this.eventEmitter.emit("scheduled", Alert)
+                        // console.log("alert", alert)
+                        // TODO decide if we store the Alert or not
+                        // this.setAlert(item.id.value, alert)
+                        this.core.events.emit("alert", alert)
                     } catch (e) {
                         console.error(e)
                     }
@@ -117,9 +123,11 @@ export class DojoAlertStore implements AlertStore {
     public setAlert(key: string, Alert: Alert): void {
         this.state[key] = Alert
     }
+
     getAll(): Alert[] {
         return this.dojoStuff!.apps
     }
+
     public setBounds(newBounds: Bounds): void {
         const newQueryBounds = getQueryBounds(newBounds)
 
@@ -127,33 +135,30 @@ export class DojoAlertStore implements AlertStore {
             this.queryBounds = newQueryBounds
         }
     }
-}
 
+    getLastForPosition(position: Position): Alert[] {
+        return []
+    }
+}
+export function createSqlQueryByRadius(center: Coordinate, radius: number) {
+    let result = `SELECT
+                      caller, player, message, "position.x" , "position.y", timestamp
+                  FROM "pixelaw-Alert"
+                  WHERE (("position.x" - ${center[0]}) * ("position.x" - ${center[0]}) + ("position.y" -  ${center[1]}) * ("position.y" -  ${center[1]})) <= (${radius} * ${radius})
+    `
+
+    result += ";"
+    return result
+}
 export function createSqlQuery(bounds: Bounds) {
     const [[left, top], [right, bottom]] = bounds
-    const xWraps = right - left < 0
-    const yWraps = bottom - top < 0
-    let result = `SELECT
-                      json_array(A.caller, A.player, ltrim(substr(P.message, 4), '0'), (A.x << 16) | A.y, A.timestamp) as d
-                  FROM "pixelaw-Alert" as A
-                  WHERE( 1 = 0 ) 
-                  `
-    const ZERO = 0
 
-    if (xWraps && yWraps) {
-        result += ` OR(x >= ${left} AND y >= ${top} AND x <= ${MAX_DIMENSION} AND y <= ${MAX_DIMENSION} )`
-        result += ` OR(x >= ${left} AND y >= ${ZERO} AND x <= ${MAX_DIMENSION} AND y <= ${bottom} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${top} AND x <= ${right} AND y <= ${MAX_DIMENSION} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
-    } else if (xWraps) {
-        result += ` OR(x >= ${left} AND y >= ${ZERO} AND x <= ${MAX_DIMENSION} AND y <= ${bottom} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
-    } else if (yWraps) {
-        result += ` OR(x >= ${ZERO} AND y >= ${top} AND x <= ${right} AND y <= ${MAX_DIMENSION} )`
-        result += ` OR(x >= ${ZERO} AND y >= ${ZERO} AND x <= ${right} AND y <= ${bottom} )`
-    } else {
-        result += ` OR(x >= ${top} AND y >= ${top} AND x <= ${right} AND y <= ${bottom} )`
-    }
+    let result = `SELECT
+                      json_array(A.caller, A.player, ltrim(substr(A.message, 4), '0'), (A.x << 16) | A.y, A.timestamp) as d
+                  FROM "pixelaw-Alert" as A
+                  WHERE (A.x >= ${left} AND A.y >= ${top} AND A.x <= ${right} AND A.y <= ${bottom} )
+                  `
+
     result += ";"
     return result
 }

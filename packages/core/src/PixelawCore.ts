@@ -1,4 +1,5 @@
 import type {
+    AlertStore,
     AppStore,
     BaseWallet,
     Coordinate,
@@ -38,6 +39,7 @@ export class PixelawCore {
     events = mitt<PixelCoreEvents>()
     queue: QueueStore = null!
     executor: Executor | null = null!
+    alerts: AlertStore | null = null!
 
     private worldsRegistry: WorldsRegistry
     private app: string | null = null

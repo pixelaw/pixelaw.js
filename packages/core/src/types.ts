@@ -90,7 +90,7 @@ export interface QueueStore {
 export interface AlertStore {
     eventEmitter: ReturnType<typeof mitt<AlertStoreEvents>>
     getAll: () => Alert[]
-    getLastForPosition: (position: Position) => Alert[]
+    // getLastForPosition: (position: Position) => Alert[]
 }
 
 export interface TileStore {
@@ -168,6 +168,7 @@ export type PixelCoreEvents = {
     tileStoreUpdated: number
     appStoreUpdated: number
     error: SimplePixelError
+    alert: Alert
     userScrolled: { bounds: Bounds }
     userZoomed: { bounds: Bounds }
     cacheUpdated: number
