@@ -581,6 +581,9 @@ export default class Canvas2DRenderer {
 
             // Reset shadow settings
             this.ctx.shadowBlur = 0
+
+            // Draw the inside of the cell again
+            this.drawCell(pixel)
         }
     }
 
