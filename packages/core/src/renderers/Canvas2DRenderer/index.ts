@@ -1,4 +1,4 @@
-import type { Coordinate, Bounds, Pixel } from "../../types"
+import type { Coordinate, Bounds, Pixel, Notification } from "../../types"
 import { areBoundsEqual, areCoordinatesEqual, hexToRgb, numRGBAToHex } from "../../utils.ts"
 import type { PixelawCore } from "../../PixelawCore.ts"
 
@@ -49,6 +49,9 @@ export default class Canvas2DRenderer {
     // Glow
     public glowingCells: Map<string, GlowingCell> = new Map()
     public glowInterval: NodeJS.Timeout | null = null
+
+    // Notification
+    public activeNotifications: Map<string, Notification> = new Map()
 
     public readonly decelerationFactor = 0.9 // Adjust for desired deceleration
 
@@ -159,20 +162,14 @@ export default class Canvas2DRenderer {
      * Starts a glow effect on a specific cell by delegating to the effects manager
      */
     public addGlow(coordinate: Coordinate, duration: number, htmlColor: string, intensity: number, size: number): void {
-        this.effects.startGlow(coordinate, duration, htmlColor, intensity, size)
+        this.effects.addGlow(coordinate, duration, htmlColor, intensity, size)
     }
 
     /**
      * Starts a glow effect on a specific cell by delegating to the effects manager
      */
-    public addAlert(
-        coordinate: Coordinate,
-        duration: number,
-        htmlColor: string,
-        intensity: number,
-        size: number,
-    ): void {
-        this.effects.startGlow(coordinate, duration, htmlColor, intensity, size)
+    public addNotification(coordinate: Coordinate, duration: number, message: string): void {
+        this.effects.addNotification(coordinate, duration, message)
     }
 
     /**

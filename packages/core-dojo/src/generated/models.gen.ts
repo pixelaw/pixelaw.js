@@ -2,7 +2,43 @@ import type { SchemaType as ISchemaType } from "@dojoengine/sdk";
 
 import { CairoCustomEnum, CairoOption, CairoOptionVariant, BigNumberish } from 'starknet';
 
-// Type definition for `pixelaw::apps::snake::app::Snake` struct
+// Type definition for `pixelaw::apps::player::Player` struct
+export interface Player {
+	owner: string;
+	name: BigNumberish;
+	emoji: BigNumberish;
+	position: Position;
+	color: BigNumberish;
+	pixel_original_color: BigNumberish;
+	pixel_original_app: string;
+	pixel_original_text: BigNumberish;
+	pixel_original_action: BigNumberish;
+}
+
+// Type definition for `pixelaw::apps::player::PlayerValue` struct
+export interface PlayerValue {
+	name: BigNumberish;
+	emoji: BigNumberish;
+	position: Position;
+	color: BigNumberish;
+	pixel_original_color: BigNumberish;
+	pixel_original_app: string;
+	pixel_original_text: BigNumberish;
+	pixel_original_action: BigNumberish;
+}
+
+// Type definition for `pixelaw::apps::player::PositionPlayer` struct
+export interface PositionPlayer {
+	position: Position;
+	player: string;
+}
+
+// Type definition for `pixelaw::apps::player::PositionPlayerValue` struct
+export interface PositionPlayerValue {
+	player: string;
+}
+
+// Type definition for `pixelaw::apps::snake::Snake` struct
 export interface Snake {
 	owner: string;
 	length: BigNumberish;
@@ -14,30 +50,28 @@ export interface Snake {
 	is_dying: boolean;
 }
 
-// Type definition for `pixelaw::apps::snake::app::SnakeSegment` struct
+// Type definition for `pixelaw::apps::snake::SnakeSegment` struct
 export interface SnakeSegment {
 	id: BigNumberish;
 	previous_id: BigNumberish;
 	next_id: BigNumberish;
-	x: BigNumberish;
-	y: BigNumberish;
+	position: Position;
 	pixel_original_color: BigNumberish;
 	pixel_original_text: BigNumberish;
 	pixel_original_app: string;
 }
 
-// Type definition for `pixelaw::apps::snake::app::SnakeSegmentValue` struct
+// Type definition for `pixelaw::apps::snake::SnakeSegmentValue` struct
 export interface SnakeSegmentValue {
 	previous_id: BigNumberish;
 	next_id: BigNumberish;
-	x: BigNumberish;
-	y: BigNumberish;
+	position: Position;
 	pixel_original_color: BigNumberish;
 	pixel_original_text: BigNumberish;
 	pixel_original_app: string;
 }
 
-// Type definition for `pixelaw::apps::snake::app::SnakeValue` struct
+// Type definition for `pixelaw::apps::snake::SnakeValue` struct
 export interface SnakeValue {
 	length: BigNumberish;
 	first_segment_id: BigNumberish;
@@ -80,6 +114,7 @@ export interface Dummy {
 	defaultParams: DefaultParameters;
 	bounds: Bounds;
 	pixelUpdate: PixelUpdate;
+	emoji: Emoji;
 }
 
 // Type definition for `pixelaw::core::models::dummy::DummyValue` struct
@@ -87,12 +122,12 @@ export interface DummyValue {
 	defaultParams: DefaultParameters;
 	bounds: Bounds;
 	pixelUpdate: PixelUpdate;
+	emoji: Emoji;
 }
 
 // Type definition for `pixelaw::core::models::pixel::Pixel` struct
 export interface Pixel {
-	x: BigNumberish;
-	y: BigNumberish;
+	position: Position;
 	app: string;
 	color: BigNumberish;
 	created_at: BigNumberish;
@@ -105,8 +140,7 @@ export interface Pixel {
 
 // Type definition for `pixelaw::core::models::pixel::PixelUpdate` struct
 export interface PixelUpdate {
-	x: BigNumberish;
-	y: BigNumberish;
+	position: Position;
 	color: CairoOption<BigNumberish>;
 	owner: CairoOption<string>;
 	app: CairoOption<string>;
@@ -204,38 +238,34 @@ export interface DefaultParameters {
 	color: BigNumberish;
 }
 
+// Type definition for `pixelaw::core::utils::Emoji` struct
+export interface Emoji {
+	value: BigNumberish;
+}
+
 // Type definition for `pixelaw::core::utils::Position` struct
 export interface Position {
 	x: BigNumberish;
 	y: BigNumberish;
 }
 
-// Type definition for `pixelaw::core::events::Alert` struct
-export interface Alert {
+// Type definition for `pixelaw::core::events::Notification` struct
+export interface Notification {
 	position: Position;
-	caller: string;
-	player: string;
-	message: BigNumberish;
-	timestamp: BigNumberish;
+	app: string;
+	color: BigNumberish;
+	from: CairoOption<string>;
+	to: CairoOption<string>;
+	text: BigNumberish;
 }
 
-// Type definition for `pixelaw::core::events::AlertValue` struct
-export interface AlertValue {
-	caller: string;
-	player: string;
-	message: BigNumberish;
-	timestamp: BigNumberish;
-}
-
-// Type definition for `pixelaw::core::events::QueueProcessed` struct
-export interface QueueProcessed {
-	id: BigNumberish;
-	result: BigNumberish;
-}
-
-// Type definition for `pixelaw::core::events::QueueProcessedValue` struct
-export interface QueueProcessedValue {
-	result: BigNumberish;
+// Type definition for `pixelaw::core::events::NotificationValue` struct
+export interface NotificationValue {
+	app: string;
+	color: BigNumberish;
+	from: CairoOption<string>;
+	to: CairoOption<string>;
+	text: BigNumberish;
 }
 
 // Type definition for `pixelaw::core::events::QueueScheduled` struct
@@ -268,6 +298,10 @@ export type DirectionEnum = CairoCustomEnum;
 
 export interface SchemaType extends ISchemaType {
 	pixelaw: {
+		Player: Player,
+		PlayerValue: PlayerValue,
+		PositionPlayer: PositionPlayer,
+		PositionPlayerValue: PositionPlayerValue,
 		Snake: Snake,
 		SnakeSegment: SnakeSegment,
 		SnakeSegmentValue: SnakeSegmentValue,
@@ -293,17 +327,44 @@ export interface SchemaType extends ISchemaType {
 		CoreActionsAddressValue: CoreActionsAddressValue,
 		Bounds: Bounds,
 		DefaultParameters: DefaultParameters,
+		Emoji: Emoji,
 		Position: Position,
-		Alert: Alert,
-		AlertValue: AlertValue,
-		QueueProcessed: QueueProcessed,
-		QueueProcessedValue: QueueProcessedValue,
+		Notification: Notification,
+		NotificationValue: NotificationValue,
 		QueueScheduled: QueueScheduled,
 		QueueScheduledValue: QueueScheduledValue,
 	},
 }
 export const schema: SchemaType = {
 	pixelaw: {
+		Player: {
+			owner: "",
+			name: 0,
+			emoji: 0,
+		position: { x: 0, y: 0, },
+			color: 0,
+			pixel_original_color: 0,
+			pixel_original_app: "",
+			pixel_original_text: 0,
+			pixel_original_action: 0,
+		},
+		PlayerValue: {
+			name: 0,
+			emoji: 0,
+		position: { x: 0, y: 0, },
+			color: 0,
+			pixel_original_color: 0,
+			pixel_original_app: "",
+			pixel_original_text: 0,
+			pixel_original_action: 0,
+		},
+		PositionPlayer: {
+		position: { x: 0, y: 0, },
+			player: "",
+		},
+		PositionPlayerValue: {
+			player: "",
+		},
 		Snake: {
 			owner: "",
 			length: 0,
@@ -323,8 +384,7 @@ export const schema: SchemaType = {
 			id: 0,
 			previous_id: 0,
 			next_id: 0,
-			x: 0,
-			y: 0,
+		position: { x: 0, y: 0, },
 			pixel_original_color: 0,
 			pixel_original_text: 0,
 			pixel_original_app: "",
@@ -332,8 +392,7 @@ export const schema: SchemaType = {
 		SnakeSegmentValue: {
 			previous_id: 0,
 			next_id: 0,
-			x: 0,
-			y: 0,
+		position: { x: 0, y: 0, },
 			pixel_original_color: 0,
 			pixel_original_text: 0,
 			pixel_original_app: "",
@@ -374,16 +433,17 @@ export const schema: SchemaType = {
 			id: 0,
 		defaultParams: { player_override: new CairoOption(CairoOptionVariant.None), system_override: new CairoOption(CairoOptionVariant.None), area_hint: new CairoOption(CairoOptionVariant.None), position: { x: 0, y: 0, }, color: 0, },
 		bounds: { x_min: 0, y_min: 0, x_max: 0, y_max: 0, },
-		pixelUpdate: { x: 0, y: 0, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
+		pixelUpdate: { position: { x: 0, y: 0, }, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
+		emoji: { value: 0, },
 		},
 		DummyValue: {
 		defaultParams: { player_override: new CairoOption(CairoOptionVariant.None), system_override: new CairoOption(CairoOptionVariant.None), area_hint: new CairoOption(CairoOptionVariant.None), position: { x: 0, y: 0, }, color: 0, },
 		bounds: { x_min: 0, y_min: 0, x_max: 0, y_max: 0, },
-		pixelUpdate: { x: 0, y: 0, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
+		pixelUpdate: { position: { x: 0, y: 0, }, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
+		emoji: { value: 0, },
 		},
 		Pixel: {
-			x: 0,
-			y: 0,
+		position: { x: 0, y: 0, },
 			app: "",
 			color: 0,
 			created_at: 0,
@@ -394,8 +454,7 @@ export const schema: SchemaType = {
 			action: 0,
 		},
 		PixelUpdate: {
-			x: 0,
-			y: 0,
+		position: { x: 0, y: 0, },
 		color: new CairoOption(CairoOptionVariant.None),
 		owner: new CairoOption(CairoOptionVariant.None),
 		app: new CairoOption(CairoOptionVariant.None),
@@ -466,29 +525,27 @@ export const schema: SchemaType = {
 		position: { x: 0, y: 0, },
 			color: 0,
 		},
+		Emoji: {
+			value: 0,
+		},
 		Position: {
 			x: 0,
 			y: 0,
 		},
-		Alert: {
+		Notification: {
 		position: { x: 0, y: 0, },
-			caller: "",
-			player: "",
-			message: 0,
-			timestamp: 0,
+			app: "",
+			color: 0,
+		from: new CairoOption(CairoOptionVariant.None),
+		to: new CairoOption(CairoOptionVariant.None),
+			text: 0,
 		},
-		AlertValue: {
-			caller: "",
-			player: "",
-			message: 0,
-			timestamp: 0,
-		},
-		QueueProcessed: {
-			id: 0,
-			result: 0,
-		},
-		QueueProcessedValue: {
-			result: 0,
+		NotificationValue: {
+			app: "",
+			color: 0,
+		from: new CairoOption(CairoOptionVariant.None),
+		to: new CairoOption(CairoOptionVariant.None),
+			text: 0,
 		},
 		QueueScheduled: {
 			id: 0,
@@ -506,6 +563,10 @@ export const schema: SchemaType = {
 	},
 };
 export enum ModelsMapping {
+	Player = 'pixelaw-Player',
+	PlayerValue = 'pixelaw-PlayerValue',
+	PositionPlayer = 'pixelaw-PositionPlayer',
+	PositionPlayerValue = 'pixelaw-PositionPlayerValue',
 	Snake = 'pixelaw-Snake',
 	SnakeSegment = 'pixelaw-SnakeSegment',
 	SnakeSegmentValue = 'pixelaw-SnakeSegmentValue',
@@ -532,11 +593,10 @@ export enum ModelsMapping {
 	Bounds = 'pixelaw-Bounds',
 	DefaultParameters = 'pixelaw-DefaultParameters',
 	Direction = 'pixelaw-Direction',
+	Emoji = 'pixelaw-Emoji',
 	Position = 'pixelaw-Position',
-	Alert = 'pixelaw-Alert',
-	AlertValue = 'pixelaw-AlertValue',
-	QueueProcessed = 'pixelaw-QueueProcessed',
-	QueueProcessedValue = 'pixelaw-QueueProcessedValue',
+	Notification = 'pixelaw-Notification',
+	NotificationValue = 'pixelaw-NotificationValue',
 	QueueScheduled = 'pixelaw-QueueScheduled',
 	QueueScheduledValue = 'pixelaw-QueueScheduledValue',
 }

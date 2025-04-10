@@ -69,7 +69,6 @@ class DojoSqlPixelStore implements PixelStore {
             DojoSqlPixelStore.instance.worker.onmessage = DojoSqlPixelStore.instance.handleRefreshWorker.bind(
                 DojoSqlPixelStore.instance,
             )
-            console.log("subbing")
             DojoSqlPixelStore.instance.subscribe()
         }
         return DojoSqlPixelStore.instance
@@ -102,11 +101,11 @@ class DojoSqlPixelStore implements PixelStore {
                                 text: convertFullHexString(p.text.value),
                                 timestamp: p.timestamp.value,
                                 app,
-                                x: p.x.value,
-                                y: p.y.value,
+                                x: p.position.value.x.value,
+                                y: p.position.value.y.value,
                             }
 
-                            const key = `${p?.x.value}_${p?.y.value}`
+                            const key = `${pixel.x}_${pixel.y}`
                             this.idLookupTable[id] = key
                             this.setPixel(key, pixel)
                         }
@@ -217,11 +216,11 @@ export function createSqlQuery(bounds: Bounds) {
     const [[left, top], [right, bottom]] = bounds
 
     let result = `SELECT
-                      json_array(P.color, ltrim(substr(P.text, 32), '0'), ltrim(substr(P.action, 3), '0'), (P.x << 16) | P.y, ltrim(substr(A.name, 4), '0' )) as d
+                      json_array(P.color, ltrim(substr(P.text, 32), '0'), ltrim(substr(P.action, 3), '0'), (P."position.x" << 16) | P."position.y", ltrim(substr(A.name, 4), '0' )) as d
                   FROM "pixelaw-Pixel" as P
                            INNER JOIN "Pixelaw-App" as A
                                       ON P.app = A.system
-                  WHERE (P.x >= ${left} AND P.y >= ${top} AND P.x <= ${right} AND P.y <= ${bottom} )
+                  WHERE (P."position.x" >= ${left} AND P."position.y" >= ${top} AND P."position.x" <= ${right} AND P."position.y" <= ${bottom} )
                   `
 
     result += ";"

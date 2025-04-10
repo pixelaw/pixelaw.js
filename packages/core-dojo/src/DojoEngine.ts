@@ -21,7 +21,7 @@ import DojoSqlPixelStore from "./DojoSqlPixelStore.ts"
 import { DojoWallet } from "./DojoWallet.ts"
 import { type DojoConfig, ENGINE_ID } from "./types.ts"
 import { DojoExecutor } from "./DojoExecutor.ts"
-import { DojoAlertStore } from "./DojoAlertStore.ts"
+import { DojoNotificationStore } from "./DojoNotificationStore.ts"
 
 export class DojoEngine implements Engine {
     id: Engines = ENGINE_ID
@@ -57,7 +57,7 @@ export class DojoEngine implements Engine {
 
             this.core.queue = await DojoQueueStore.getInstance(this.config.toriiUrl, this.dojoSetup)
 
-            this.core.alerts = await DojoAlertStore.getInstance(this.core)
+            this.core.notification = await DojoNotificationStore.getInstance(this.core)
         } catch (error) {
             console.error("Dojo init error:", error)
         }
@@ -75,7 +75,7 @@ export class DojoEngine implements Engine {
 
     async executeQueueItem(item: QueueItem): Promise<boolean> {
         const dojoCall = {
-            contractAddress: "0x5386eb3153d91bd740a4e17933f26056ce10faddf9a06f56a2c23c0c4794cb5", // TODO properly configure pixelaw_actions contract,
+            contractAddress: "0x1f455be12a750b7228e5626e1efd6bcee4849f24e98bb098371d6e8f773f3", // TODO properly configure pixelaw_actions contract,
             entrypoint: "process_queue",
             calldata: [
                 item.id,

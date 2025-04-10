@@ -1,5 +1,5 @@
 import type {
-    AlertStore,
+    NotificationStore,
     AppStore,
     BaseWallet,
     Coordinate,
@@ -39,12 +39,13 @@ export class PixelawCore {
     events = mitt<PixelCoreEvents>()
     queue: QueueStore = null!
     executor: Executor | null = null!
-    alerts: AlertStore | null = null!
+    notification: NotificationStore | null = null!
 
     private worldsRegistry: WorldsRegistry
     private app: string | null = null
     private color = 0
     private zoom = 1
+    private lastNotification = 0
     private center: Coordinate = [0, 0]
     private world: string
 
@@ -87,11 +88,12 @@ export class PixelawCore {
 
     private async getStorageDefaults(): Promise<CoreDefaults | undefined> {
         // Use Promise.all to fetch all items concurrently, improving time efficiency
-        const [app, color, center, zoom] = await Promise.all([
+        const [app, color, center, zoom, lastNotification] = await Promise.all([
             this.storage.getItem(this.getStorageKey("app")),
             this.storage.getItem(this.getStorageKey("color")),
             this.storage.getItem(this.getStorageKey("center")),
             this.storage.getItem(this.getStorageKey("zoom")),
+            this.storage.getItem(this.getStorageKey("lastNotification")),
         ])
 
         // Check for undefined values directly, improving readability
@@ -101,6 +103,7 @@ export class PixelawCore {
                 color: color as unknown as number,
                 center: center as unknown as number[],
                 zoom: zoom as unknown as number,
+                lastNotification: lastNotification as unknown as number,
             }
         }
     }
@@ -137,6 +140,7 @@ export class PixelawCore {
             this.setColor(defaults.color)
             this.setCenter(defaults.center as Coordinate)
             this.setZoom(defaults.zoom)
+            this.setLastNotification(defaults.lastNotification)
         }
 
         this.viewPort = new Canvas2DRenderer(this)
@@ -210,6 +214,16 @@ export class PixelawCore {
         this.zoom = newZoom
         this.events.emit("zoomChanged", newZoom)
         this.storage.setItem(this.getStorageKey("zoom"), newZoom.toString()).catch(console.error)
+    }
+
+    public setLastNotification(newLastNotification: number) {
+        if (this.lastNotification === newLastNotification) return
+        this.lastNotification = newLastNotification
+        this.storage.setItem(this.getStorageKey("lastNotification"), newLastNotification).catch(console.error)
+    }
+
+    public getLastNotification(): number {
+        return this.lastNotification
     }
 
     public getCenter(): Coordinate {

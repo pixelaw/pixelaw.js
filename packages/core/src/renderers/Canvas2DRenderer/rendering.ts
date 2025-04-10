@@ -32,6 +32,8 @@ export class RenderingMethods {
 
         // Draw glowing cells last to ensure glow is on top
         this.drawGlowingCells()
+
+        this.drawNotifications()
     }
 
     private getRenderableBounds(): Bounds {
@@ -103,6 +105,19 @@ export class RenderingMethods {
 
             // Draw the inside of the cell again
             this.drawCell(pixel)
+        }
+    }
+
+    public drawNotifications(): void {
+        for (const [key, notification] of this.renderer.activeNotifications.entries()) {
+            const [x, y] = key.split(",").map(Number)
+            const screenX = x * this.renderer.options.cellSize * this.renderer.zoom + this.renderer.offsetX
+            const screenY = y * this.renderer.options.cellSize * this.renderer.zoom + this.renderer.offsetY
+
+            this.renderer.ctx.fillStyle = "rgba(255, 255, 255, 0.8)"
+            this.renderer.ctx.fillRect(screenX, screenY - 20, 100, 20)
+            this.renderer.ctx.fillStyle = "black"
+            this.renderer.ctx.fillText(notification.message, screenX + 5, screenY - 5)
         }
     }
 

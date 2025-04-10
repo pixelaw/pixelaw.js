@@ -62,18 +62,18 @@ export type QueueItem = {
     calldata: string
 }
 
-export type Alert = {
-    id: string
+export type Notification = {
     position: Position
-    caller: string
-    player: string | null
-    message: string
-    timestamp: number
+    app: App
+    color: number
+    from: string | null
+    to: string | null
+    text: string
 }
 
-export type AlertStoreEvents = {
+export type NotificationStoreEvents = {
     updated: number
-    added: Alert
+    added: Notification
 }
 
 export type QueueStoreEvents = {
@@ -87,10 +87,10 @@ export interface QueueStore {
     retrieve: () => Promise<void>
 }
 
-export interface AlertStore {
-    eventEmitter: ReturnType<typeof mitt<AlertStoreEvents>>
-    getAll: () => Alert[]
-    // getLastForPosition: (position: Position) => Alert[]
+export interface NotificationStore {
+    eventEmitter: ReturnType<typeof mitt<NotificationStoreEvents>>
+    getAll: () => Notification[]
+    // getLastForPosition: (position: Position) => Notification[]
 }
 
 export interface TileStore {
@@ -168,7 +168,7 @@ export type PixelCoreEvents = {
     tileStoreUpdated: number
     appStoreUpdated: number
     error: SimplePixelError
-    alert: Alert
+    notification: Notification
     userScrolled: { bounds: Bounds }
     userZoomed: { bounds: Bounds }
     cacheUpdated: number
@@ -220,6 +220,7 @@ export type CoreDefaults = {
     color: number
     center: number[] // same as Coordinate
     zoom: number
+    lastNotification: number
 }
 
 export type PixelStoreEvents = {

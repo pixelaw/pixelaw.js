@@ -1,15 +1,16 @@
 import { KeysClause, type SDK } from "@dojoengine/sdk"
 import { queryTorii } from "@dojoengine/sdk/sql"
 import {
-    type AlertStore,
-    type Alert,
+    type NotificationStore,
+    type Notification,
     QueueStore,
-    type AlertStoreEvents,
+    type NotificationStoreEvents,
     type Bounds,
     MAX_DIMENSION,
     areBoundsEqual,
     type PixelawCore,
     type Coordinate,
+    type Position,
 } from "@pixelaw/core"
 import mitt from "mitt"
 import type { DojoStuff } from "./DojoEngine.init.ts"
@@ -19,15 +20,15 @@ import { getQueryBounds } from "./utils/querybuilder.ts"
 import type { DojoEngine } from "./DojoEngine.ts"
 import { convertFullHexString } from "./utils/utils.ts"
 
-type State = { [key: string]: Alert | undefined }
+type State = { [key: string]: Notification | undefined }
 
 const QUERY_RADIUS = 20
 
-export class DojoAlertStore implements AlertStore {
-    public readonly eventEmitter = mitt<AlertStoreEvents>()
+export class DojoNotificationStore implements NotificationStore {
+    public readonly eventEmitter = mitt<NotificationStoreEvents>()
     private dojoStuff
     private sdk: SDK<SchemaType>
-    private static instance: DojoAlertStore
+    private static instance: DojoNotificationStore
     private isSubscribed = false
     private cacheUpdated: number = Date.now()
     private state: State = {}
@@ -43,34 +44,40 @@ export class DojoAlertStore implements AlertStore {
     }
 
     // Singleton factory
-    public static async getInstance(core: PixelawCore): Promise<DojoAlertStore> {
-        if (!DojoAlertStore.instance) {
-            DojoAlertStore.instance = new DojoAlertStore(core)
+    public static async getInstance(core: PixelawCore): Promise<DojoNotificationStore> {
+        if (!DojoNotificationStore.instance) {
+            DojoNotificationStore.instance = new DojoNotificationStore(core)
 
-            await DojoAlertStore.instance.subscribe()
-            await DojoAlertStore.instance.initialize()
+            await DojoNotificationStore.instance.subscribe()
+            await DojoNotificationStore.instance.initialize()
         }
-        return DojoAlertStore.instance
+        return DojoNotificationStore.instance
     }
 
     private async initialize() {
         try {
+            // TODO Notifications should be filtered by wallet address
+            // const wallet = this.core.wallet as DojoWallet
+
             const items = await queryTorii(
                 this.toriiUrl,
-                createSqlQueryByRadius(this.core.getCenter(), QUERY_RADIUS),
+                createSqlQueryByRadius(
+                    this.core.getCenter(),
+                    QUERY_RADIUS,
+                    this.core.lastNotification /*,  wallet.getAccount()*/,
+                ),
                 (rows: any[]) => {
                     return rows.map((item) => {
                         // const item = JSON.parse(str.d)
                         return {
                             ...item,
-                            message: convertFullHexString(item.message),
-                            timestamp: Number.parseInt(item.timestamp, 16),
-                        } as Alert
+                            message: convertFullHexString(item.text),
+                        } as Notification
                     })
                 },
             )
             for (const item of items) {
-                this.setAlert(item.id, item)
+                // this.setNotification(item.id, item)
                 this.eventEmitter.emit("added", item)
             }
         } catch (e) {
@@ -82,25 +89,33 @@ export class DojoAlertStore implements AlertStore {
         if (this.isSubscribed) return
         try {
             const subscription = this.sdk.client.onEventMessageUpdated(
-                [KeysClause(["pixelaw-Alert"], [undefined], "VariableLen").build() as unknown as EntityKeysClause],
+                [
+                    KeysClause(
+                        ["pixelaw-Notification"],
+                        [undefined],
+                        "VariableLen",
+                    ).build() as unknown as EntityKeysClause,
+                ],
                 (id, data) => {
                     if (id === "0x0") return
                     try {
-                        const item = data["pixelaw-Alert"]
-                        const alert: Alert = {
-                            caller: item.caller.value,
-                            player: item.player.value,
+                        const item = data["pixelaw-Notification"]
+                        console.log(item)
+                        const notification: Notification = {
+                            from: item.from.value.option === "None" ? null : item.from.value.value.value,
+                            to: item.to.value.option === "None" ? null : item.to.value.value.value,
+                            color: item.color.value,
+                            app: item.app.value, // TODO
                             position: {
                                 x: item.position.value.x.value,
                                 y: item.position.value.y.value,
                             },
-                            message: convertFullHexString(item.message.value),
-                            timestamp: Number.parseInt(item.timestamp.value, 16),
+                            text: convertFullHexString(item.text.value),
                         }
-                        // console.log("alert", alert)
-                        // TODO decide if we store the Alert or not
-                        // this.setAlert(item.id.value, alert)
-                        this.core.events.emit("alert", alert)
+                        // console.log("notification", notification)
+                        // TODO decide if we store the Notification or not
+                        // this.setNotification(item.id.value, notification)
+                        this.core.events.emit("notification", notification)
                     } catch (e) {
                         console.error(e)
                     }
@@ -120,11 +135,11 @@ export class DojoAlertStore implements AlertStore {
         }
     }
 
-    public setAlert(key: string, Alert: Alert): void {
-        this.state[key] = Alert
+    public setNotification(key: string, Notification: Notification): void {
+        this.state[key] = Notification
     }
 
-    getAll(): Alert[] {
+    getAll(): Notification[] {
         return this.dojoStuff!.apps
     }
 
@@ -136,29 +151,33 @@ export class DojoAlertStore implements AlertStore {
         }
     }
 
-    getLastForPosition(position: Position): Alert[] {
+    getLastForPosition(position: Position): Notification[] {
         return []
     }
 }
-export function createSqlQueryByRadius(center: Coordinate, radius: number) {
+export function createSqlQueryByRadius(center: Coordinate, radius: number, lastNotification: number, address: string) {
+    console.log("add", address)
     let result = `SELECT
-                      caller, player, message, "position.x" , "position.y", timestamp
-                  FROM "pixelaw-Alert"
+                      "from", "to", "text", "position.x" , "position.y", "color"
+                  FROM "pixelaw-Notification"
                   WHERE (("position.x" - ${center[0]}) * ("position.x" - ${center[0]}) + ("position.y" -  ${center[1]}) * ("position.y" -  ${center[1]})) <= (${radius} * ${radius})
     `
 
     result += ";"
     return result
 }
+/*
+
 export function createSqlQuery(bounds: Bounds) {
     const [[left, top], [right, bottom]] = bounds
 
     let result = `SELECT
                       json_array(A.caller, A.player, ltrim(substr(A.message, 4), '0'), (A.x << 16) | A.y, A.timestamp) as d
-                  FROM "pixelaw-Alert" as A
+                  FROM "pixelaw-Notification" as A
                   WHERE (A.x >= ${left} AND A.y >= ${top} AND A.x <= ${right} AND A.y <= ${bottom} )
                   `
 
     result += ";"
     return result
 }
+*/

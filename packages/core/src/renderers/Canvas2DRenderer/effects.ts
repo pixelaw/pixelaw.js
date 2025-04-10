@@ -17,7 +17,7 @@ export class EffectsManager {
     /**
      * Starts a glow effect on a specific cell
      */
-    public startGlow(coordinate: Coordinate, duration: number, htmlColor: string, intensity: number, size: number) {
+    public addGlow(coordinate: Coordinate, duration: number, htmlColor: string, intensity: number, size: number) {
         const rgb = hexToRgb(htmlColor)
 
         const key = `${coordinate[0]},${coordinate[1]}`
@@ -143,5 +143,18 @@ export class EffectsManager {
             this.renderer.updateCenter()
             this.renderer.updateBounds()
         }, 30) // Approximately 30fps
+    }
+
+    public addNotification(coordinate: Coordinate, duration: number, text: string): void {
+        const key = `${coordinate[0]},${coordinate[1]}`
+        // this.renderer.activeNotifications.set(key, {
+        //     startTime: Date.now(),
+        //     duration,
+        //     text,
+        // })
+
+        if (!this.renderer.glowInterval) {
+            this.startGlowInterval()
+        }
     }
 }
