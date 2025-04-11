@@ -58,91 +58,89 @@ export class EffectsManager {
                 this.renderer.glowInterval = null
             }
 
-            this.renderer.requestRender()
+            // this.requestRender()
+            this.renderer.needRender = true
         }, 50) // 20fps
     }
 
-    /**
-     * Starts zoom inertia
-     */
-    public startZoomInertia(): void {
-        if (this.renderer.zoomInertiaInterval) {
-            clearInterval(this.renderer.zoomInertiaInterval)
+    // Add a method to handle zoom inertia
+    public handleZoomInertia(): void {
+        if (!this.renderer.isZoomInertiaActive) return
+
+        if (Math.abs(this.renderer.zoomInertiaVelocity) < 0.001) {
+            this.renderer.isZoomInertiaActive = false
+            this.renderer.zoomInertiaVelocity = 0
+            return
         }
 
-        this.renderer.zoomInertiaInterval = setInterval(() => {
-            if (Math.abs(this.renderer.zoomInertiaVelocity) < 0.001) {
-                clearInterval(this.renderer.zoomInertiaInterval)
-                this.renderer.zoomInertiaInterval = null
-                return
-            }
+        // Calculate new zoom level
+        const newZoom = Math.max(
+            this.renderer.options.minZoom,
+            Math.min(this.renderer.options.maxZoom, this.renderer.zoom * (1 + this.renderer.zoomInertiaVelocity)),
+        )
 
-            // Calculate new zoom level
-            const newZoom = Math.max(
-                this.renderer.options.minZoom,
-                Math.min(this.renderer.options.maxZoom, this.renderer.zoom * (1 + this.renderer.zoomInertiaVelocity)),
-            )
+        // Calculate the midpoint of the canvas as the zoom center
+        const midX = this.renderer.canvas.width / 2
+        const midY = this.renderer.canvas.height / 2
 
-            // Calculate the midpoint of the canvas as the zoom center
-            const midX = this.renderer.canvas.width / 2
-            const midY = this.renderer.canvas.height / 2
+        // Calculate world coordinates before zoom
+        const worldXBefore = (midX - this.renderer.offsetX) / this.renderer.zoom
+        const worldYBefore = (midY - this.renderer.offsetY) / this.renderer.zoom
 
-            // Calculate world coordinates before zoom
-            const worldXBefore = (midX - this.renderer.offsetX) / this.renderer.zoom
-            const worldYBefore = (midY - this.renderer.offsetY) / this.renderer.zoom
+        // Calculate world coordinates after zoom
+        const worldXAfter = (midX - this.renderer.offsetX) / newZoom
+        const worldYAfter = (midY - this.renderer.offsetY) / newZoom
 
-            // Calculate world coordinates after zoom
-            const worldXAfter = (midX - this.renderer.offsetX) / newZoom
-            const worldYAfter = (midY - this.renderer.offsetY) / newZoom
+        // Adjust offset to keep the midpoint fixed
+        this.renderer.offsetX += (worldXAfter - worldXBefore) * newZoom
+        this.renderer.offsetY += (worldYAfter - worldYBefore) * newZoom
 
-            // Adjust offset to keep the midpoint fixed
-            this.renderer.offsetX += (worldXAfter - worldXBefore) * newZoom
-            this.renderer.offsetY += (worldYAfter - worldYBefore) * newZoom
+        // Update zoom and apply deceleration
+        this.renderer.zoom = newZoom
+        this.renderer.zoomInertiaVelocity *= this.renderer.decelerationFactor
 
-            // Update zoom and render
-            this.renderer.updateZoom(newZoom)
-            this.renderer.zoomInertiaVelocity *= this.renderer.decelerationFactor // Apply deceleration
-
-            this.renderer.requestRender()
-            this.renderer.updateCenter()
-            this.renderer.updateBounds()
-        }, 30) // Approximately 30fps
+        this.renderer.needRender = true
+        this.renderer.updateCenter()
+        this.renderer.updateBounds()
     }
 
-    /**
-     * Starts pan inertia
-     */
+    // Modify the startZoomInertia method
+    public startZoomInertia(): void {
+        if (Math.abs(this.renderer.zoomInertiaVelocity) >= 0.001) {
+            this.renderer.isZoomInertiaActive = true
+        }
+    }
     public startPanInertia(): void {
-        if (this.renderer.panInertiaInterval) {
-            clearInterval(this.renderer.panInertiaInterval)
+        if (Math.abs(this.renderer.panInertiaVelocity[0]) < 4 && Math.abs(this.renderer.panInertiaVelocity[1]) < 4) {
+            return
         }
 
-        if (Math.abs(this.renderer.panInertiaVelocity[0]) < 4 && Math.abs(this.renderer.panInertiaVelocity[1]) < 4)
-            return
+        this.renderer.isPanInertiaActive = true
+    }
 
-        this.renderer.panInertiaInterval = setInterval(() => {
-            // Apply velocity to offset
-            this.renderer.offsetX += this.renderer.panInertiaVelocity[0]
-            this.renderer.offsetY += this.renderer.panInertiaVelocity[1]
+    public handlePanInertia(): void {
+        if (!this.renderer.isPanInertiaActive) return
 
-            // Decelerate
-            this.renderer.panInertiaVelocity[0] *= this.renderer.decelerationFactor
-            this.renderer.panInertiaVelocity[1] *= this.renderer.decelerationFactor
+        // Apply velocity to offset
+        this.renderer.offsetX += this.renderer.panInertiaVelocity[0]
+        this.renderer.offsetY += this.renderer.panInertiaVelocity[1]
 
-            // Stop inertia when velocity is low
-            if (
-                Math.abs(this.renderer.panInertiaVelocity[0]) < 0.01 &&
-                Math.abs(this.renderer.panInertiaVelocity[1]) < 0.01
-            ) {
-                clearInterval(this.renderer.panInertiaInterval)
-                this.renderer.panInertiaInterval = null
-            }
+        // Decelerate
+        this.renderer.panInertiaVelocity[0] *= this.renderer.decelerationFactor
+        this.renderer.panInertiaVelocity[1] *= this.renderer.decelerationFactor
 
-            // Render with new offset
-            this.renderer.requestRender()
-            this.renderer.updateCenter()
-            this.renderer.updateBounds()
-        }, 30) // Approximately 30fps
+        // Stop inertia when velocity is low
+        if (
+            Math.abs(this.renderer.panInertiaVelocity[0]) < 0.01 &&
+            Math.abs(this.renderer.panInertiaVelocity[1]) < 0.01
+        ) {
+            this.renderer.isPanInertiaActive = false
+            this.renderer.panInertiaVelocity = [0, 0]
+        }
+
+        this.renderer.needRender = true
+        this.renderer.updateCenter()
+        this.renderer.updateBounds()
     }
 
     public addNotification(coordinate: Coordinate, duration: number, text: string): void {

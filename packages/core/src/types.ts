@@ -220,7 +220,6 @@ export type CoreDefaults = {
     color: number
     center: number[] // same as Coordinate
     zoom: number
-    lastNotification: number
 }
 
 export type PixelStoreEvents = {

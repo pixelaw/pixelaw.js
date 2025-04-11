@@ -29,7 +29,6 @@ export default class Canvas2DRenderer {
     // Public properties for handlers
     public offsetX = 0
     public offsetY = 0
-    public isRendering = false
     public dragStartTime = 0
     public lastDragTime = 0
 
@@ -40,11 +39,11 @@ export default class Canvas2DRenderer {
 
     // For panning "inertia"
     public panInertiaVelocity: [number, number] = [0, 0]
-    public panInertiaInterval: NodeJS.Timeout
+    public isPanInertiaActive = false
 
     // For zooming "inertia"
     public zoomInertiaVelocity: number
-    public zoomInertiaInterval: NodeJS.Timeout
+    public isZoomInertiaActive = false
 
     // Glow
     public glowingCells: Map<string, GlowingCell> = new Map()
@@ -59,6 +58,9 @@ export default class Canvas2DRenderer {
     private handlers: EventHandlers
     private rendering: RenderingMethods
     effects: EffectsManager
+
+    // render management
+    public needRender = true
 
     constructor(core: PixelawCore, options: Partial<Canvas2DRendererOptions> = {}) {
         // Create a new canvas element
@@ -98,7 +100,7 @@ export default class Canvas2DRenderer {
 
         this.setCenter(core.getCenter())
 
-        this.requestRender()
+        this.startRenderLoop()
     }
 
     private subscribeToEvents() {
@@ -106,33 +108,42 @@ export default class Canvas2DRenderer {
         // TODO decide on whether pixelstore cacheupdated goes to a global event bus or not
         this.core.pixelStore.eventEmitter.on("cacheUpdated", (_timestamp: number) => {
             console.log("cacheUpdated")
-            this.requestRender()
+            this.needRender = true
+            // this.requestRender()
         })
 
         this.core.events.on("pixelStoreUpdated", (timestamp: number) => {
             console.log(`pixelStoreUpdated at: ${timestamp}`)
-            this.requestRender()
+            // this.requestRender()
+            this.needRender = true
         })
         this.core.events.on("tileStoreUpdated", (timestamp: number) => {
             console.log(`tileStoreUpdated at: ${timestamp}`)
-            this.requestRender()
+            // this.requestRender()
+            this.needRender = true
         })
     }
 
-    public requestRender() {
-        if (!this.isRendering) {
-            this.isRendering = true
-            if (isBrowser) {
-                requestAnimationFrame(() => {
-                    this.rendering.render()
-                    this.isRendering = false
-                })
-            } else {
-                setImmediate(() => {
-                    this.rendering.render()
-                    this.isRendering = false
-                })
+    public startRenderLoop() {
+        const renderLoop = () => {
+            if (this.needRender) {
+                this.needRender = false
+                this.requestRender()
             }
+            requestAnimationFrame(renderLoop)
+        }
+        requestAnimationFrame(renderLoop)
+    }
+
+    public requestRender() {
+        if (isBrowser) {
+            requestAnimationFrame(() => {
+                this.rendering.render()
+            })
+        } else {
+            setImmediate(() => {
+                this.rendering.render()
+            })
         }
     }
 
@@ -151,7 +162,8 @@ export default class Canvas2DRenderer {
         if (container) {
             this.canvas.width = container.clientWidth
             this.canvas.height = container.clientHeight
-            this.requestRender()
+            // this.requestRender()
+            this.needRender = true
 
             this.updateBounds()
             this.setCenter(this.center)

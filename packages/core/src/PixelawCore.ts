@@ -88,12 +88,11 @@ export class PixelawCore {
 
     private async getStorageDefaults(): Promise<CoreDefaults | undefined> {
         // Use Promise.all to fetch all items concurrently, improving time efficiency
-        const [app, color, center, zoom, lastNotification] = await Promise.all([
+        const [app, color, center, zoom] = await Promise.all([
             this.storage.getItem(this.getStorageKey("app")),
             this.storage.getItem(this.getStorageKey("color")),
             this.storage.getItem(this.getStorageKey("center")),
             this.storage.getItem(this.getStorageKey("zoom")),
-            this.storage.getItem(this.getStorageKey("lastNotification")),
         ])
 
         // Check for undefined values directly, improving readability
@@ -103,7 +102,6 @@ export class PixelawCore {
                 color: color as unknown as number,
                 center: center as unknown as number[],
                 zoom: zoom as unknown as number,
-                lastNotification: lastNotification as unknown as number,
             }
         }
     }
@@ -140,8 +138,9 @@ export class PixelawCore {
             this.setColor(defaults.color)
             this.setCenter(defaults.center as Coordinate)
             this.setZoom(defaults.zoom)
-            this.setLastNotification(defaults.lastNotification)
         }
+
+        // TODO load lastNotification?
 
         this.viewPort = new Canvas2DRenderer(this)
 

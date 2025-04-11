@@ -18,9 +18,13 @@ export class RenderingMethods {
      * Renders the grid and cells
      */
     public render(): void {
+        console.log("rendering")
         // Clear canvas
         this.renderer.ctx.fillStyle = this.renderer.options.backgroundColor
         this.renderer.ctx.fillRect(0, 0, this.renderer.canvas.width, this.renderer.canvas.height)
+
+        this.renderer.effects.handlePanInertia()
+        this.renderer.effects.handleZoomInertia()
 
         // Draw visible cells
         this.drawCells()
@@ -117,7 +121,7 @@ export class RenderingMethods {
             this.renderer.ctx.fillStyle = "rgba(255, 255, 255, 0.8)"
             this.renderer.ctx.fillRect(screenX, screenY - 20, 100, 20)
             this.renderer.ctx.fillStyle = "black"
-            this.renderer.ctx.fillText(notification.message, screenX + 5, screenY - 5)
+            this.renderer.ctx.fillText(notification.text, screenX + 5, screenY - 5)
         }
     }
 

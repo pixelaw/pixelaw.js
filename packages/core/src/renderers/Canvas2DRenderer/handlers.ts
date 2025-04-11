@@ -67,7 +67,8 @@ export class EventHandlers {
         this.renderer.updateCenter()
         this.renderer.updateBounds()
 
-        this.renderer.requestRender()
+        // this.requestRender()
+        this.renderer.needRender = true
         this.renderer.effects.startZoomInertia()
     }
 
@@ -115,7 +116,8 @@ export class EventHandlers {
         }
 
         // Render with new offset
-        this.renderer.requestRender()
+        // this.requestRender()
+        this.renderer.needRender = true
 
         this.renderer.updateCenter()
         this.renderer.updateBounds()
@@ -227,7 +229,8 @@ export class EventHandlers {
             this.renderer.updateZoom(newZoom)
             this.renderer.updateCenter()
             this.renderer.updateBounds()
-            this.renderer.requestRender()
+            // this.requestRender()
+            this.renderer.needRender = true
         }
     }
 
