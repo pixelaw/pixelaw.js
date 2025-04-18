@@ -60,30 +60,30 @@ export const PixelawProvider = ({
     const [contextValues, setContextValues] = useState<IPixelawContext>({
         pixelawCore,
         coreStatus: "uninitialized",
-        wallet: pixelawCore.getWallet(),
-        app: pixelawCore.getApp(),
+        wallet: pixelawCore.wallet,
+        app: pixelawCore.app,
         engine: null,
-        world: pixelawCore.getWorld(),
-        color: pixelawCore.getColor(),
-        center: pixelawCore.getCenter(),
-        zoom: pixelawCore.getZoom(),
+        world: pixelawCore.world,
+        color: pixelawCore.color,
+        center: pixelawCore.center,
+        zoom: pixelawCore.zoom,
         setWallet: (wallet: Wallet | null) => {
-            pixelawCore.setWallet(wallet)
+            pixelawCore.wallet = wallet
         },
         setApp: (app: string) => {
-            pixelawCore.setApp(app)
+            pixelawCore.app = app
         },
         setWorld: (world: string) => {
             pixelawCore.loadWorld(world)
         },
         setColor: (color: number) => {
-            pixelawCore.setColor(color)
+            pixelawCore.color = color
         },
         setCenter: (center: Coordinate) => {
-            pixelawCore.setCenter(center)
+            pixelawCore.center = center
         },
         setZoom: (zoom: number) => {
-            pixelawCore.setZoom(zoom)
+            pixelawCore.zoom = zoom
         },
     })
 

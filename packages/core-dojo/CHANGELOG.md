@@ -1,5 +1,13 @@
 # @pixelaw/core-dojo
 
+## 0.6.22
+
+### Patch Changes
+
+- bump
+- Updated dependencies
+  - @pixelaw/core@0.6.22
+
 ## 0.6.21
 
 ### Patch Changes

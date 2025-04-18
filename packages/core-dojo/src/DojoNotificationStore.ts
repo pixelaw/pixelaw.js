@@ -37,7 +37,7 @@ export class DojoNotificationStore implements NotificationStore {
     private core: PixelawCore
 
     protected constructor(core: PixelawCore) {
-        const engine = core.engine as DojoEngine
+        const engine = core._engine as DojoEngine
         this.sdk = engine.dojoSetup.sdk
         this.toriiUrl = engine.dojoSetup.toriiUrl
         this.core = core
@@ -62,7 +62,7 @@ export class DojoNotificationStore implements NotificationStore {
             const items = await queryTorii(
                 this.toriiUrl,
                 createSqlQueryByRadius(
-                    this.core.getCenter(),
+                    this.core.center,
                     QUERY_RADIUS,
                     this.core.lastNotification /*,  wallet.getAccount()*/,
                 ),

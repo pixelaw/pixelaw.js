@@ -18,7 +18,6 @@ export class RenderingMethods {
      * Renders the grid and cells
      */
     public render(): void {
-        console.log("rendering")
         // Clear canvas
         this.renderer.ctx.fillStyle = this.renderer.options.backgroundColor
         this.renderer.ctx.fillRect(0, 0, this.renderer.canvas.width, this.renderer.canvas.height)

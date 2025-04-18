@@ -1,5 +1,11 @@
 # @pixelaw/imgtool-dojo
 
+## 0.6.21
+
+### Patch Changes
+
+- bump
+
 ## 0.6.20
 
 ### Patch Changes

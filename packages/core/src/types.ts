@@ -119,6 +119,7 @@ export interface Tileset {
 }
 
 export interface Executor {
+    account: unknown
     enqueue(call: unknown, onSuccess: (result: unknown) => void, onFail: (error: unknown) => void): void
     get pendingCalls(): number
     set wallet(wallet: Wallet)
@@ -159,6 +160,7 @@ export type SimplePixelError = { coordinate: Coordinate | null; error: string }
 export type PixelCoreEvents = {
     cellClicked: Coordinate
     cellHovered: Coordinate | undefined
+    accountChanged: unknown | null // TODO should have a type for Account?
     centerChanged: Coordinate
     boundsChanged: Bounds
     engineChanged: Engine
@@ -179,7 +181,16 @@ export type PixelCoreEvents = {
 }
 
 export type EngineStatus = "ready" | "loading" | "error" | "uninitialized"
-export type CoreStatus = "uninitialized" | "loadConfig" | "initializing" | "ready" | "error"
+export type CoreStatus =
+    | "uninitialized"
+    | "loadConfig"
+    | "initEngine"
+    | "initWallet"
+    | "initAccount"
+    | "ready"
+    | "readyWithoutWallet"
+    | "error"
+
 export interface Engine {
     id: Engines
     core: PixelawCore
@@ -252,7 +263,8 @@ export class BaseWallet {
 }
 
 export abstract class Wallet extends BaseWallet {
-    abstract getAccount(): unknown
     abstract toJSON(): unknown
+    abstract get isConnected(): boolean
+    abstract get account(): unknown
 }
 export const IS_BROWSER = typeof window !== "undefined" && typeof window.document !== "undefined"

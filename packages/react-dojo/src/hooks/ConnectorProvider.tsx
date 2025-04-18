@@ -4,7 +4,7 @@ import { usePixelawProvider } from "@pixelaw/react"
 import type { Connector } from "@starknet-react/core"
 import { InjectedConnector, useAccount, useConnect, useDisconnect } from "@starknet-react/core"
 
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, type ReactNode, useContext, useEffect, useState } from "react"
 import { constants } from "starknet"
 import { ArgentMobileConnector, isInArgentMobileAppBrowser } from "starknetkit/argentMobile"
 import { WebWalletConnector } from "starknetkit/webwallet"
@@ -25,88 +25,101 @@ export const ConnectorProvider: React.FC<ConnectorProviderProps> = ({ children }
     const { connectAsync } = useConnect()
     const { disconnectAsync } = useDisconnect()
     const { connector: currentConnector, account: currentAccount } = useAccount()
-    const { pixelawCore, wallet, setWallet } = usePixelawProvider()
+    const { pixelawCore, wallet, setWallet, coreStatus } = usePixelawProvider()
+
     const engine: DojoEngine = pixelawCore.engine as DojoEngine
     const { controllerConnector, burnerConnector } = engine.dojoSetup || {}
 
     // setting AvailableConnectors
     useEffect(() => {
         const connectors: Connector[] = [
-            ...(isInArgentMobileAppBrowser()
-                ? [
-                      ArgentMobileConnector.init({
-                          options: {
-                              url: window?.location.href || "",
-                              dappName: "PixeLAW",
-                              chainId: constants.NetworkName.SN_SEPOLIA,
-                          },
-                      }),
-                  ]
-                : [
-                      new InjectedConnector({ options: { id: "argentX" } }),
-                      new InjectedConnector({ options: { id: "braavos" } }),
-                      ArgentMobileConnector.init({
-                          options: {
-                              url: window?.location.href || "",
-                              dappName: "PixeLAW",
-                              chainId: constants.NetworkName.SN_MAIN,
-                          },
-                      }),
-                      new WebWalletConnector({ url: "https://web.argent.xyz" }),
-                  ]),
+            burnerConnector as unknown as Connector,
+            // ...(isInArgentMobileAppBrowser()
+            //     ? [
+            //           ArgentMobileConnector.init({
+            //               options: {
+            //                   url: window?.location.href || "",
+            //                   dappName: "PixeLAW",
+            //                   chainId: constants.NetworkName.SN_SEPOLIA,
+            //               },
+            //           }),
+            //       ]
+            //     : [
+            //           new InjectedConnector({ options: { id: "argentX" } }),
+            //           new InjectedConnector({ options: { id: "braavos" } }),
+            //           ArgentMobileConnector.init({
+            //               options: {
+            //                   url: window?.location.href || "",
+            //                   dappName: "PixeLAW",
+            //                   chainId: constants.NetworkName.SN_MAIN,
+            //               },
+            //           }),
+            //           new WebWalletConnector({ url: "https://web.argent.xyz" }),
+            //       ]),
             controllerConnector,
-            burnerConnector as Connector,
         ].filter((connector): connector is Connector => connector != null)
 
         setAvailableConnectors(connectors)
     }, [controllerConnector, burnerConnector])
 
-    // Handling connector selection
+    // Handling connector selection (click in the wallet selector page)
     const handleConnectorSelection = async (connector: Connector | null) => {
         try {
+            // Disconnect the current connector first
             if (currentConnector) await disconnectAsync()
+
+            // If a connector was selected, connect to it.
             if (connector) {
                 await connectAsync({ connector })
+            } else {
+                setWallet(null)
             }
         } catch (error) {
             console.error("Error activating connector:", error)
         }
     }
 
-    // Handling Connector activation
+    // Handling Connector activation/deactivation
     useEffect(() => {
-        const activateConnector = async () => {
+        const setCoreWalletFromConnector = async () => {
             if (currentConnector && currentAccount) {
-                console.log("Handling Connector activation")
                 try {
                     console.log("activateConnector", { currentAccount })
-                    const chainId = await currentAccount.getChainId()
-                    const wallet = new DojoWallet(currentConnector.id as DojoWalletId, chainId, currentAccount)
-                    setWallet(wallet)
-                    // navigate("/");
+                    if (!pixelawCore.wallet) {
+                        const chainId = await currentAccount.getChainId()
+
+                        const wallet = new DojoWallet(currentConnector.id as DojoWalletId, chainId, currentAccount)
+                        pixelawCore.wallet = wallet
+                    }
+                    pixelawCore.account = currentAccount
                 } catch (error) {
                     console.error("Error setting up wallet:", error)
                 }
             }
         }
 
-        activateConnector()
-    }, [currentConnector, currentAccount, setWallet])
+        setCoreWalletFromConnector()
+    }, [currentConnector, currentAccount, pixelawCore])
 
     // Handling loading from BaseWallet
     useEffect(() => {
-        const activateConnector = async () => {
-            if (wallet && !(typeof wallet["getAccount"] === "function")) {
+        const loadAccountForWallet = async () => {
+            if (availableConnectors && coreStatus === "initAccount" && wallet) {
+                console.log("loadAccountForWallet", availableConnectors)
+                // Find the connector belonging to core.wallet
                 const matchingConnector = availableConnectors.find((connector) => connector.id === wallet.id)
 
+                // If found, connect it in the browser
                 if (matchingConnector) {
+                    console.log("connecting", matchingConnector)
                     await connectAsync({ connector: matchingConnector })
+                    pixelawCore.account = currentAccount
                 }
             }
         }
 
-        activateConnector()
-    }, [wallet, availableConnectors, connectAsync])
+        loadAccountForWallet()
+    }, [wallet, availableConnectors, connectAsync, coreStatus, currentAccount, pixelawCore])
 
     return (
         <ConnectorContext.Provider value={{ availableConnectors, handleConnectorSelection }}>

@@ -33,7 +33,7 @@ class DojoSqlPixelStore implements PixelStore {
     private core: PixelawCore
 
     protected constructor(core: PixelawCore) {
-        const engine = core.engine as DojoEngine
+        const engine = core._engine as DojoEngine
         this.sdk = engine.dojoSetup.sdk
         this.toriiUrl = engine.dojoSetup.toriiUrl
         this.core = core
@@ -46,7 +46,7 @@ class DojoSqlPixelStore implements PixelStore {
     public static async getInstance(core: PixelawCore): Promise<DojoSqlPixelStore> {
         if (!DojoSqlPixelStore.instance) {
             DojoSqlPixelStore.instance = new DojoSqlPixelStore(core)
-            const engine = core.engine as DojoEngine
+            const engine = core._engine as DojoEngine
 
             if (typeof window !== "undefined" && Object.keys(window).length !== 0) {
                 // Browser environment

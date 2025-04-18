@@ -53,7 +53,7 @@ export class DojoEngine implements Engine {
             // Setup TileStore
             // this.core.tileStore = new RestTileStore(config.serverUrl)
 
-            this.core.executor = new DojoExecutor(this.dojoSetup.provider, null)
+            this.core.executor = new DojoExecutor(this.core, this.dojoSetup.provider)
 
             this.core.queue = await DojoQueueStore.getInstance(this.config.toriiUrl, this.dojoSetup)
 
@@ -65,8 +65,8 @@ export class DojoEngine implements Engine {
 
     async prepInteraction(coordinate: Coordinate): Promise<Interaction> {
         const pixel = this.core.pixelStore.getPixel(coordinate) ?? ({ x: coordinate[0], y: coordinate[1] } as Pixel)
-        const app = this.core.appStore.getByName(this.core.getApp())
-        const color = this.core.getColor()
+        const app = this.core.appStore.getByName(this.core.app)
+        const color = this.core.color
 
         const interaction: Interaction = await DojoInteraction.create(this, app, pixel, color)
 

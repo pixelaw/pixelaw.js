@@ -12,15 +12,20 @@ export type DojoWalletId =
     | "controller"
 
 export class DojoWallet extends Wallet {
-    private account: AccountInterface
+    private _account: AccountInterface
+    private _isConnected = false
 
     constructor(walletId: DojoWalletId, chainId: string, account: AccountInterface) {
         super(ENGINE_ID, walletId, account.address, chainId)
-        this.account = account
+        this._account = account
     }
 
-    getAccount(): AccountInterface {
-        return this.account
+    get account(): AccountInterface {
+        return this._account
+    }
+
+    get isConnected(): boolean {
+        return this._isConnected
     }
 
     toJSON(): BaseWallet {

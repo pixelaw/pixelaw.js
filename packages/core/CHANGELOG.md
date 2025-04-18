@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.6.22
+
+### Patch Changes
+
+- bump
+
 ## 0.6.21
 
 ### Patch Changes

@@ -104,11 +104,12 @@ export class DojoInteraction implements Interaction {
                 this.color,
             )
 
-            this.engine.core.executor.enqueue(dojoCall, console.log, (e: Error) => {
-                const error = e.message
+            this.engine.core.executor.enqueue(dojoCall, console.log, (e: Error | string) => {
+                const error = typeof e === "string" ? e : e.message
+
                 // console.error("Error executing DojoCall:", error)
 
-                const regex = /Failure reason: \\"([^"]+)\\"/
+                const regex = /Failure reason: "([^"]+)"/
                 const match = error.match(regex)
 
                 if (!match) {

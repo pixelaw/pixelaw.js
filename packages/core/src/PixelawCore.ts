@@ -28,9 +28,9 @@ import nullDriver from "unstorage/drivers/null"
 import Canvas2DRenderer from "./renderers/Canvas2DRenderer"
 
 export class PixelawCore {
-    status: CoreStatus = "uninitialized"
+    _status: CoreStatus = "uninitialized"
     worldConfig: WorldConfig = null!
-    engine: Engine = null!
+    _engine: Engine = null!
     pixelStore: PixelStore = null!
     tileStore: TileStore = null!
     appStore: AppStore = null!
@@ -41,17 +41,18 @@ export class PixelawCore {
     executor: Executor | null = null!
     notification: NotificationStore | null = null!
 
-    private worldsRegistry: WorldsRegistry
-    private app: string | null = null
-    private color = 0
-    private zoom = 1
-    private lastNotification = 0
-    private center: Coordinate = [0, 0]
-    private world: string
+    private _worldsRegistry: WorldsRegistry
+    private _app: string | null = null
+    private _color = 0
+    private _zoom = 1
+    private _lastNotification = 0
+    private _center: Coordinate = [0, 0]
+    private _world: string
 
     private engines: Record<string, EngineConstructor<Engine>> = {}
 
-    private wallet: Wallet | BaseWallet | null = null
+    private _wallet: Wallet | BaseWallet | null = null
+    private _account: unknown | null
     readonly storage: Storage<StorageValue>
 
     constructor(
@@ -61,29 +62,53 @@ export class PixelawCore {
     ) {
         this.engines = engines
 
-        this.worldsRegistry = worldsRegistry
+        this._worldsRegistry = worldsRegistry
 
         this.storage = storage
+    }
+
+    public set account(newAccount: unknown | null) {
+        this._account = newAccount
+        this.events.emit("accountChanged", newAccount)
+
+        if (newAccount) {
+            this.status = "ready"
+            this.executor.account = newAccount
+        } else {
+            this.status = "readyWithoutWallet"
+        }
+    }
+    public get account() {
+        return this._account
     }
 
     public getExecutor(): Executor | null {
         return this.executor
     }
 
-    public getWallet(): Wallet | BaseWallet | null {
-        return this.wallet
+    public get wallet(): Wallet | BaseWallet | null {
+        return this._wallet
     }
 
-    public setWallet(wallet: Wallet | null) {
-        this.wallet = wallet
-        console.log("setWallet", this.wallet)
+    public set wallet(wallet: Wallet | null) {
+        if (wallet === this._wallet) return
+
+        this._wallet = wallet
+        console.log("setWallet", this._wallet)
         this.events.emit("walletChanged", wallet)
-        this.executor.wallet = wallet
+
         this.storage.setItem(this.getStorageKey("wallet"), JSON.stringify(wallet)).catch(console.error)
+
+        // Also set account to null, since it relies on wallet
+        // this.account = account
     }
 
-    public getEngine(): string | null {
-        return this.engine ? this.engine.constructor.name : null
+    public get engineId(): string | null {
+        return this._engine ? this._engine.constructor.name : null
+    }
+
+    public get engine(): Engine | null {
+        return this._engine
     }
 
     private async getStorageDefaults(): Promise<CoreDefaults | undefined> {
@@ -109,11 +134,11 @@ export class PixelawCore {
     public async loadWorld(world: string, urlDefaults?: CoreDefaults) {
         console.log("loading loadWorld")
 
-        if (!Object.prototype.hasOwnProperty.call(this.worldsRegistry, world))
+        if (!Object.prototype.hasOwnProperty.call(this._worldsRegistry, world))
             throw Error(`World ${world} does not exist in registry`)
 
-        this.setStatus("loadConfig")
-        const worldConfig = this.worldsRegistry[world]
+        this.status = "loadConfig"
+        const worldConfig = this._worldsRegistry[world]
 
         const engineClass = this.engines[worldConfig.engine.toLowerCase()]
 
@@ -121,23 +146,23 @@ export class PixelawCore {
             throw new Error(`Unsupported engine: ${worldConfig.engine}`)
         }
 
-        this.engine = new engineClass(this)
+        this._engine = new engineClass(this)
 
-        this.setStatus("initializing")
+        this.status = "initEngine"
 
         // Engine init will access some core setters, so stuff may change
-        await this.engine.init(worldConfig.config)
+        await this._engine.init(worldConfig.config)
 
-        this.setWorld(world)
+        this.world = world
 
         const storageDefaults = await this.getStorageDefaults()
 
         const defaults = urlDefaults ?? storageDefaults ?? worldConfig.defaults
         if (defaults) {
-            this.setApp(defaults.app)
-            this.setColor(defaults.color)
-            this.setCenter(defaults.center as Coordinate)
-            this.setZoom(defaults.zoom)
+            this.app = defaults.app
+            this.color = defaults.color
+            this.center = defaults.center as Coordinate
+            this.zoom = defaults.zoom
         }
 
         // TODO load lastNotification?
@@ -146,102 +171,105 @@ export class PixelawCore {
 
         this.worldConfig = worldConfig
 
+        this.events.emit("engineChanged", this._engine)
         // Try to get the Wallet
         const baseWallet = await this.storage.getItem(this.getStorageKey("wallet"))
         if (baseWallet) {
             console.log("loading basewallet")
-            this.setWallet(baseWallet as unknown as Wallet)
-            // this.wallet = baseWallet as unknown as BaseWallet
+            this.wallet = baseWallet as unknown as Wallet
 
-            // @ts-ignore FIXME it works but its not great
-            // this.events.emit("walletChanged", baseWallet)
+            this.status = "initAccount"
+        } else {
+            this.status = "readyWithoutWallet"
         }
 
         this.events.on("centerChanged", (newCenter: Coordinate) => {
-            this.setCenter(newCenter)
+            this.center = newCenter
         })
 
         this.events.on("zoomChanged", (newZoom: number) => {
-            this.setZoom(newZoom)
+            this.zoom = newZoom
         })
-
-        this.setStatus("ready")
-        this.events.emit("engineChanged", this.engine)
     }
 
-    private setStatus(newStatus: CoreStatus) {
-        this.status = newStatus
+    public get status(): CoreStatus {
+        return this._status
+    }
+    private set status(newStatus: CoreStatus) {
+        this._status = newStatus
         this.events.emit("statusChanged", newStatus)
+
+        console.info("core.setStatus", newStatus)
     }
 
-    public getWorldsRegistry(): WorldsRegistry {
-        return this.worldsRegistry
+    public get worldsRegistry(): WorldsRegistry {
+        return this._worldsRegistry
     }
 
-    public getApp(): string | null {
-        return this.app
+    public get app(): string | null {
+        return this._app
     }
 
-    public setApp(newApp: string | null) {
-        this.app = newApp
+    public set app(newApp: string | null) {
+        this._app = newApp
         this.events.emit("appChanged", newApp)
         this.storage.setItem(this.getStorageKey("app"), newApp).catch(console.error)
     }
 
-    private setWorld(newWorld: string) {
-        this.world = newWorld
+    private set world(newWorld: string) {
+        this._world = newWorld
         this.storage.setItem(this.getStorageKey("world"), newWorld).catch(console.error)
         this.events.emit("worldChanged", newWorld)
     }
 
-    public getColor(): number {
-        return this.color
+    public get color(): number {
+        return this._color
     }
 
-    public setColor(newColor: number | null) {
-        this.color = newColor
+    public set color(newColor: number | null) {
+        this._color = newColor
         this.events.emit("colorChanged", newColor)
         this.storage.setItem(this.getStorageKey("color"), newColor.toString()).catch(console.error)
     }
 
-    public getZoom(): number {
-        return this.zoom
+    public get zoom(): number {
+        return this._zoom
     }
 
-    public setZoom(newZoom: number) {
-        if (this.zoom === newZoom) return
-        this.zoom = newZoom
+    public set zoom(newZoom: number) {
+        if (this._zoom === newZoom) return
+        this._zoom = newZoom
         this.events.emit("zoomChanged", newZoom)
         this.storage.setItem(this.getStorageKey("zoom"), newZoom.toString()).catch(console.error)
     }
 
-    public setLastNotification(newLastNotification: number) {
-        if (this.lastNotification === newLastNotification) return
-        this.lastNotification = newLastNotification
+    public set lastNotification(newLastNotification: number) {
+        if (this._lastNotification === newLastNotification) return
+        this._lastNotification = newLastNotification
         this.storage.setItem(this.getStorageKey("lastNotification"), newLastNotification).catch(console.error)
     }
 
-    public getLastNotification(): number {
-        return this.lastNotification
+    public get lastNotification(): number {
+        return this._lastNotification
     }
 
-    public getCenter(): Coordinate {
-        return this.center
+    public get center(): Coordinate {
+        return this._center
     }
 
-    public setCenter(newCenter: Coordinate) {
-        if (this.center === newCenter) return
-        this.center = newCenter
+    public set center(newCenter: Coordinate) {
+        if (this._center === newCenter) return
+        this._center = newCenter
         this.events.emit("centerChanged", newCenter)
         this.storage.setItem(this.getStorageKey("center"), JSON.stringify(newCenter)).catch(console.error)
     }
 
-    public getWorld(): string {
-        return this.world
+    public get world(): string {
+        return this._world
     }
 
     public async prepInteraction(coordinate: Coordinate): Promise<Interaction> {
-        return await this.engine.prepInteraction(coordinate)
+        return await this._engine.prepInteraction(coordinate)
     }
 
     // public async executeInteraction(interaction: Interaction): Promise<void> {
@@ -256,10 +284,10 @@ export class PixelawCore {
 
     // TODO finalize return type etc
     public async executeQueueItem(queueItem: QueueItem): Promise<boolean> {
-        return await this.engine.executeQueueItem(queueItem)
+        return await this._engine.executeQueueItem(queueItem)
     }
 
     private getStorageKey(key: string): string {
-        return `${this.world}::${key}`
+        return `${this._world}::${key}`
     }
 }

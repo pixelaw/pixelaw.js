@@ -200,7 +200,7 @@ async function setupBurnerConnector(
                     console.error(e)
                 }
             }
-
+            console.log("burn")
             return new BurnerConnector(
                 {
                     id: "burner",

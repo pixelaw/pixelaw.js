@@ -72,7 +72,7 @@ export async function prepareParams(
 ): Promise<InteractParam[]> {
     const result: InteractParam[] = []
     const storage = interaction.engine.core.storage
-    const address = interaction.engine.core.getWallet().address
+    const address = interaction.engine.core.wallet?.address
     const positionString = `${interaction.position.x}_${interaction.position.y}`
     for (const rawParam of rawParams) {
         const param = { ...rawParam }

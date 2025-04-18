@@ -1,5 +1,14 @@
 # @pixelaw/react-dojo
 
+## 0.6.22
+
+### Patch Changes
+
+- bump
+- Updated dependencies
+  - @pixelaw/core-dojo@0.6.22
+  - @pixelaw/react@0.6.22
+
 ## 0.6.21
 
 ### Patch Changes

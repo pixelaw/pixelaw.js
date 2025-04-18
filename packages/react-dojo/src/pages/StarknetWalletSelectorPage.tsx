@@ -1,6 +1,6 @@
 import type ControllerConnector from "@cartridge/connector/controller"
 import { useAccount } from "@starknet-react/core"
-import { useEffect } from "react"
+
 import ControllerDetails from "../components/ControllerDetails/ControllerDetails"
 import { useConnectorContext } from "../hooks/ConnectorProvider"
 import styles from "./StarknetWalletSelectorPage.module.css"
@@ -9,12 +9,6 @@ export const StarknetWalletSelectorPage = () => {
     const { connector: currentConnector, account: currentAccount, status } = useAccount()
     const { availableConnectors, handleConnectorSelection } = useConnectorContext()
 
-    useEffect(() => {
-        console.log("Connector changed:", currentConnector)
-        // Add any additional logic needed when currentConnector changes
-    }, [currentConnector])
-
-    console.log({ currentConnector })
     return (
         <div className={styles.inner}>
             <h1>Current Wallet</h1>

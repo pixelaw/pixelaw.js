@@ -80,7 +80,7 @@ export default class Canvas2DRenderer {
         // Initialize properties
         this.core = core
         this.options = { ...DEFAULT_OPTIONS, ...options }
-        this.zoom = core.getZoom()
+        this.zoom = core.zoom
 
         // Initialize component instances
         this.handlers = new EventHandlers(this)
@@ -98,7 +98,7 @@ export default class Canvas2DRenderer {
 
         this.subscribeToEvents()
 
-        this.setCenter(core.getCenter())
+        this.setCenter(core.center)
 
         this.startRenderLoop()
     }
