@@ -1,5 +1,11 @@
 # @pixelaw/imgtool-dojo
 
+## 0.6.22
+
+### Patch Changes
+
+- nonce mgmt, txns
+
 ## 0.6.21
 
 ### Patch Changes

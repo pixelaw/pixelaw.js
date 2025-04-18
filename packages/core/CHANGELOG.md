@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.6.23
+
+### Patch Changes
+
+- nonce mgmt, txns
+
 ## 0.6.22
 
 ### Patch Changes

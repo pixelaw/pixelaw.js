@@ -1,5 +1,14 @@
 # @pixelaw/react-dojo
 
+## 0.6.23
+
+### Patch Changes
+
+- nonce mgmt, txns
+- Updated dependencies
+  - @pixelaw/core-dojo@0.6.23
+  - @pixelaw/react@0.6.23
+
 ## 0.6.22
 
 ### Patch Changes
