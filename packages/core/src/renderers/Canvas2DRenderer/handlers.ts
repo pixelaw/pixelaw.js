@@ -77,8 +77,7 @@ export class EventHandlers {
      */
     public handleMouseDown(event: MouseEvent): void {
         event.preventDefault()
-        clearInterval(this.renderer.panInertiaInterval)
-        this.renderer.panInertiaInterval = null
+        this.renderer.effects.stopPanInertia()
 
         this.renderer.dragStartTime = Date.now()
         this.renderer.dragStartCoord = [event.clientX, event.clientY]

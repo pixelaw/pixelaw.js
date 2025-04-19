@@ -110,12 +110,18 @@ export class EffectsManager {
             this.renderer.isZoomInertiaActive = true
         }
     }
+
     public startPanInertia(): void {
         if (Math.abs(this.renderer.panInertiaVelocity[0]) < 4 && Math.abs(this.renderer.panInertiaVelocity[1]) < 4) {
             return
         }
 
         this.renderer.isPanInertiaActive = true
+    }
+
+    public stopPanInertia(): void {
+        this.renderer.isPanInertiaActive = false
+        this.renderer.panInertiaVelocity = [0, 0]
     }
 
     public handlePanInertia(): void {
@@ -134,8 +140,7 @@ export class EffectsManager {
             Math.abs(this.renderer.panInertiaVelocity[0]) < 0.01 &&
             Math.abs(this.renderer.panInertiaVelocity[1]) < 0.01
         ) {
-            this.renderer.isPanInertiaActive = false
-            this.renderer.panInertiaVelocity = [0, 0]
+            this.stopPanInertia()
         }
 
         this.renderer.needRender = true
