@@ -54,10 +54,10 @@ export class DojoAppStore implements AppStore {
     }
 
     getByName(name: string): App | undefined {
-        return this.dojoStuff!.apps.find((app) => app.name === name)
+        return this.state[name]
     }
 
     getBySystem(system: string): App | undefined {
-        return this.dojoStuff!.apps.find((app) => app.system === system)
+        return Object.values(this.state).find((app) => app?.system === system)
     }
 }

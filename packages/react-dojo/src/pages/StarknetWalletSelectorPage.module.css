@@ -1,14 +1,14 @@
-.inner {
-    background-color: white;
-    padding: 1rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    width: 100vw;
-}
+/*.inner {*/
+/*    background-color: white;*/
+/*    padding: 1rem;*/
+/*    border-radius: 1rem;*/
+/*    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*    gap: 1rem;*/
+/*    width: 100vw;*/
+/*}*/
 
 .list {
     list-style-type: none;

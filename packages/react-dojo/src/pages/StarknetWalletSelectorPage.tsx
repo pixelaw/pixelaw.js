@@ -11,7 +11,7 @@ export const StarknetWalletSelectorPage = () => {
 
     return (
         <div className={styles.inner}>
-            <h1>Current Wallet</h1>
+
             {currentConnector?.id === "controller" && (
                 <ControllerDetails connector={currentConnector as unknown as ControllerConnector} />
             )}
@@ -20,7 +20,7 @@ export const StarknetWalletSelectorPage = () => {
                 {currentAccount ? currentAccount.address : "no account"}
             </p>
 
-            <h1>Wallet Selector</h1>
+            <h4>Wallet Selector</h4>
             <ul className={styles.settingsList}>
                 <li key="">
                     <button type="button" className={styles.menuButton} onClick={() => handleConnectorSelection(null)}>

@@ -104,17 +104,22 @@ export const ConnectorProvider: React.FC<ConnectorProviderProps> = ({ children }
     // Handling loading from BaseWallet
     useEffect(() => {
         const loadAccountForWallet = async () => {
-            if (availableConnectors && coreStatus === "initAccount" && wallet) {
-                console.log("loadAccountForWallet", availableConnectors)
-                // Find the connector belonging to core.wallet
-                const matchingConnector = availableConnectors.find((connector) => connector.id === wallet.id)
+            try {
+                if (availableConnectors && coreStatus === "initAccount" && wallet) {
+                    console.log("loadAccountForWallet", availableConnectors)
+                    // Find the connector belonging to core.wallet
+                    const matchingConnector = availableConnectors.find((connector) => connector.id === wallet.id)
 
-                // If found, connect it in the browser
-                if (matchingConnector) {
-                    console.log("connecting", matchingConnector)
-                    await connectAsync({ connector: matchingConnector })
-                    pixelawCore.account = currentAccount
+                    // If found, connect it in the browser
+                    if (matchingConnector) {
+                        console.log("connecting", matchingConnector)
+                        await connectAsync({ connector: matchingConnector })
+                        pixelawCore.account = currentAccount
+                    }
+                    console.log("done")
                 }
+            } catch (e) {
+                console.error(e)
             }
         }
 
