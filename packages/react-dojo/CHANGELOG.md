@@ -1,5 +1,14 @@
 # @pixelaw/react-dojo
 
+## 0.6.24
+
+### Patch Changes
+
+- performance improvement for sepolia
+- Updated dependencies
+  - @pixelaw/core-dojo@0.6.24
+  - @pixelaw/react@0.6.24
+
 ## 0.6.23
 
 ### Patch Changes

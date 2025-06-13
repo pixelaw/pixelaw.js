@@ -1,5 +1,13 @@
 # @pixelaw/core-mud
 
+## 0.6.24
+
+### Patch Changes
+
+- performance improvement for sepolia
+- Updated dependencies
+  - @pixelaw/core@0.6.24
+
 ## 0.6.23
 
 ### Patch Changes

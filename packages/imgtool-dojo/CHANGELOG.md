@@ -1,5 +1,11 @@
 # @pixelaw/imgtool-dojo
 
+## 0.6.23
+
+### Patch Changes
+
+- performance improvement for sepolia
+
 ## 0.6.22
 
 ### Patch Changes
