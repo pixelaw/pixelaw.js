@@ -1,4 +1,4 @@
-import type {WalletConfig} from "@pixelaw/core";
+import type { WalletConfig } from "@pixelaw/core"
 
 export interface DojoConfig {
     serverUrl: string
@@ -11,6 +11,14 @@ export interface DojoConfig {
         controller?: WalletConfig
     }
     world: string
+}
+
+export interface SimpleContract {
+    kind: string
+    address: string
+    abi: any
+    tag: string
+    name?: string
 }
 
 export const ENGINE_ID = "dojo"

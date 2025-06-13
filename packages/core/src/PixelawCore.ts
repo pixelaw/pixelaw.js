@@ -70,7 +70,7 @@ export class PixelawCore {
     public set account(newAccount: unknown | null) {
         this._account = newAccount
         this.events.emit("accountChanged", newAccount)
-
+        console.log("core.account", newAccount)
         if (newAccount) {
             this.status = "ready"
             this.executor.account = newAccount

@@ -7,3 +7,5 @@
 lerna-debug.log
 .turbo
 apps/bot-dojo/db.sqlite
+.zed/
+doc/scratch*

@@ -11,7 +11,6 @@ export const StarknetWalletSelectorPage = () => {
 
     return (
         <div className={styles.inner}>
-
             {currentConnector?.id === "controller" && (
                 <ControllerDetails connector={currentConnector as unknown as ControllerConnector} />
             )}

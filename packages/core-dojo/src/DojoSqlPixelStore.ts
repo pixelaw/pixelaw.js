@@ -1,21 +1,19 @@
 import { KeysClause, type SDK } from "@dojoengine/sdk"
-import type { EntityKeysClause } from "@dojoengine/torii-client"
 import {
-    areBoundsEqual,
     type Bounds,
     type Coordinate,
-    makeString,
-    MAX_DIMENSION,
     type Pixel,
-    type PixelawCore,
     type PixelStore,
     type PixelStoreEvents,
+    type PixelawCore,
+    areBoundsEqual,
+    makeString,
 } from "@pixelaw/core"
 import mitt from "mitt"
+import type { DojoEngine } from "./DojoEngine.ts"
 import type { SchemaType } from "./generated/models.gen.ts"
 import { getQueryBounds } from "./utils/querybuilder.ts"
 import { convertFullHexString } from "./utils/utils.ts"
-import type { DojoEngine } from "./DojoEngine.ts"
 
 type State = { [key: string]: Pixel | undefined }
 
@@ -79,12 +77,12 @@ class DojoSqlPixelStore implements PixelStore {
 
         try {
             const subscription = this.sdk.client.onEntityUpdated(
-                [KeysClause(["pixelaw-Pixel"], [undefined], "VariableLen").build() as unknown as EntityKeysClause],
-                (id, data) => {
-                    if (id === "0x0") return
+                KeysClause(["pixelaw-Pixel"], [undefined], "VariableLen").build(),
+                (data) => {
                     try {
-                        const p = data["pixelaw-Pixel"]
-                        console.log("pixel from sub", p)
+                        console.log("pixel from sub", data)
+                        const p = data["models"]["pixelaw-Pixel"]
+                        const id = data["hashed_keys"]
                         if (Object.keys(data).length === 0) {
                             // Pixel got deleted
                             this.deletePixel(this.idLookupTable[id])
@@ -149,6 +147,15 @@ class DojoSqlPixelStore implements PixelStore {
         this.worker.postMessage({ query, toriiUrl: this.toriiUrl })
     }
 
+    // public applyOptimisticState(pixel: Pixel): void {
+    //     const newQueryBounds = getQueryBounds(newBounds)
+
+    //     if (!this.queryBounds || !areBoundsEqual(this.queryBounds, newQueryBounds)) {
+    //         this.queryBounds = newQueryBounds
+    //         this.refresh()
+    //     }
+    // }
+
     public prepare(newBounds: Bounds): void {
         const newQueryBounds = getQueryBounds(newBounds)
 
@@ -196,10 +203,12 @@ class DojoSqlPixelStore implements PixelStore {
         this.setPixel(key, pixel)
     }
 
-    public setPixels(pixels: { key: string; pixel: Pixel }[]): void {
-        for (const { key, pixel } of pixels) {
-            this.setPixel(key, pixel)
+    public setPixels(pixels: Pixel[]): void {
+        for (const p of pixels) {
+            this.setPixel(`${p.x}_${p.y}`, p)
         }
+        this.eventEmitter.emit("cacheUpdated", Date.now())
+        console.log("p up")
     }
 
     public updateCache() {}

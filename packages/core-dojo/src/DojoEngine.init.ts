@@ -2,15 +2,16 @@ import type ControllerConnector from "@cartridge/connector/controller"
 import type { Manifest } from "@dojoengine/core"
 import { DojoProvider } from "@dojoengine/core"
 import { BurnerConnector, BurnerManager, type BurnerManagerOptions } from "@dojoengine/create-burner"
-import { init, KeysClause, type SDK, ToriiQueryBuilder, type ToriiResponse } from "@dojoengine/sdk"
+import { type SDK, init } from "@dojoengine/sdk"
 import type { App, PixelawCore } from "@pixelaw/core"
-import { Account, RpcProvider } from "starknet"
+import { Account, type ProviderInterface, RpcProvider } from "starknet"
 import type { Storage, StorageValue } from "unstorage"
 import type { SchemaType } from "./generated/models.gen.ts"
-import type { DojoConfig } from "./types.ts"
+import type { DojoConfig, SimpleContract } from "./types.ts"
 import { getControllerConnector } from "./utils/controller.ts"
-import { felt252ToString, felt252ToUnicode, formatAddress, getAbi } from "./utils/utils.starknet.ts"
+import { felt252ToString, felt252ToUnicode, formatAddress, getAbi, getClass } from "./utils/utils.starknet.ts"
 
+import { queryTorii } from "@dojoengine/sdk/sql"
 import { baseManifest } from "./utils/manifest.js"
 
 export type DojoStuff = {
@@ -40,8 +41,8 @@ export async function dojoInit(worldConfig: DojoConfig, core: PixelawCore): Prom
         },
         domain: {
             name: "pixelaw",
-            version: "1.0",
-            chainId: "KATANA",
+            version: "1",
+            chainId: "SN_SEPOLIA",
             revision: "1",
         },
     }
@@ -102,26 +103,41 @@ async function fetchAppsAndManifest(
                 },
             }
         })
+        const provider = new RpcProvider({ nodeUrl: worldConfig.rpcUrl })
 
-        const contracts = await Promise.all(
-            apps.map((app) => getAbi(new RpcProvider({ nodeUrl: worldConfig.rpcUrl }), app)),
+        const coreActionsAddress = await queryTorii(
+            worldConfig.toriiUrl,
+            `SELECT *
+                FROM "pixelaw-CoreActionsAddress"
+                LIMIT 1;`,
+            (rows: any[]) => {
+                return rows[0].value
+            },
         )
+        const coreActionsClass = getClass(provider, coreActionsAddress)
 
-        // TODO Retrieve core actions manifest too, so we'll have the address for process_queue
+        let contracts: SimpleContract[] = [
+            {
+                kind: "DojoContract",
+                address: coreActionsAddress,
+                abi: coreActionsClass.abi,
+                tag: "pixelaw-actions",
+                name: "",
+            },
+        ]
 
-        // TODO make this dynamic based on chain
+        // TODO WE're now adding ALL apps to the list to be approved for sessions.
+        // Eventually we'll let the user add apps so this will change
+        contracts = contracts.concat(await Promise.all(apps.map((app) => getAbi(provider, app))))
+
         const base = baseManifest(worldConfig.world)
-
-        const coreContract = base.contracts[0]
 
         const manifest = {
             ...base,
             contracts,
         } as unknown as Manifest
 
-        // console.log(coreContract)
-
-        return { apps, manifest, coreAddress: coreContract.address }
+        return { apps, manifest, coreAddress: coreActionsAddress }
     } catch (error) {
         console.error("Error fetching apps and manifest:", error)
         return { apps: [], manifest: {} as Manifest, coreAddress: "" }
@@ -129,7 +145,6 @@ async function fetchAppsAndManifest(
 }
 
 function setupControllerConnector(manifest: Manifest, worldConfig: DojoConfig): ControllerConnector | null {
-    // return null // TODO disabling controller since it broke with latest dojo update
     if (!worldConfig.wallets.controller) {
         return null
     }
@@ -145,7 +160,7 @@ function setupControllerConnector(manifest: Manifest, worldConfig: DojoConfig): 
               rpcUrl: worldConfig.wallets.controller.rpcUrl!,
           })
         : null
-
+    // console.log("c", worldConfig)
     controllerConnectorCache.set(cacheKey, connector)
     return connector
 }
@@ -185,7 +200,7 @@ async function setupBurnerConnector(
                 feeTokenAddress: worldConfig.feeTokenAddress,
                 rpcProvider: rpcProvider.provider,
                 masterAccount: new Account(
-                    rpcProvider.provider,
+                    rpcProvider.provider as never as ProviderInterface,
                     burnerConfig.masterAddress!,
                     burnerConfig.masterPrivateKey!,
                 ),

@@ -89,6 +89,7 @@ export const ConnectorProvider: React.FC<ConnectorProviderProps> = ({ children }
                         const chainId = await currentAccount.getChainId()
 
                         const wallet = new DojoWallet(currentConnector.id as DojoWalletId, chainId, currentAccount)
+
                         pixelawCore.wallet = wallet
                     }
                     pixelawCore.account = currentAccount

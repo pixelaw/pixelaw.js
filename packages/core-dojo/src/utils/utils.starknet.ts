@@ -1,12 +1,17 @@
-import {type RpcProvider, shortString} from "starknet" // BEWARE: it seems that using this in a service/webworker crashes with error:
-
+import type { App } from "@pixelaw/core" // BEWARE: it seems that using this in a service/webworker crashes with error:
+import { type BigNumberish, type RpcProvider, shortString } from "starknet"
+import type { SimpleContract } from "../types.ts"
 // BEWARE: it seems that using this in a service/webworker crashes with a "global not found" ponycode error
 
-export async function getAbi(provider: RpcProvider, app: any): Promise<any> {
+export async function getClass(provider: RpcProvider, system: BigNumberish): Promise<any> {
+    const ch = await provider.getClassHashAt(system)
+    return await provider.getClass(ch)
+}
+
+export async function getAbi(provider: RpcProvider, app: App): Promise<SimpleContract> {
     let name = felt252ToString(app.name).toLowerCase()
 
-    const ch = await provider.getClassHashAt(app.system)
-    const cl = await provider.getClass(ch)
+    const cl = await getClass(provider, app.system)
 
     const tag = `pixelaw-${name}_actions`
     name = `pixelaw::apps::${name}::app::${name}_actions`
@@ -19,6 +24,7 @@ export async function getAbi(provider: RpcProvider, app: any): Promise<any> {
         tag,
     }
 }
+
 export const felt252ToString = (felt252Input: string | number | bigint) => {
     let result = felt252Input
 

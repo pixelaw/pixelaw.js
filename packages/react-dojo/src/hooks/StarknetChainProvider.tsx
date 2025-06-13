@@ -1,7 +1,7 @@
-import type {ChainProviderProps} from "@pixelaw/react"
-import { mainnet, sepolia} from "@starknet-react/chains"
-import {publicProvider, StarknetConfig} from "@starknet-react/core"
-import {ConnectorProvider} from "./ConnectorProvider"
+import type { ChainProviderProps } from "@pixelaw/react"
+import { mainnet, sepolia } from "@starknet-react/chains"
+import { StarknetConfig, publicProvider } from "@starknet-react/core"
+import { ConnectorProvider } from "./ConnectorProvider"
 
 export const StarknetChainProvider: React.FC<ChainProviderProps> = ({ children }) => {
     return (

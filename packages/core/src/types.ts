@@ -2,14 +2,14 @@ import type mitt from "mitt"
 import type { PixelawCore } from "./PixelawCore.ts"
 
 export type Pixel = {
+    x: number
+    y: number
     action: string
     app: string
     color: number | string
     owner: string
     text: string
     timestamp: number | string
-    x: number
-    y: number
 }
 
 export type App = {
@@ -35,7 +35,7 @@ export type InteractParam = {
     type: "string" | "number" | "enum" | "emoji"
     typeName: string | null
     variants: Variant[]
-    transformer: () => void
+    transformer: () => Promise<void>
     value?: number | string | null
     systemOnly?: boolean
 }
@@ -244,7 +244,7 @@ export interface PixelStore {
     getPixel: (coordinate: Coordinate) => Pixel | undefined
     setPixelColor: (coord: Coordinate, color: number) => void
     setPixel: (key: string, pixel: Pixel) => void
-    setPixels: (pixels: { key: string; pixel: Pixel }[]) => void
+    setPixels: (pixels: Pixel[]) => void
     unload?: () => Promise<void>
 }
 

@@ -1,23 +1,22 @@
 import { KeysClause, type SDK } from "@dojoengine/sdk"
 import { queryTorii } from "@dojoengine/sdk/sql"
 import {
-    type NotificationStore,
-    type Notification,
-    QueueStore,
-    type NotificationStoreEvents,
     type Bounds,
-    MAX_DIMENSION,
-    areBoundsEqual,
-    type PixelawCore,
     type Coordinate,
+    MAX_DIMENSION,
+    type Notification,
+    type NotificationStore,
+    type NotificationStoreEvents,
+    type PixelawCore,
     type Position,
+    QueueStore,
+    areBoundsEqual,
 } from "@pixelaw/core"
 import mitt from "mitt"
 import type { DojoStuff } from "./DojoEngine.init.ts"
-import type { SchemaType } from "./generated/models.gen.ts"
-import type { EntityKeysClause } from "@dojoengine/torii-client"
-import { getQueryBounds } from "./utils/querybuilder.ts"
 import type { DojoEngine } from "./DojoEngine.ts"
+import type { SchemaType } from "./generated/models.gen.ts"
+import { getQueryBounds } from "./utils/querybuilder.ts"
 import { convertFullHexString } from "./utils/utils.ts"
 
 type State = { [key: string]: Notification | undefined }
@@ -89,18 +88,12 @@ export class DojoNotificationStore implements NotificationStore {
         if (this.isSubscribed) return
         try {
             const subscription = this.sdk.client.onEventMessageUpdated(
-                [
-                    KeysClause(
-                        ["pixelaw-Notification"],
-                        [undefined],
-                        "VariableLen",
-                    ).build() as unknown as EntityKeysClause,
-                ],
+                KeysClause(["pixelaw-Notification"], [undefined], "VariableLen").build(),
                 (id, data) => {
                     if (id === "0x0") return
                     try {
-                        const item = data["pixelaw-Notification"]
-                        console.log(item)
+                        const item = data["models"]["pixelaw-Notification"]
+                        console.log("notification from sub", item)
                         const notification: Notification = {
                             from: item.from.value.option === "None" ? null : item.from.value.value.value,
                             to: item.to.value.option === "None" ? null : item.to.value.value.value,

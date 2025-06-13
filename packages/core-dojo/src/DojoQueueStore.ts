@@ -4,7 +4,6 @@ import type { QueueItem, QueueStore, QueueStoreEvents } from "@pixelaw/core"
 import mitt from "mitt"
 import type { DojoStuff } from "./DojoEngine.init.ts"
 import type { SchemaType } from "./generated/models.gen.ts"
-import type { EntityKeysClause } from "@dojoengine/torii-client"
 
 type State = { [key: string]: QueueItem | undefined }
 
@@ -41,7 +40,7 @@ export class DojoQueueStore implements QueueStore {
                 this.toriiUrl,
                 `SELECT qs.id, qs.timestamp, qs.called_system, qs.selector, qs.calldata
                 FROM "pixelaw-QueueScheduled" qs
-                INNER JOIN "pixelaw-QueueItem" qi 
+                INNER JOIN "pixelaw-QueueItem" qi
                 ON qi.id = qs.id;
                 `,
                 (rows: any[]) => {
@@ -68,17 +67,11 @@ export class DojoQueueStore implements QueueStore {
         if (this.isSubscribed) return
         try {
             const subscription = this.sdk.client.onEventMessageUpdated(
-                [
-                    KeysClause(
-                        ["pixelaw-QueueScheduled"],
-                        [undefined],
-                        "VariableLen",
-                    ).build() as unknown as EntityKeysClause,
-                ],
+                KeysClause(["pixelaw-QueueScheduled"], [undefined], "VariableLen").build(),
                 (id, data) => {
                     if (id === "0x0") return
                     try {
-                        const item = data["pixelaw-QueueScheduled"]
+                        const item = data["models"]["pixelaw-QueueScheduled"]
 
                         const queueItem: QueueItem = {
                             calldata: item.calldata.value.map((val) => val.value),

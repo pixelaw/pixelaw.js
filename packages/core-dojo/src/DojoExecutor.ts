@@ -1,9 +1,8 @@
 import { type DojoCall, type DojoProvider, parseDojoCall } from "@dojoengine/core"
+import { type Coordinate, type Executor, NAMESPACE, type PixelawCore, parsePixelError } from "@pixelaw/core"
+import type { AccountInterface, BigNumberish, UniversalDetails } from "starknet"
 import type { DojoWallet } from "./DojoWallet.ts"
-import { type Coordinate, type Executor, NAMESPACE, parsePixelError, type PixelawCore } from "@pixelaw/core"
-import { Account, type AccountInterface, type BigNumberish, ReceiptTx, type UniversalDetails } from "starknet"
-import { customExecute } from "./utils/customExecute.ts"
-import type { OptimisticNonceAccount } from "./utils/OptimisticNonceAccount.ts"
+import { parseEventsFromSimulation } from "./utils/parseEvents.ts"
 
 interface ExecutionTask {
     dojoCall: DojoCall
@@ -34,9 +33,9 @@ export class DojoExecutor implements Executor {
 
     public set account(newAccount: AccountInterface) {
         this._account = newAccount
-        this.syncNonce().then(() => {
-            // let it finish
-        })
+        // this.syncNonce().then(() => {
+        //     // let it finish
+        // })
     }
 
     public get pendingCalls(): number {
@@ -66,10 +65,8 @@ export class DojoExecutor implements Executor {
 
         this.executing = true
         const task = this.queue.shift()!
-        const account = this.core.account
-
-        // biome-ignore lint/complexity/useLiteralKeys: We're customizing account
-        account["customExecute"] = customExecute.bind(account)
+        const account = this.core.account.walletProvider.account as AccountInterface
+        console.log("processQueue")
 
         try {
             const options: UniversalDetails = {
@@ -80,30 +77,97 @@ export class DojoExecutor implements Executor {
 
             const call = parseDojoCall(this.provider.manifest, NAMESPACE, task.dojoCall)
 
-            // @ts-ignore was bound above
-            const { transaction_hash } = await account.customExecute([call], options)
+            console.log(account)
 
-            const [_, receipt] = await Promise.all([
-                this.syncNonce(),
-                this.provider.provider.getTransactionReceipt(transaction_hash),
+            const [sim, { transaction_hash }] = await Promise.all([
+                account.simulateTransaction(
+                    [
+                        {
+                            ...call,
+                            type: "INVOKE_FUNCTION",
+                        },
+                    ],
+                    options,
+                ),
+                account.execute([call], options),
             ])
+            console.log("s", sim[0], transaction_hash)
 
-            if (receipt.isSuccess()) {
-                task.onSuccess(receipt)
+            // FIXME somehow the actual simulation output is not conforming the types
+            if (sim[0].transaction_trace?.execute_invocation?.revert_reason) {
+                const error = sim[0].transaction_trace.execute_invocation.revert_reason
+
+                console.log("fail", error)
+                task.onFail(error)
             } else {
-                // biome-ignore lint/complexity/useLiteralKeys: TODO
-                task.onFail(receipt["revert_reason"])
+                // TODO parse the sim for all the pixel changes and apply those to the PixelStore
+                const pixels = parseEventsFromSimulation(
+                    "0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
+                    sim,
+                )
+
+                this.core.updateService["channel"].publish("PixelUpdate", JSON.stringify(pixels))
+
+                /*
+                // TODO properly implement the messaging using DOJO.
+                // Right now it's changing drastically so i used Ably just to get it working.
+                //
+                //
+                this.core.pixelStore.setPixels(pixels)
+                // console.info(pixels)
+                //
+                const msg = this.core.engine.dojoSetup.sdk.generateTypedData("pixelaw-Pixel", {
+                    position: { x: 123, y: 321 },
+                    action: "ac",
+                    color: 1234,
+                    owner: "",
+                    text: "ac",
+                    timestamp: "dd",
+                    app: "app",
+                })
+                console.log("msg", msg)
+                try {
+                    const signature = await account.signMessage(msg)
+
+                    console.log("s", signature)
+
+                    try {
+                        await this.core.engine.dojoSetup.sdk.client.publishMessage(
+                            JSON.stringify(msg),
+                            signature as string[],
+                        )
+                        console.log("yay published")
+                        // reset()
+                    } catch (error) {
+                        console.error("failed to publish message:", error)
+                    }
+
+                } catch (error) {
+                    console.error("failed to sign message:", error)
+                }
+                console.info(msg)
+*/
+                task.onSuccess(sim[0])
             }
         } catch (error) {
+            console.log(error)
             task.onFail(error)
         } finally {
+            console.log("done!")
             this.executing = false
             this.processQueue()
         }
     }
 }
+
+/*
+Transaction execution has failed:
+0: Error in the called contract (contract address: 0x05f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718, class hash: 0x0743c83c41ce99ad470aa308823f417b2141e02e04571f5c0004e743556e7faf, selector: 0x015d40a3d6ca2ac30f4031e42be28da9b056fef9bb7357ac5e85627ee876e5ad):
+Execution failed. Failure reason:
+(0x617267656e742f6d756c746963616c6c2d6661696c6564 ('argent/multicall-failed'), 0x0 (''), "10_12 Another player is here", 0x454e545259504f494e545f4641494c4544 ('ENTRYPOINT_FAILED')).
+*/
 function parseError(error: string): { coordinate: Coordinate; error: string } {
-    const regex = /Failure reason: "([^"]+)"/
+    const regex = /"\s*(\d+_\d+\s[^"]+)\s*"/
     const match = error.match(regex)
 
     if (!match) {
