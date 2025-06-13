@@ -1,12 +1,5 @@
-import type { DojoProvider, DojoCall } from "@dojoengine/core"
-import {
-    type Account,
-    type AccountInterface,
-    type BigNumberish,
-    type CairoOption,
-    type CairoCustomEnum,
-    ByteArray,
-} from "starknet"
+import type { DojoCall, DojoProvider } from "@dojoengine/core"
+import type { Account, AccountInterface, BigNumberish, CairoCustomEnum, CairoOption } from "starknet"
 import type * as models from "./models.gen"
 
 export function setupWorld(provider: DojoProvider) {
@@ -31,7 +24,9 @@ export function setupWorld(provider: DojoProvider) {
         app: string,
     ) => {
         try {
+            // @ts-ignore
             return await provider.execute(
+                // @ts-ignore
                 snAccount,
                 build_actions_addArea_calldata(bounds, owner, color, app),
                 "pixelaw",

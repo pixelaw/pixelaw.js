@@ -120,7 +120,7 @@ async function fetchAppsAndManifest(
             {
                 kind: "DojoContract",
                 address: coreActionsAddress,
-                abi: coreActionsClass.abi,
+                abi: coreActionsClass["abi"],
                 tag: "pixelaw-actions",
                 name: "",
             },
