@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.7.0
+
+### Minor Changes
+
+- upgrade
+
 ## 0.6.24
 
 ### Patch Changes
