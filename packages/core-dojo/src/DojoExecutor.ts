@@ -56,18 +56,39 @@ export class DojoExecutor implements Executor {
         console.log("aa", this._nonce)
     }
 
-    private async processQueue(): Promise<void> {
-        if (this.executing || this.queue.length === 0) return
+    private async processQueue(): Promise<void> {        
+        if (this.executing || this.queue.length === 0) {
+            console.log("DojoExecutor: Skipping processQueue - executing:", this.executing, "queue empty:", this.queue.length === 0)
+            return
+        }
+        
         if (!this.core.account) {
-            console.log("account not loaded")
+            console.log("DojoExecutor: account not loaded")
+            return
+        }
+        
+        // Determine the correct way to access the account
+        let account: AccountInterface | null = null
+        
+        if (this.core.account.walletProvider?.account) {
+            // Legacy path - account is nested in walletProvider
+            account = this.core.account.walletProvider.account as AccountInterface
+            console.log("DojoExecutor: Using walletProvider.account path")
+        } else if (this.core.account.account) {
+            // DojoWallet path - account is in .account property
+            account = this.core.account.account as AccountInterface
+            console.log("DojoExecutor: Using DojoWallet.account path")
+        } else if (this.core.account.address && this.core.account.execute) {
+            // Direct AccountInterface - core.account is the account itself
+            account = this.core.account as AccountInterface
+        
+        if (!account) {
+            console.log("DojoExecutor: Could not find account in any expected location")
             return
         }
 
         this.executing = true
         const task = this.queue.shift()!
-        const account = this.core.account.walletProvider.account as AccountInterface
-        console.log("processQueue")
-
         try {
             const options: UniversalDetails = {
                 version: 3,
