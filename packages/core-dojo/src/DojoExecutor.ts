@@ -90,10 +90,15 @@ export class DojoExecutor implements Executor {
         this.executing = true
         const task = this.queue.shift()!
         try {
+            // Get the current nonce from the account instead of using cached nonce
+            const currentNonce = await account.getNonce()        
+            // Update our cached nonce
+            this._nonce = currentNonce
+            
             const options: UniversalDetails = {
                 version: 3,
                 blockIdentifier: "pending",
-                nonce: this._nonce,
+                nonce: currentNonce,
             }
 
             const call = parseDojoCall(this.provider.manifest, NAMESPACE, task.dojoCall)
