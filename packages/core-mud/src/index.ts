@@ -1,1 +1,1 @@
-export * from "./MudEngine.ts"
+export * from "./MudEngine.ts";

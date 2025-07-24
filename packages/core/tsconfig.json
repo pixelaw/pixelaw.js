@@ -19,8 +19,7 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "paths": {
-    }
+    "paths": {}
   },
   "include": ["src"]
 }

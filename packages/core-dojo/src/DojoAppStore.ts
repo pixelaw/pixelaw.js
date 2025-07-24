@@ -1,63 +1,63 @@
-import type { App, AppStore } from "@pixelaw/core"
-import type { DojoStuff } from "./DojoEngine.init.ts"
-import { queryTorii } from "@dojoengine/sdk/sql"
-import { convertFullHexString } from "./utils/utils.ts"
+import type { App, AppStore } from "@pixelaw/core";
+import type { DojoStuff } from "./DojoEngine.init.ts";
+import { queryTorii } from "@dojoengine/sdk/sql";
+import { convertFullHexString } from "./utils/utils.ts";
 
-type State = { [key: string]: App | undefined }
+type State = { [key: string]: App | undefined };
 
 export class DojoAppStore implements AppStore {
-    private dojoStuff
-    private state: State = {}
+  private dojoStuff;
+  private state: State = {};
 
-    constructor(dojoStuff: DojoStuff) {
-        this.dojoStuff = dojoStuff
-    }
+  constructor(dojoStuff: DojoStuff) {
+    this.dojoStuff = dojoStuff;
+  }
 
-    public static async getInstance(dojoStuff: DojoStuff): Promise<DojoAppStore> {
-        const dojoAppStore = new DojoAppStore(dojoStuff)
+  public static async getInstance(dojoStuff: DojoStuff): Promise<DojoAppStore> {
+    const dojoAppStore = new DojoAppStore(dojoStuff);
 
-        await dojoAppStore.initialize()
-        // await dojoAppStore.subscribe()
-        return dojoAppStore
-    }
+    await dojoAppStore.initialize();
+    // await dojoAppStore.subscribe()
+    return dojoAppStore;
+  }
 
-    private async initialize() {
-        try {
-            const items = await queryTorii(
-                this.dojoStuff.toriiUrl,
-                `SELECT * 
+  private async initialize() {
+    try {
+      const items = await queryTorii(
+        this.dojoStuff.toriiUrl,
+        `SELECT * 
                 FROM "pixelaw-App";`,
-                (rows: any[]) => {
-                    return rows
-                },
-            )
-            for (const item of items) {
-                const app: App = {
-                    action: convertFullHexString(item.action),
-                    icon: convertFullHexString(item.icon),
-                    name: convertFullHexString(item.name),
-                    plugin: item.plugin,
-                    system: item.system,
-                    entity: { id: "" }, // TODO
-                }
-                this.state[app.name] = app
-                console.log("APP", app)
-            }
-            // console.log({ items })
-        } catch (e) {
-            console.error(e)
-        }
+        (rows: any[]) => {
+          return rows;
+        },
+      );
+      for (const item of items) {
+        const app: App = {
+          action: convertFullHexString(item.action),
+          icon: convertFullHexString(item.icon),
+          name: convertFullHexString(item.name),
+          plugin: item.plugin,
+          system: item.system,
+          entity: { id: "" }, // TODO
+        };
+        this.state[app.name] = app;
+        console.log("APP", app);
+      }
+      // console.log({ items })
+    } catch (e) {
+      console.error(e);
     }
+  }
 
-    getAll(): App[] {
-        return Object.values(this.state)
-    }
+  getAll(): App[] {
+    return Object.values(this.state);
+  }
 
-    getByName(name: string): App | undefined {
-        return this.state[name]
-    }
+  getByName(name: string): App | undefined {
+    return this.state[name];
+  }
 
-    getBySystem(system: string): App | undefined {
-        return Object.values(this.state).find((app) => app?.system === system)
-    }
+  getBySystem(system: string): App | undefined {
+    return Object.values(this.state).find((app) => app?.system === system);
+  }
 }
