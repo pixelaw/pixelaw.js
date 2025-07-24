@@ -1,2 +1,2 @@
-export * from "./hooks/StarknetChainProvider"
-export * from "./pages/StarknetWalletSelectorPage"
+export * from "./hooks/StarknetChainProvider";
+export * from "./pages/StarknetWalletSelectorPage";

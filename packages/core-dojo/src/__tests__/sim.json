@@ -68,7 +68,10 @@
                   "steps": 1152
                 },
                 "messages": [],
-                "result": ["0x1", "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"]
+                "result": [
+                  "0x1",
+                  "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
+                ]
               },
               {
                 "call_type": "CALL",
@@ -97,7 +100,10 @@
                   "steps": 1152
                 },
                 "messages": [],
-                "result": ["0x1", "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"]
+                "result": [
+                  "0x1",
+                  "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
+                ]
               },
               {
                 "call_type": "CALL",
@@ -162,7 +168,18 @@
                   "steps": 9187
                 },
                 "messages": [],
-                "result": ["0x9", "0x0", "0xf09f8d87", "0xa", "0xe", "0xff7f00ff", "0x0", "0x0", "0x0", "0x0"]
+                "result": [
+                  "0x9",
+                  "0x0",
+                  "0xf09f8d87",
+                  "0xa",
+                  "0xe",
+                  "0xff7f00ff",
+                  "0x0",
+                  "0x0",
+                  "0x0",
+                  "0x0"
+                ]
               },
               {
                 "call_type": "CALL",
@@ -191,7 +208,10 @@
                   "steps": 1152
                 },
                 "messages": [],
-                "result": ["0x1", "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718"]
+                "result": [
+                  "0x1",
+                  "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718"
+                ]
               },
               {
                 "call_type": "CALL",
@@ -242,7 +262,10 @@
                       "steps": 1152
                     },
                     "messages": [],
-                    "result": ["0x1", "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"]
+                    "result": [
+                      "0x1",
+                      "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
+                    ]
                   },
                   {
                     "call_type": "CALL",
@@ -449,7 +472,21 @@
                   "steps": 29027
                 },
                 "messages": [],
-                "result": ["0x0", "0xa", "0xe", "0x0", "0x0", "0x1", "0x0", "0x0", "0x0", "0x0", "0x1", "0x0", "0x0"]
+                "result": [
+                  "0x0",
+                  "0xa",
+                  "0xe",
+                  "0x0",
+                  "0x0",
+                  "0x1",
+                  "0x0",
+                  "0x0",
+                  "0x0",
+                  "0x0",
+                  "0x1",
+                  "0x0",
+                  "0x0"
+                ]
               },
               {
                 "call_type": "CALL",
@@ -507,7 +544,17 @@
                   "steps": 7975
                 },
                 "messages": [],
-                "result": ["0x8", "0x0", "0x0", "0x0", "0x0", "0x0", "0x0", "0x0", "0x0"]
+                "result": [
+                  "0x8",
+                  "0x0",
+                  "0x0",
+                  "0x0",
+                  "0x0",
+                  "0x0",
+                  "0x0",
+                  "0x0",
+                  "0x0"
+                ]
               },
               {
                 "call_type": "CALL",
@@ -687,7 +734,10 @@
                       "steps": 1152
                     },
                     "messages": [],
-                    "result": ["0x1", "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"]
+                    "result": [
+                      "0x1",
+                      "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
+                    ]
                   },
                   {
                     "call_type": "CALL",
@@ -745,7 +795,17 @@
                       "steps": 7975
                     },
                     "messages": [],
-                    "result": ["0x8", "0x0", "0x0", "0x0", "0x0", "0x0", "0x0", "0x0", "0x0"]
+                    "result": [
+                      "0x8",
+                      "0x0",
+                      "0x0",
+                      "0x0",
+                      "0x0",
+                      "0x0",
+                      "0x0",
+                      "0x0",
+                      "0x0"
+                    ]
                   },
                   {
                     "call_type": "CALL",

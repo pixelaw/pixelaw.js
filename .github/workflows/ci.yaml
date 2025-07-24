@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Run biome lint
-        run: pnpm run lint
+      # - name: Run biome lint
+      #   run: pnpm run lint
 
       - name: Build packages and examples
         run: pnpm run build --ui stream

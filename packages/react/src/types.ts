@@ -1,9 +1,9 @@
-import type { ReactNode } from "react"
+import type { ReactNode } from "react";
 
 export interface ChainProviderProps {
-    children: ReactNode
+  children: ReactNode;
 }
 
 export interface IChainProvider {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
