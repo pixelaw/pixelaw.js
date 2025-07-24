@@ -81,6 +81,7 @@ export class DojoExecutor implements Executor {
         } else if (this.core.account.address && this.core.account.execute) {
             // Direct AccountInterface - core.account is the account itself
             account = this.core.account as AccountInterface
+        }
         
         if (!account) {
             console.log("DojoExecutor: Could not find account in any expected location")
