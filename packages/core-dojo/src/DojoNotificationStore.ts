@@ -65,11 +65,18 @@ export class DojoNotificationStore implements NotificationStore {
 				),
 				(rows: any[]) => {
 					return rows.map((item) => {
-						// const item = JSON.parse(str.d)
 						return {
-							...item,
-							message: convertFullHexString(item.text),
-						} as Notification;
+							from: item.from,
+							to: item.to,
+							color: item.color,
+							app: item.app,
+							position: {
+								x: item["position.x"],
+								y: item["position.y"],
+							},
+							text: convertFullHexString(item.text),
+							timestamp: Date.now(),
+						};
 					});
 				},
 			);
@@ -91,31 +98,29 @@ export class DojoNotificationStore implements NotificationStore {
 					[undefined],
 					"VariableLen",
 				).build(),
-				(id, data) => {
-					if (id === "0x0") return;
+				(data) => {
 					try {
-						const item = data.models["pixelaw-Notification"];
-						console.log("notification from sub", item);
-						const notification: Notification = {
-							from:
-								item.from.value.option === "None"
-									? null
-									: item.from.value.value.value,
-							to:
-								item.to.value.option === "None"
-									? null
-									: item.to.value.value.value,
-							color: item.color.value,
-							app: item.app.value, // TODO
+						console.log("notification from sub", data);
+						const p = data.models["pixelaw-Notification"];
+						
+						if (Object.keys(data).length === 0) {
+							// Notification got deleted
+							return;
+						}
+
+						const notification = {
+							from: p.from.value.option === "None" ? null : p.from.value.value.value,
+							to: p.to.value.option === "None" ? null : p.to.value.value.value,  
+							color: p.color.value,
+							app: p.app.value,
 							position: {
-								x: item.position.value.x.value,
-								y: item.position.value.y.value,
+								x: p.position.value.x.value,
+								y: p.position.value.y.value,
 							},
-							text: convertFullHexString(item.text.value),
+							text: convertFullHexString(p.text.value),
+							timestamp: Date.now(),
 						};
-						// console.log("notification", notification)
-						// TODO decide if we store the Notification or not
-						// this.setNotification(item.id.value, notification)
+
 						this.core.events.emit("notification", notification);
 					} catch (e) {
 						console.error(e);
