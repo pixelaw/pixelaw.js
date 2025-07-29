@@ -1,1261 +1,1261 @@
 [
-  {
-    "resourceBounds": {
-      "l2_gas": {
-        "max_amount": "0x0",
-        "max_price_per_unit": "0x0"
-      },
-      "l1_gas": {
-        "max_amount": "0x21a",
-        "max_price_per_unit": "0x18f4078579ea"
-      }
-    },
-    "suggestedMaxFee": 9849659446298041,
-    "fee_estimation": {
-      "data_gas_consumed": "0x4e0",
-      "data_gas_price": "0x9a6",
-      "gas_consumed": "0x167",
-      "gas_price": "0x10a2afae5147",
-      "overall_fee": "0x1754245da303d1",
-      "unit": "FRI"
-    },
-    "transaction_trace": {
-      "execute_invocation": {
-        "call_type": "CALL",
-        "calldata": [
-          "0x1",
-          "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-          "0x476d5e1b17fd9d508bd621909241c5eb4c67380f3651f54873c5c1f2b891f4",
-          "0x6",
-          "0x1",
-          "0x1",
-          "0x1",
-          "0xa",
-          "0x10",
-          "0x0"
-        ],
-        "caller_address": "0x0",
-        "calls": [
-          {
-            "call_type": "CALL",
-            "calldata": ["0x1", "0x1", "0x1", "0xa", "0x10", "0x0"],
-            "caller_address": "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
-            "calls": [
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x5379e1ce3a70cb70f1e96dae1b142164574f33d4e32cebdb965b5aec30222c5",
-                  "0x1",
-                  "0x710a93409aeb869505de269dbbc9ad0f7ec232d3c3136da94255c300cdbecb5",
-                  "0x1",
-                  "0x1",
-                  "0x1afeeaff0ed5cee7d05a21078399c2f56226b0cd5657062500cef4c4e736f85",
-                  "0x0",
-                  "0x1",
-                  "0xfb"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [],
-                "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                "entry_point_type": "EXTERNAL",
-                "events": [],
-                "execution_resources": {
-                  "memory_holes": 225,
-                  "poseidon_builtin_applications": 4,
-                  "range_check_builtin_applications": 38,
-                  "steps": 1152
-                },
-                "messages": [],
-                "result": [
-                  "0x1",
-                  "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
-                ]
-              },
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x5379e1ce3a70cb70f1e96dae1b142164574f33d4e32cebdb965b5aec30222c5",
-                  "0x1",
-                  "0x710a93409aeb869505de269dbbc9ad0f7ec232d3c3136da94255c300cdbecb5",
-                  "0x1",
-                  "0x1",
-                  "0x1afeeaff0ed5cee7d05a21078399c2f56226b0cd5657062500cef4c4e736f85",
-                  "0x0",
-                  "0x1",
-                  "0xfb"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [],
-                "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                "entry_point_type": "EXTERNAL",
-                "events": [],
-                "execution_resources": {
-                  "memory_holes": 225,
-                  "poseidon_builtin_applications": 4,
-                  "range_check_builtin_applications": 38,
-                  "steps": 1152
-                },
-                "messages": [],
-                "result": [
-                  "0x1",
-                  "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
-                ]
-              },
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x30a1b371016270e1d0c33e176d9d07ab01d801d8b1f0e1fd1d45534137f2ce",
-                  "0x1",
-                  "0x77499bd5f741bb5b825361752c3d8af717fcb21573e228bac9dabb6918a82e6",
-                  "0x1",
-                  "0x8",
-                  "0x361458367e696363fbcc70777d07ebbd2394e89fd0adcaf147faccd1d294d60",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x253597a712ba447f1c5f4de994793331511fb60c29ca3aa3ec8ebbec77d64ad",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x334f8ce3b01e25d0b6fe82d0fdb6eb534f3183d7dc5a6bb44d8eb9f676f650c",
-                  "0x1",
-                  "0x2",
-                  "0x121d1cadbcfa91eec65aa16715b94ffc1c9654ba57ea2ef1a2127bca1127a83",
-                  "0x0",
-                  "0x1",
-                  "0x10",
-                  "0x3847cf31c36389df832d0d4d3df7cf28f211e3f83173e5c157bab31573d61f3",
-                  "0x0",
-                  "0x1",
-                  "0x10",
-                  "0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
-                  "0x0",
-                  "0x1",
-                  "0x20",
-                  "0x67f8fc7ed32f92f4a1f23471f5db5159b70326505f677d857a769adfd98e52",
-                  "0x0",
-                  "0x1",
-                  "0x20",
-                  "0x168b5da86b03134deb85af20724106461a2615ae3b3a1cfe64ad8f8954c5521",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x11386389549b9c52ff8cf040c0d37f1ecef70b726299e4d77ae9ba2e364559f",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x9df296b4a74dc7bc300424dff4117eccc5286aa51001e1bbb67693c08ce25d",
-                  "0x0",
-                  "0x1",
-                  "0xfb"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [],
-                "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                "entry_point_type": "EXTERNAL",
-                "events": [],
-                "execution_resources": {
-                  "bitwise_builtin_applications": 8,
-                  "memory_holes": 1220,
-                  "poseidon_builtin_applications": 38,
-                  "range_check_builtin_applications": 442,
-                  "steps": 9187
-                },
-                "messages": [],
-                "result": [
-                  "0x9",
-                  "0x0",
-                  "0xf09f8d87",
-                  "0xa",
-                  "0xe",
-                  "0xff7f00ff",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x0"
-                ]
-              },
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
-                  "0x1",
-                  "0x117d91ddbe138c03174c42147b57e147d131c282cdd6ca683438c5ca1e4258b",
-                  "0x1",
-                  "0x1",
-                  "0x26d994cdb81aaccb84aa1f62bae636dc0aaf98ab22f66b0c9224f1edccd7cc9",
-                  "0x0",
-                  "0x1",
-                  "0xfb"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [],
-                "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                "entry_point_type": "EXTERNAL",
-                "events": [],
-                "execution_resources": {
-                  "memory_holes": 225,
-                  "poseidon_builtin_applications": 4,
-                  "range_check_builtin_applications": 38,
-                  "steps": 1152
-                },
-                "messages": [],
-                "result": [
-                  "0x1",
-                  "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718"
-                ]
-              },
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
-                  "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                  "0xa",
-                  "0xe",
-                  "0x0",
-                  "0x0",
-                  "0x1",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x1",
-                  "0x0",
-                  "0x0",
-                  "0x1",
-                  "0x0"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [
-                  {
-                    "call_type": "CALL",
-                    "calldata": [
-                      "0x5379e1ce3a70cb70f1e96dae1b142164574f33d4e32cebdb965b5aec30222c5",
-                      "0x1",
-                      "0x710a93409aeb869505de269dbbc9ad0f7ec232d3c3136da94255c300cdbecb5",
-                      "0x1",
-                      "0x1",
-                      "0x1afeeaff0ed5cee7d05a21078399c2f56226b0cd5657062500cef4c4e736f85",
-                      "0x0",
-                      "0x1",
-                      "0xfb"
-                    ],
-                    "caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                    "calls": [],
-                    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                    "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                    "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                    "entry_point_type": "EXTERNAL",
-                    "events": [],
-                    "execution_resources": {
-                      "memory_holes": 225,
-                      "poseidon_builtin_applications": 4,
-                      "range_check_builtin_applications": 38,
-                      "steps": 1152
-                    },
-                    "messages": [],
-                    "result": [
-                      "0x1",
-                      "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
-                    ]
-                  },
-                  {
-                    "call_type": "CALL",
-                    "calldata": [
-                      "0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
-                      "0x1",
-                      "0x117d91ddbe138c03174c42147b57e147d131c282cdd6ca683438c5ca1e4258b",
-                      "0x1",
-                      "0x8",
-                      "0x2f028ca0e8edb4a8c9757ca4fdccab25fa1e0317da1188108f7d2dee14902fb",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
-                      "0x0",
-                      "0x1",
-                      "0x20",
-                      "0x5cfa5c7e504eb4ab4b5836e27a52bd193ebb7173419dc5002c302e8176c61f",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0xbd14cb6f0ee671aab46bd04cf1b9e7b6c7797739207e1e89d62db252996311",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0x2bf727c48eac2c66272456b06a885c5cc03e54d140f63b63b6fd10c1227958e",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0x2016836a56b71f0d02689e69e326f4f4c1b9057164ef592671cf0d37c8040c0",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x199d5e4e43121196cadfeaea326e46f58d9db74299decfd64bd3b700350ccd9",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
-                      "0x0",
-                      "0x1",
-                      "0xfb"
-                    ],
-                    "caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                    "calls": [],
-                    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                    "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                    "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                    "entry_point_type": "EXTERNAL",
-                    "events": [],
-                    "execution_resources": {
-                      "bitwise_builtin_applications": 8,
-                      "memory_holes": 1032,
-                      "poseidon_builtin_applications": 32,
-                      "range_check_builtin_applications": 398,
-                      "steps": 7975
-                    },
-                    "messages": [],
-                    "result": [
-                      "0x8",
-                      "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                      "0xff7f00ff",
-                      "0x683e1bc2",
-                      "0x683e1bc2",
-                      "0x0",
-                      "0x0",
-                      "0xf09f8d87",
-                      "0x636f6e666967757265"
-                    ]
-                  },
-                  {
-                    "call_type": "CALL",
-                    "calldata": [
-                      "0x3baaf9fe25823e8928b6fc6400e28e98d4b7618ff56faf269a11f3400a1c105",
-                      "0x1",
-                      "0x14dca4cec1eaae8ac8e80048da4f4e5165d3e2cb93520cdb8294c82ead422ee",
-                      "0x1",
-                      "0x1",
-                      "0x1a666cca84378d56bd6902ed679e04a9041116d4e21064ef2faf2756cd367c1",
-                      "0x0",
-                      "0x1",
-                      "0xfb"
-                    ],
-                    "caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                    "calls": [],
-                    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                    "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                    "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                    "entry_point_type": "EXTERNAL",
-                    "events": [],
-                    "execution_resources": {
-                      "memory_holes": 225,
-                      "poseidon_builtin_applications": 4,
-                      "range_check_builtin_applications": 38,
-                      "steps": 1152
-                    },
-                    "messages": [],
-                    "result": ["0x1", "0x14002a"]
-                  },
-                  {
-                    "call_type": "CALL",
-                    "calldata": [
-                      "0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
-                      "0x0",
-                      "0x2",
-                      "0xa",
-                      "0xe",
-                      "0x8",
-                      "0x0",
-                      "0x0",
-                      "0x683e1bc2",
-                      "0x683e1bc2",
-                      "0x0",
-                      "0x0",
-                      "0x0",
-                      "0x0",
-                      "0x1",
-                      "0x8",
-                      "0x2f028ca0e8edb4a8c9757ca4fdccab25fa1e0317da1188108f7d2dee14902fb",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
-                      "0x0",
-                      "0x1",
-                      "0x20",
-                      "0x5cfa5c7e504eb4ab4b5836e27a52bd193ebb7173419dc5002c302e8176c61f",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0xbd14cb6f0ee671aab46bd04cf1b9e7b6c7797739207e1e89d62db252996311",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0x2bf727c48eac2c66272456b06a885c5cc03e54d140f63b63b6fd10c1227958e",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0x2016836a56b71f0d02689e69e326f4f4c1b9057164ef592671cf0d37c8040c0",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x199d5e4e43121196cadfeaea326e46f58d9db74299decfd64bd3b700350ccd9",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
-                      "0x0",
-                      "0x1",
-                      "0xfb"
-                    ],
-                    "caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                    "calls": [],
-                    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                    "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                    "entry_point_selector": "0xd065c837ba98927ca43d2e15d8e840ca8e67646b8e00108f1b55d18a75d80f",
-                    "entry_point_type": "EXTERNAL",
-                    "events": [
-                      {
-                        "data": [
-                          "0x2",
-                          "0xa",
-                          "0xe",
-                          "0x8",
-                          "0x0",
-                          "0x0",
-                          "0x683e1bc2",
-                          "0x683e1bc2",
-                          "0x0",
-                          "0x0",
-                          "0x0",
-                          "0x0"
-                        ],
-                        "keys": [
-                          "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d",
-                          "0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
-                          "0x117d91ddbe138c03174c42147b57e147d131c282cdd6ca683438c5ca1e4258b"
-                        ],
-                        "order": 0
-                      }
-                    ],
-                    "execution_resources": {
-                      "bitwise_builtin_applications": 16,
-                      "memory_holes": 209,
-                      "pedersen_builtin_applications": 3,
-                      "poseidon_builtin_applications": 34,
-                      "range_check_builtin_applications": 597,
-                      "steps": 9403
-                    },
-                    "messages": [],
-                    "result": []
-                  }
-                ],
-                "class_hash": "0x5ee1e5ccf2ba9562397a0987ddce064091a0d8bfc3e8c95720990e966821b9c",
-                "contract_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                "entry_point_selector": "0x2b6cc443571e84d5278bcdf2487b89d19aca51b15ee2532950bcafceb49a3ff",
-                "entry_point_type": "EXTERNAL",
-                "events": [],
-                "execution_resources": {
-                  "bitwise_builtin_applications": 40,
-                  "memory_holes": 1855,
-                  "pedersen_builtin_applications": 3,
-                  "poseidon_builtin_applications": 96,
-                  "range_check_builtin_applications": 1389,
-                  "steps": 29027
-                },
-                "messages": [],
-                "result": [
-                  "0x0",
-                  "0xa",
-                  "0xe",
-                  "0x0",
-                  "0x0",
-                  "0x1",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x1",
-                  "0x0",
-                  "0x0"
-                ]
-              },
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
-                  "0x1",
-                  "0x70dd4296c8b5cbe03cf453e3ab044811bb6dbb302e09a86bc8b1ff4bceaf5e",
-                  "0x1",
-                  "0x8",
-                  "0x2f028ca0e8edb4a8c9757ca4fdccab25fa1e0317da1188108f7d2dee14902fb",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
-                  "0x0",
-                  "0x1",
-                  "0x20",
-                  "0x5cfa5c7e504eb4ab4b5836e27a52bd193ebb7173419dc5002c302e8176c61f",
-                  "0x0",
-                  "0x1",
-                  "0x40",
-                  "0xbd14cb6f0ee671aab46bd04cf1b9e7b6c7797739207e1e89d62db252996311",
-                  "0x0",
-                  "0x1",
-                  "0x40",
-                  "0x2bf727c48eac2c66272456b06a885c5cc03e54d140f63b63b6fd10c1227958e",
-                  "0x0",
-                  "0x1",
-                  "0x40",
-                  "0x2016836a56b71f0d02689e69e326f4f4c1b9057164ef592671cf0d37c8040c0",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x199d5e4e43121196cadfeaea326e46f58d9db74299decfd64bd3b700350ccd9",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
-                  "0x0",
-                  "0x1",
-                  "0xfb"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [],
-                "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                "entry_point_type": "EXTERNAL",
-                "events": [],
-                "execution_resources": {
-                  "bitwise_builtin_applications": 8,
-                  "memory_holes": 1032,
-                  "poseidon_builtin_applications": 32,
-                  "range_check_builtin_applications": 398,
-                  "steps": 7975
-                },
-                "messages": [],
-                "result": [
-                  "0x8",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x0"
-                ]
-              },
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
-                  "0x1",
-                  "0x70dd4296c8b5cbe03cf453e3ab044811bb6dbb302e09a86bc8b1ff4bceaf5e",
-                  "0x1",
-                  "0x1",
-                  "0x26d994cdb81aaccb84aa1f62bae636dc0aaf98ab22f66b0c9224f1edccd7cc9",
-                  "0x0",
-                  "0x1",
-                  "0xfb"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [],
-                "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                "entry_point_type": "EXTERNAL",
-                "events": [],
-                "execution_resources": {
-                  "memory_holes": 225,
-                  "poseidon_builtin_applications": 4,
-                  "range_check_builtin_applications": 38,
-                  "steps": 1152
-                },
-                "messages": [],
-                "result": ["0x1", "0x0"]
-              },
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x30a1b371016270e1d0c33e176d9d07ab01d801d8b1f0e1fd1d45534137f2ce",
-                  "0x0",
-                  "0x1",
-                  "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
-                  "0x9",
-                  "0x0",
-                  "0xf09f8d87",
-                  "0xa",
-                  "0xf",
-                  "0xff7f00ff",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x0",
-                  "0x1",
-                  "0x8",
-                  "0x361458367e696363fbcc70777d07ebbd2394e89fd0adcaf147faccd1d294d60",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x253597a712ba447f1c5f4de994793331511fb60c29ca3aa3ec8ebbec77d64ad",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x334f8ce3b01e25d0b6fe82d0fdb6eb534f3183d7dc5a6bb44d8eb9f676f650c",
-                  "0x1",
-                  "0x2",
-                  "0x121d1cadbcfa91eec65aa16715b94ffc1c9654ba57ea2ef1a2127bca1127a83",
-                  "0x0",
-                  "0x1",
-                  "0x10",
-                  "0x3847cf31c36389df832d0d4d3df7cf28f211e3f83173e5c157bab31573d61f3",
-                  "0x0",
-                  "0x1",
-                  "0x10",
-                  "0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
-                  "0x0",
-                  "0x1",
-                  "0x20",
-                  "0x67f8fc7ed32f92f4a1f23471f5db5159b70326505f677d857a769adfd98e52",
-                  "0x0",
-                  "0x1",
-                  "0x20",
-                  "0x168b5da86b03134deb85af20724106461a2615ae3b3a1cfe64ad8f8954c5521",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x11386389549b9c52ff8cf040c0d37f1ecef70b726299e4d77ae9ba2e364559f",
-                  "0x0",
-                  "0x1",
-                  "0xfb",
-                  "0x9df296b4a74dc7bc300424dff4117eccc5286aa51001e1bbb67693c08ce25d",
-                  "0x0",
-                  "0x1",
-                  "0xfb"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [],
-                "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                "entry_point_selector": "0xd065c837ba98927ca43d2e15d8e840ca8e67646b8e00108f1b55d18a75d80f",
-                "entry_point_type": "EXTERNAL",
-                "events": [
-                  {
-                    "data": [
-                      "0x1",
-                      "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
-                      "0x9",
-                      "0x0",
-                      "0xf09f8d87",
-                      "0xa",
-                      "0xf",
-                      "0xff7f00ff",
-                      "0x0",
-                      "0x0",
-                      "0x0",
-                      "0x0"
-                    ],
-                    "keys": [
-                      "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d",
-                      "0x30a1b371016270e1d0c33e176d9d07ab01d801d8b1f0e1fd1d45534137f2ce",
-                      "0x77499bd5f741bb5b825361752c3d8af717fcb21573e228bac9dabb6918a82e6"
-                    ],
-                    "order": 1
-                  }
-                ],
-                "execution_resources": {
-                  "bitwise_builtin_applications": 18,
-                  "memory_holes": 235,
-                  "pedersen_builtin_applications": 3,
-                  "poseidon_builtin_applications": 39,
-                  "range_check_builtin_applications": 676,
-                  "steps": 10697
-                },
-                "messages": [],
-                "result": []
-              },
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
-                  "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                  "0xa",
-                  "0xf",
-                  "0x0",
-                  "0xff7f00ff",
-                  "0x1",
-                  "0x0",
-                  "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                  "0x0",
-                  "0xf09f8d87",
-                  "0x1",
-                  "0x0",
-                  "0x636f6e666967757265",
-                  "0x1",
-                  "0x0"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [
-                  {
-                    "call_type": "CALL",
-                    "calldata": [
-                      "0x5379e1ce3a70cb70f1e96dae1b142164574f33d4e32cebdb965b5aec30222c5",
-                      "0x1",
-                      "0x710a93409aeb869505de269dbbc9ad0f7ec232d3c3136da94255c300cdbecb5",
-                      "0x1",
-                      "0x1",
-                      "0x1afeeaff0ed5cee7d05a21078399c2f56226b0cd5657062500cef4c4e736f85",
-                      "0x0",
-                      "0x1",
-                      "0xfb"
-                    ],
-                    "caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                    "calls": [],
-                    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                    "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                    "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                    "entry_point_type": "EXTERNAL",
-                    "events": [],
-                    "execution_resources": {
-                      "memory_holes": 225,
-                      "poseidon_builtin_applications": 4,
-                      "range_check_builtin_applications": 38,
-                      "steps": 1152
-                    },
-                    "messages": [],
-                    "result": [
-                      "0x1",
-                      "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
-                    ]
-                  },
-                  {
-                    "call_type": "CALL",
-                    "calldata": [
-                      "0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
-                      "0x1",
-                      "0x70dd4296c8b5cbe03cf453e3ab044811bb6dbb302e09a86bc8b1ff4bceaf5e",
-                      "0x1",
-                      "0x8",
-                      "0x2f028ca0e8edb4a8c9757ca4fdccab25fa1e0317da1188108f7d2dee14902fb",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
-                      "0x0",
-                      "0x1",
-                      "0x20",
-                      "0x5cfa5c7e504eb4ab4b5836e27a52bd193ebb7173419dc5002c302e8176c61f",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0xbd14cb6f0ee671aab46bd04cf1b9e7b6c7797739207e1e89d62db252996311",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0x2bf727c48eac2c66272456b06a885c5cc03e54d140f63b63b6fd10c1227958e",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0x2016836a56b71f0d02689e69e326f4f4c1b9057164ef592671cf0d37c8040c0",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x199d5e4e43121196cadfeaea326e46f58d9db74299decfd64bd3b700350ccd9",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
-                      "0x0",
-                      "0x1",
-                      "0xfb"
-                    ],
-                    "caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                    "calls": [],
-                    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                    "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                    "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                    "entry_point_type": "EXTERNAL",
-                    "events": [],
-                    "execution_resources": {
-                      "bitwise_builtin_applications": 8,
-                      "memory_holes": 1032,
-                      "poseidon_builtin_applications": 32,
-                      "range_check_builtin_applications": 398,
-                      "steps": 7975
-                    },
-                    "messages": [],
-                    "result": [
-                      "0x8",
-                      "0x0",
-                      "0x0",
-                      "0x0",
-                      "0x0",
-                      "0x0",
-                      "0x0",
-                      "0x0",
-                      "0x0"
-                    ]
-                  },
-                  {
-                    "call_type": "CALL",
-                    "calldata": [
-                      "0x3baaf9fe25823e8928b6fc6400e28e98d4b7618ff56faf269a11f3400a1c105",
-                      "0x1",
-                      "0x14dca4cec1eaae8ac8e80048da4f4e5165d3e2cb93520cdb8294c82ead422ee",
-                      "0x1",
-                      "0x1",
-                      "0x1a666cca84378d56bd6902ed679e04a9041116d4e21064ef2faf2756cd367c1",
-                      "0x0",
-                      "0x1",
-                      "0xfb"
-                    ],
-                    "caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                    "calls": [],
-                    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                    "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                    "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                    "entry_point_type": "EXTERNAL",
-                    "events": [],
-                    "execution_resources": {
-                      "memory_holes": 225,
-                      "poseidon_builtin_applications": 4,
-                      "range_check_builtin_applications": 38,
-                      "steps": 1152
-                    },
-                    "messages": [],
-                    "result": ["0x1", "0x14002a"]
-                  },
-                  {
-                    "call_type": "CALL",
-                    "calldata": [
-                      "0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
-                      "0x0",
-                      "0x2",
-                      "0xa",
-                      "0xf",
-                      "0x8",
-                      "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                      "0xff7f00ff",
-                      "0x683e1bc2",
-                      "0x683e1bc2",
-                      "0x0",
-                      "0x0",
-                      "0xf09f8d87",
-                      "0x636f6e666967757265",
-                      "0x1",
-                      "0x8",
-                      "0x2f028ca0e8edb4a8c9757ca4fdccab25fa1e0317da1188108f7d2dee14902fb",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
-                      "0x0",
-                      "0x1",
-                      "0x20",
-                      "0x5cfa5c7e504eb4ab4b5836e27a52bd193ebb7173419dc5002c302e8176c61f",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0xbd14cb6f0ee671aab46bd04cf1b9e7b6c7797739207e1e89d62db252996311",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0x2bf727c48eac2c66272456b06a885c5cc03e54d140f63b63b6fd10c1227958e",
-                      "0x0",
-                      "0x1",
-                      "0x40",
-                      "0x2016836a56b71f0d02689e69e326f4f4c1b9057164ef592671cf0d37c8040c0",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x199d5e4e43121196cadfeaea326e46f58d9db74299decfd64bd3b700350ccd9",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
-                      "0x0",
-                      "0x1",
-                      "0xfb"
-                    ],
-                    "caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                    "calls": [],
-                    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                    "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                    "entry_point_selector": "0xd065c837ba98927ca43d2e15d8e840ca8e67646b8e00108f1b55d18a75d80f",
-                    "entry_point_type": "EXTERNAL",
-                    "events": [
-                      {
-                        "data": [
-                          "0x2",
-                          "0xa",
-                          "0xf",
-                          "0x8",
-                          "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                          "0xff7f00ff",
-                          "0x683e1bc2",
-                          "0x683e1bc2",
-                          "0x0",
-                          "0x0",
-                          "0xf09f8d87",
-                          "0x636f6e666967757265"
-                        ],
-                        "keys": [
-                          "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d",
-                          "0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
-                          "0x70dd4296c8b5cbe03cf453e3ab044811bb6dbb302e09a86bc8b1ff4bceaf5e"
-                        ],
-                        "order": 2
-                      }
-                    ],
-                    "execution_resources": {
-                      "bitwise_builtin_applications": 16,
-                      "memory_holes": 200,
-                      "pedersen_builtin_applications": 3,
-                      "poseidon_builtin_applications": 34,
-                      "range_check_builtin_applications": 600,
-                      "steps": 9415
-                    },
-                    "messages": [],
-                    "result": []
-                  },
-                  {
-                    "call_type": "CALL",
-                    "calldata": [
-                      "0x3650456503601ce448928ac87c54e3a6e95e76d725a59c95c7201324c9b2b74",
-                      "0x1",
-                      "0x1bca6d53792f72d017dc8ad8b59a3babb6ed5ec22ec66d19d4597848992e8d6",
-                      "0x1",
-                      "0x3",
-                      "0x361458367e696363fbcc70777d07ebbd2394e89fd0adcaf147faccd1d294d60",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0xfb359b10bbf4a2d200a28af8a4e722ae4421e7f9b1530443597898d2a1e9b0",
-                      "0x0",
-                      "0x1",
-                      "0xfb",
-                      "0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
-                      "0x0",
-                      "0x1",
-                      "0xfb"
-                    ],
-                    "caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                    "calls": [],
-                    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                    "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                    "entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
-                    "entry_point_type": "EXTERNAL",
-                    "events": [],
-                    "execution_resources": {
-                      "memory_holes": 587,
-                      "poseidon_builtin_applications": 12,
-                      "range_check_builtin_applications": 102,
-                      "steps": 2914
-                    },
-                    "messages": [],
-                    "result": ["0x3", "0x706c61796572", "0xf09f9883", "0x0"]
-                  },
-                  {
-                    "call_type": "CALL",
-                    "calldata": [
-                      "0xa",
-                      "0xf",
-                      "0x0",
-                      "0xff7f00ff",
-                      "0x1",
-                      "0x0",
-                      "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                      "0x0",
-                      "0xf09f8d87",
-                      "0x1",
-                      "0x0",
-                      "0x636f6e666967757265",
-                      "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                      "0x706c61796572",
-                      "0xf09f9883",
-                      "0x0",
-                      "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718"
-                    ],
-                    "caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                    "calls": [],
-                    "class_hash": "0x7cfb11bb511667fd838d7eb14620f25c86ffd3141d1eee9d1427182481dcf5c",
-                    "contract_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                    "entry_point_selector": "0x3484ad2e032768c324059cc216083c643765f60c00f2b9b0561bc98ceb1c92",
-                    "entry_point_type": "EXTERNAL",
-                    "events": [],
-                    "execution_resources": {
-                      "memory_holes": 16,
-                      "range_check_builtin_applications": 17,
-                      "steps": 317
-                    },
-                    "messages": [],
-                    "result": []
-                  }
-                ],
-                "class_hash": "0x5ee1e5ccf2ba9562397a0987ddce064091a0d8bfc3e8c95720990e966821b9c",
-                "contract_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
-                "entry_point_selector": "0x2b6cc443571e84d5278bcdf2487b89d19aca51b15ee2532950bcafceb49a3ff",
-                "entry_point_type": "EXTERNAL",
-                "events": [],
-                "execution_resources": {
-                  "bitwise_builtin_applications": 40,
-                  "memory_holes": 2468,
-                  "pedersen_builtin_applications": 3,
-                  "poseidon_builtin_applications": 113,
-                  "range_check_builtin_applications": 1574,
-                  "steps": 35089
-                },
-                "messages": [],
-                "result": [
-                  "0x0",
-                  "0xa",
-                  "0xf",
-                  "0x0",
-                  "0xff7f00ff",
-                  "0x1",
-                  "0x0",
-                  "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                  "0x0",
-                  "0xf09f8d87",
-                  "0x1",
-                  "0x0",
-                  "0x636f6e666967757265"
-                ]
-              },
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
-                  "0x0",
-                  "0x2",
-                  "0xa",
-                  "0xf",
-                  "0x1",
-                  "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
-                  "0x1",
-                  "0x1",
-                  "0x26d994cdb81aaccb84aa1f62bae636dc0aaf98ab22f66b0c9224f1edccd7cc9",
-                  "0x0",
-                  "0x1",
-                  "0xfb"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [],
-                "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                "entry_point_selector": "0xd065c837ba98927ca43d2e15d8e840ca8e67646b8e00108f1b55d18a75d80f",
-                "entry_point_type": "EXTERNAL",
-                "events": [
-                  {
-                    "data": [
-                      "0x2",
-                      "0xa",
-                      "0xf",
-                      "0x1",
-                      "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718"
-                    ],
-                    "keys": [
-                      "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d",
-                      "0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
-                      "0x70dd4296c8b5cbe03cf453e3ab044811bb6dbb302e09a86bc8b1ff4bceaf5e"
-                    ],
-                    "order": 3
-                  }
-                ],
-                "execution_resources": {
-                  "bitwise_builtin_applications": 2,
-                  "memory_holes": 46,
-                  "pedersen_builtin_applications": 3,
-                  "poseidon_builtin_applications": 6,
-                  "range_check_builtin_applications": 110,
-                  "steps": 2296
-                },
-                "messages": [],
-                "result": []
-              },
-              {
-                "call_type": "CALL",
-                "calldata": [
-                  "0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
-                  "0x0",
-                  "0x2",
-                  "0xa",
-                  "0xe",
-                  "0x1",
-                  "0x0",
-                  "0x1",
-                  "0x1",
-                  "0x26d994cdb81aaccb84aa1f62bae636dc0aaf98ab22f66b0c9224f1edccd7cc9",
-                  "0x0",
-                  "0x1",
-                  "0xfb"
-                ],
-                "caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-                "calls": [],
-                "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-                "contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-                "entry_point_selector": "0xd065c837ba98927ca43d2e15d8e840ca8e67646b8e00108f1b55d18a75d80f",
-                "entry_point_type": "EXTERNAL",
-                "events": [
-                  {
-                    "data": ["0x2", "0xa", "0xe", "0x1", "0x0"],
-                    "keys": [
-                      "0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d",
-                      "0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
-                      "0x117d91ddbe138c03174c42147b57e147d131c282cdd6ca683438c5ca1e4258b"
-                    ],
-                    "order": 4
-                  }
-                ],
-                "execution_resources": {
-                  "bitwise_builtin_applications": 2,
-                  "memory_holes": 55,
-                  "pedersen_builtin_applications": 3,
-                  "poseidon_builtin_applications": 6,
-                  "range_check_builtin_applications": 107,
-                  "steps": 2284
-                },
-                "messages": [],
-                "result": []
-              }
-            ],
-            "class_hash": "0x7cfb11bb511667fd838d7eb14620f25c86ffd3141d1eee9d1427182481dcf5c",
-            "contract_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
-            "entry_point_selector": "0x476d5e1b17fd9d508bd621909241c5eb4c67380f3651f54873c5c1f2b891f4",
-            "entry_point_type": "EXTERNAL",
-            "events": [],
-            "execution_resources": {
-              "bitwise_builtin_applications": 118,
-              "memory_holes": 7971,
-              "pedersen_builtin_applications": 15,
-              "poseidon_builtin_applications": 393,
-              "range_check_builtin_applications": 5388,
-              "steps": 121289
-            },
-            "messages": [],
-            "result": []
-          }
-        ],
-        "class_hash": "0x743c83c41ce99ad470aa308823f417b2141e02e04571f5c0004e743556e7faf",
-        "contract_address": "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
-        "entry_point_selector": "0x15d40a3d6ca2ac30f4031e42be28da9b056fef9bb7357ac5e85627ee876e5ad",
-        "entry_point_type": "EXTERNAL",
-        "events": [
-          {
-            "data": ["0x1", "0x0"],
-            "keys": [
-              "0x1dcde06aabdbca2f80aa51392b345d7549d7757aa855f7e37f5d335ac8243b1",
-              "0x555ff13cea63632db4104c8165b387d8c709e308c63e65dedb405645196542b"
-            ],
-            "order": 5
-          }
-        ],
-        "execution_resources": {
-          "bitwise_builtin_applications": 118,
-          "memory_holes": 8000,
-          "pedersen_builtin_applications": 15,
-          "poseidon_builtin_applications": 393,
-          "range_check_builtin_applications": 5429,
-          "steps": 123123
-        },
-        "messages": [],
-        "result": ["0x1", "0x0"]
-      },
-      "execution_resources": {
-        "bitwise_builtin_applications": 118,
-        "data_availability": {
-          "l1_data_gas": 1024,
-          "l1_gas": 0
-        },
-        "memory_holes": 8000,
-        "pedersen_builtin_applications": 15,
-        "poseidon_builtin_applications": 393,
-        "range_check_builtin_applications": 5429,
-        "steps": 123123
-      },
-      "state_diff": {
-        "declared_classes": [],
-        "deployed_contracts": [],
-        "deprecated_declared_classes": [],
-        "nonces": [
-          {
-            "contract_address": "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
-            "nonce": "0x1"
-          }
-        ],
-        "replaced_classes": [],
-        "storage_diffs": [
-          {
-            "address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
-            "storage_entries": [
-              {
-                "key": "0x48b31b6fe7220d0b4e3cd71cf0842c425e842ef4ecc69f408573926bf7578a",
-                "value": "0x683e1bc2"
-              },
-              {
-                "key": "0x11e23f3abed3523870ce431acb363f4c308c2c700f775886ff7d91a8e6392c9",
-                "value": "0xf09f8d87"
-              },
-              {
-                "key": "0x1d682c54bd2de846314777529668ecda95da990852928827633ad38ea4d3d13",
-                "value": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a"
-              },
-              {
-                "key": "0x204d512afce968c3cb9280f665083f38f6db83e0e1ac4f8b6c125b93919dcaf",
-                "value": "0xff7f00ff"
-              },
-              {
-                "key": "0x2b561f0f2c243f8cacda64c0ca00a5d84ab85909daa6e9394f5f254cd7ddacd",
-                "value": "0x0"
-              },
-              {
-                "key": "0x2d3b19002fd06d9736062c0f578382213e72ab1b8d64ddd16fb7de4968c58f1",
-                "value": "0x636f6e666967757265"
-              },
-              {
-                "key": "0x31752b9e0653adb3aeda41c7f067305281a5c93a9f59cac67fcce6082f14d27",
-                "value": "0x0"
-              },
-              {
-                "key": "0x3a221cdfaeaf9099c4a70fd33588d6f3243406de6245271113d0d7d9600270b",
-                "value": "0x0"
-              },
-              {
-                "key": "0x3ac5717be627cfa49af145e2a94c8050c786220412aece4b72b79fb11dbd333",
-                "value": "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718"
-              },
-              {
-                "key": "0x481b327acdb41aee11a9140d5979680c1a3d6db238aea01f9e3e911752537a3",
-                "value": "0x0"
-              },
-              {
-                "key": "0x6d4d892264985623e0bdb4e586639d6f31193ad7c08c8d2805b4b802c13fda4",
-                "value": "0x683e1bc2"
-              },
-              {
-                "key": "0x6e77d1b4280aac6b3abbcd410840fc0cc2e1bc1d52749c6d351f30b59351acd",
-                "value": "0x0"
-              },
-              {
-                "key": "0x789389e054ad321e62b5774449f484ca6962d95aa8756fb3b914aff9bea1a5d",
-                "value": "0xf"
-              }
-            ]
-          }
-        ]
-      },
-      "type": "INVOKE"
-    }
-  }
+	{
+		"resourceBounds": {
+			"l2_gas": {
+				"max_amount": "0x0",
+				"max_price_per_unit": "0x0"
+			},
+			"l1_gas": {
+				"max_amount": "0x21a",
+				"max_price_per_unit": "0x18f4078579ea"
+			}
+		},
+		"suggestedMaxFee": 9849659446298041,
+		"fee_estimation": {
+			"data_gas_consumed": "0x4e0",
+			"data_gas_price": "0x9a6",
+			"gas_consumed": "0x167",
+			"gas_price": "0x10a2afae5147",
+			"overall_fee": "0x1754245da303d1",
+			"unit": "FRI"
+		},
+		"transaction_trace": {
+			"execute_invocation": {
+				"call_type": "CALL",
+				"calldata": [
+					"0x1",
+					"0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+					"0x476d5e1b17fd9d508bd621909241c5eb4c67380f3651f54873c5c1f2b891f4",
+					"0x6",
+					"0x1",
+					"0x1",
+					"0x1",
+					"0xa",
+					"0x10",
+					"0x0"
+				],
+				"caller_address": "0x0",
+				"calls": [
+					{
+						"call_type": "CALL",
+						"calldata": ["0x1", "0x1", "0x1", "0xa", "0x10", "0x0"],
+						"caller_address": "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
+						"calls": [
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x5379e1ce3a70cb70f1e96dae1b142164574f33d4e32cebdb965b5aec30222c5",
+									"0x1",
+									"0x710a93409aeb869505de269dbbc9ad0f7ec232d3c3136da94255c300cdbecb5",
+									"0x1",
+									"0x1",
+									"0x1afeeaff0ed5cee7d05a21078399c2f56226b0cd5657062500cef4c4e736f85",
+									"0x0",
+									"0x1",
+									"0xfb"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [],
+								"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+								"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+								"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+								"entry_point_type": "EXTERNAL",
+								"events": [],
+								"execution_resources": {
+									"memory_holes": 225,
+									"poseidon_builtin_applications": 4,
+									"range_check_builtin_applications": 38,
+									"steps": 1152
+								},
+								"messages": [],
+								"result": [
+									"0x1",
+									"0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
+								]
+							},
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x5379e1ce3a70cb70f1e96dae1b142164574f33d4e32cebdb965b5aec30222c5",
+									"0x1",
+									"0x710a93409aeb869505de269dbbc9ad0f7ec232d3c3136da94255c300cdbecb5",
+									"0x1",
+									"0x1",
+									"0x1afeeaff0ed5cee7d05a21078399c2f56226b0cd5657062500cef4c4e736f85",
+									"0x0",
+									"0x1",
+									"0xfb"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [],
+								"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+								"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+								"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+								"entry_point_type": "EXTERNAL",
+								"events": [],
+								"execution_resources": {
+									"memory_holes": 225,
+									"poseidon_builtin_applications": 4,
+									"range_check_builtin_applications": 38,
+									"steps": 1152
+								},
+								"messages": [],
+								"result": [
+									"0x1",
+									"0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
+								]
+							},
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x30a1b371016270e1d0c33e176d9d07ab01d801d8b1f0e1fd1d45534137f2ce",
+									"0x1",
+									"0x77499bd5f741bb5b825361752c3d8af717fcb21573e228bac9dabb6918a82e6",
+									"0x1",
+									"0x8",
+									"0x361458367e696363fbcc70777d07ebbd2394e89fd0adcaf147faccd1d294d60",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x253597a712ba447f1c5f4de994793331511fb60c29ca3aa3ec8ebbec77d64ad",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x334f8ce3b01e25d0b6fe82d0fdb6eb534f3183d7dc5a6bb44d8eb9f676f650c",
+									"0x1",
+									"0x2",
+									"0x121d1cadbcfa91eec65aa16715b94ffc1c9654ba57ea2ef1a2127bca1127a83",
+									"0x0",
+									"0x1",
+									"0x10",
+									"0x3847cf31c36389df832d0d4d3df7cf28f211e3f83173e5c157bab31573d61f3",
+									"0x0",
+									"0x1",
+									"0x10",
+									"0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
+									"0x0",
+									"0x1",
+									"0x20",
+									"0x67f8fc7ed32f92f4a1f23471f5db5159b70326505f677d857a769adfd98e52",
+									"0x0",
+									"0x1",
+									"0x20",
+									"0x168b5da86b03134deb85af20724106461a2615ae3b3a1cfe64ad8f8954c5521",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x11386389549b9c52ff8cf040c0d37f1ecef70b726299e4d77ae9ba2e364559f",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x9df296b4a74dc7bc300424dff4117eccc5286aa51001e1bbb67693c08ce25d",
+									"0x0",
+									"0x1",
+									"0xfb"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [],
+								"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+								"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+								"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+								"entry_point_type": "EXTERNAL",
+								"events": [],
+								"execution_resources": {
+									"bitwise_builtin_applications": 8,
+									"memory_holes": 1220,
+									"poseidon_builtin_applications": 38,
+									"range_check_builtin_applications": 442,
+									"steps": 9187
+								},
+								"messages": [],
+								"result": [
+									"0x9",
+									"0x0",
+									"0xf09f8d87",
+									"0xa",
+									"0xe",
+									"0xff7f00ff",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x0"
+								]
+							},
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
+									"0x1",
+									"0x117d91ddbe138c03174c42147b57e147d131c282cdd6ca683438c5ca1e4258b",
+									"0x1",
+									"0x1",
+									"0x26d994cdb81aaccb84aa1f62bae636dc0aaf98ab22f66b0c9224f1edccd7cc9",
+									"0x0",
+									"0x1",
+									"0xfb"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [],
+								"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+								"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+								"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+								"entry_point_type": "EXTERNAL",
+								"events": [],
+								"execution_resources": {
+									"memory_holes": 225,
+									"poseidon_builtin_applications": 4,
+									"range_check_builtin_applications": 38,
+									"steps": 1152
+								},
+								"messages": [],
+								"result": [
+									"0x1",
+									"0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718"
+								]
+							},
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
+									"0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+									"0xa",
+									"0xe",
+									"0x0",
+									"0x0",
+									"0x1",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x1",
+									"0x0",
+									"0x0",
+									"0x1",
+									"0x0"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [
+									{
+										"call_type": "CALL",
+										"calldata": [
+											"0x5379e1ce3a70cb70f1e96dae1b142164574f33d4e32cebdb965b5aec30222c5",
+											"0x1",
+											"0x710a93409aeb869505de269dbbc9ad0f7ec232d3c3136da94255c300cdbecb5",
+											"0x1",
+											"0x1",
+											"0x1afeeaff0ed5cee7d05a21078399c2f56226b0cd5657062500cef4c4e736f85",
+											"0x0",
+											"0x1",
+											"0xfb"
+										],
+										"caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+										"calls": [],
+										"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+										"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+										"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+										"entry_point_type": "EXTERNAL",
+										"events": [],
+										"execution_resources": {
+											"memory_holes": 225,
+											"poseidon_builtin_applications": 4,
+											"range_check_builtin_applications": 38,
+											"steps": 1152
+										},
+										"messages": [],
+										"result": [
+											"0x1",
+											"0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
+										]
+									},
+									{
+										"call_type": "CALL",
+										"calldata": [
+											"0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
+											"0x1",
+											"0x117d91ddbe138c03174c42147b57e147d131c282cdd6ca683438c5ca1e4258b",
+											"0x1",
+											"0x8",
+											"0x2f028ca0e8edb4a8c9757ca4fdccab25fa1e0317da1188108f7d2dee14902fb",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
+											"0x0",
+											"0x1",
+											"0x20",
+											"0x5cfa5c7e504eb4ab4b5836e27a52bd193ebb7173419dc5002c302e8176c61f",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0xbd14cb6f0ee671aab46bd04cf1b9e7b6c7797739207e1e89d62db252996311",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0x2bf727c48eac2c66272456b06a885c5cc03e54d140f63b63b6fd10c1227958e",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0x2016836a56b71f0d02689e69e326f4f4c1b9057164ef592671cf0d37c8040c0",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x199d5e4e43121196cadfeaea326e46f58d9db74299decfd64bd3b700350ccd9",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
+											"0x0",
+											"0x1",
+											"0xfb"
+										],
+										"caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+										"calls": [],
+										"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+										"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+										"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+										"entry_point_type": "EXTERNAL",
+										"events": [],
+										"execution_resources": {
+											"bitwise_builtin_applications": 8,
+											"memory_holes": 1032,
+											"poseidon_builtin_applications": 32,
+											"range_check_builtin_applications": 398,
+											"steps": 7975
+										},
+										"messages": [],
+										"result": [
+											"0x8",
+											"0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+											"0xff7f00ff",
+											"0x683e1bc2",
+											"0x683e1bc2",
+											"0x0",
+											"0x0",
+											"0xf09f8d87",
+											"0x636f6e666967757265"
+										]
+									},
+									{
+										"call_type": "CALL",
+										"calldata": [
+											"0x3baaf9fe25823e8928b6fc6400e28e98d4b7618ff56faf269a11f3400a1c105",
+											"0x1",
+											"0x14dca4cec1eaae8ac8e80048da4f4e5165d3e2cb93520cdb8294c82ead422ee",
+											"0x1",
+											"0x1",
+											"0x1a666cca84378d56bd6902ed679e04a9041116d4e21064ef2faf2756cd367c1",
+											"0x0",
+											"0x1",
+											"0xfb"
+										],
+										"caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+										"calls": [],
+										"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+										"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+										"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+										"entry_point_type": "EXTERNAL",
+										"events": [],
+										"execution_resources": {
+											"memory_holes": 225,
+											"poseidon_builtin_applications": 4,
+											"range_check_builtin_applications": 38,
+											"steps": 1152
+										},
+										"messages": [],
+										"result": ["0x1", "0x14002a"]
+									},
+									{
+										"call_type": "CALL",
+										"calldata": [
+											"0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
+											"0x0",
+											"0x2",
+											"0xa",
+											"0xe",
+											"0x8",
+											"0x0",
+											"0x0",
+											"0x683e1bc2",
+											"0x683e1bc2",
+											"0x0",
+											"0x0",
+											"0x0",
+											"0x0",
+											"0x1",
+											"0x8",
+											"0x2f028ca0e8edb4a8c9757ca4fdccab25fa1e0317da1188108f7d2dee14902fb",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
+											"0x0",
+											"0x1",
+											"0x20",
+											"0x5cfa5c7e504eb4ab4b5836e27a52bd193ebb7173419dc5002c302e8176c61f",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0xbd14cb6f0ee671aab46bd04cf1b9e7b6c7797739207e1e89d62db252996311",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0x2bf727c48eac2c66272456b06a885c5cc03e54d140f63b63b6fd10c1227958e",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0x2016836a56b71f0d02689e69e326f4f4c1b9057164ef592671cf0d37c8040c0",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x199d5e4e43121196cadfeaea326e46f58d9db74299decfd64bd3b700350ccd9",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
+											"0x0",
+											"0x1",
+											"0xfb"
+										],
+										"caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+										"calls": [],
+										"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+										"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+										"entry_point_selector": "0xd065c837ba98927ca43d2e15d8e840ca8e67646b8e00108f1b55d18a75d80f",
+										"entry_point_type": "EXTERNAL",
+										"events": [
+											{
+												"data": [
+													"0x2",
+													"0xa",
+													"0xe",
+													"0x8",
+													"0x0",
+													"0x0",
+													"0x683e1bc2",
+													"0x683e1bc2",
+													"0x0",
+													"0x0",
+													"0x0",
+													"0x0"
+												],
+												"keys": [
+													"0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d",
+													"0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
+													"0x117d91ddbe138c03174c42147b57e147d131c282cdd6ca683438c5ca1e4258b"
+												],
+												"order": 0
+											}
+										],
+										"execution_resources": {
+											"bitwise_builtin_applications": 16,
+											"memory_holes": 209,
+											"pedersen_builtin_applications": 3,
+											"poseidon_builtin_applications": 34,
+											"range_check_builtin_applications": 597,
+											"steps": 9403
+										},
+										"messages": [],
+										"result": []
+									}
+								],
+								"class_hash": "0x5ee1e5ccf2ba9562397a0987ddce064091a0d8bfc3e8c95720990e966821b9c",
+								"contract_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+								"entry_point_selector": "0x2b6cc443571e84d5278bcdf2487b89d19aca51b15ee2532950bcafceb49a3ff",
+								"entry_point_type": "EXTERNAL",
+								"events": [],
+								"execution_resources": {
+									"bitwise_builtin_applications": 40,
+									"memory_holes": 1855,
+									"pedersen_builtin_applications": 3,
+									"poseidon_builtin_applications": 96,
+									"range_check_builtin_applications": 1389,
+									"steps": 29027
+								},
+								"messages": [],
+								"result": [
+									"0x0",
+									"0xa",
+									"0xe",
+									"0x0",
+									"0x0",
+									"0x1",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x1",
+									"0x0",
+									"0x0"
+								]
+							},
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
+									"0x1",
+									"0x70dd4296c8b5cbe03cf453e3ab044811bb6dbb302e09a86bc8b1ff4bceaf5e",
+									"0x1",
+									"0x8",
+									"0x2f028ca0e8edb4a8c9757ca4fdccab25fa1e0317da1188108f7d2dee14902fb",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
+									"0x0",
+									"0x1",
+									"0x20",
+									"0x5cfa5c7e504eb4ab4b5836e27a52bd193ebb7173419dc5002c302e8176c61f",
+									"0x0",
+									"0x1",
+									"0x40",
+									"0xbd14cb6f0ee671aab46bd04cf1b9e7b6c7797739207e1e89d62db252996311",
+									"0x0",
+									"0x1",
+									"0x40",
+									"0x2bf727c48eac2c66272456b06a885c5cc03e54d140f63b63b6fd10c1227958e",
+									"0x0",
+									"0x1",
+									"0x40",
+									"0x2016836a56b71f0d02689e69e326f4f4c1b9057164ef592671cf0d37c8040c0",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x199d5e4e43121196cadfeaea326e46f58d9db74299decfd64bd3b700350ccd9",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
+									"0x0",
+									"0x1",
+									"0xfb"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [],
+								"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+								"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+								"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+								"entry_point_type": "EXTERNAL",
+								"events": [],
+								"execution_resources": {
+									"bitwise_builtin_applications": 8,
+									"memory_holes": 1032,
+									"poseidon_builtin_applications": 32,
+									"range_check_builtin_applications": 398,
+									"steps": 7975
+								},
+								"messages": [],
+								"result": [
+									"0x8",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x0"
+								]
+							},
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
+									"0x1",
+									"0x70dd4296c8b5cbe03cf453e3ab044811bb6dbb302e09a86bc8b1ff4bceaf5e",
+									"0x1",
+									"0x1",
+									"0x26d994cdb81aaccb84aa1f62bae636dc0aaf98ab22f66b0c9224f1edccd7cc9",
+									"0x0",
+									"0x1",
+									"0xfb"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [],
+								"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+								"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+								"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+								"entry_point_type": "EXTERNAL",
+								"events": [],
+								"execution_resources": {
+									"memory_holes": 225,
+									"poseidon_builtin_applications": 4,
+									"range_check_builtin_applications": 38,
+									"steps": 1152
+								},
+								"messages": [],
+								"result": ["0x1", "0x0"]
+							},
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x30a1b371016270e1d0c33e176d9d07ab01d801d8b1f0e1fd1d45534137f2ce",
+									"0x0",
+									"0x1",
+									"0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
+									"0x9",
+									"0x0",
+									"0xf09f8d87",
+									"0xa",
+									"0xf",
+									"0xff7f00ff",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x0",
+									"0x1",
+									"0x8",
+									"0x361458367e696363fbcc70777d07ebbd2394e89fd0adcaf147faccd1d294d60",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x253597a712ba447f1c5f4de994793331511fb60c29ca3aa3ec8ebbec77d64ad",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x334f8ce3b01e25d0b6fe82d0fdb6eb534f3183d7dc5a6bb44d8eb9f676f650c",
+									"0x1",
+									"0x2",
+									"0x121d1cadbcfa91eec65aa16715b94ffc1c9654ba57ea2ef1a2127bca1127a83",
+									"0x0",
+									"0x1",
+									"0x10",
+									"0x3847cf31c36389df832d0d4d3df7cf28f211e3f83173e5c157bab31573d61f3",
+									"0x0",
+									"0x1",
+									"0x10",
+									"0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
+									"0x0",
+									"0x1",
+									"0x20",
+									"0x67f8fc7ed32f92f4a1f23471f5db5159b70326505f677d857a769adfd98e52",
+									"0x0",
+									"0x1",
+									"0x20",
+									"0x168b5da86b03134deb85af20724106461a2615ae3b3a1cfe64ad8f8954c5521",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x11386389549b9c52ff8cf040c0d37f1ecef70b726299e4d77ae9ba2e364559f",
+									"0x0",
+									"0x1",
+									"0xfb",
+									"0x9df296b4a74dc7bc300424dff4117eccc5286aa51001e1bbb67693c08ce25d",
+									"0x0",
+									"0x1",
+									"0xfb"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [],
+								"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+								"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+								"entry_point_selector": "0xd065c837ba98927ca43d2e15d8e840ca8e67646b8e00108f1b55d18a75d80f",
+								"entry_point_type": "EXTERNAL",
+								"events": [
+									{
+										"data": [
+											"0x1",
+											"0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
+											"0x9",
+											"0x0",
+											"0xf09f8d87",
+											"0xa",
+											"0xf",
+											"0xff7f00ff",
+											"0x0",
+											"0x0",
+											"0x0",
+											"0x0"
+										],
+										"keys": [
+											"0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d",
+											"0x30a1b371016270e1d0c33e176d9d07ab01d801d8b1f0e1fd1d45534137f2ce",
+											"0x77499bd5f741bb5b825361752c3d8af717fcb21573e228bac9dabb6918a82e6"
+										],
+										"order": 1
+									}
+								],
+								"execution_resources": {
+									"bitwise_builtin_applications": 18,
+									"memory_holes": 235,
+									"pedersen_builtin_applications": 3,
+									"poseidon_builtin_applications": 39,
+									"range_check_builtin_applications": 676,
+									"steps": 10697
+								},
+								"messages": [],
+								"result": []
+							},
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
+									"0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+									"0xa",
+									"0xf",
+									"0x0",
+									"0xff7f00ff",
+									"0x1",
+									"0x0",
+									"0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+									"0x0",
+									"0xf09f8d87",
+									"0x1",
+									"0x0",
+									"0x636f6e666967757265",
+									"0x1",
+									"0x0"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [
+									{
+										"call_type": "CALL",
+										"calldata": [
+											"0x5379e1ce3a70cb70f1e96dae1b142164574f33d4e32cebdb965b5aec30222c5",
+											"0x1",
+											"0x710a93409aeb869505de269dbbc9ad0f7ec232d3c3136da94255c300cdbecb5",
+											"0x1",
+											"0x1",
+											"0x1afeeaff0ed5cee7d05a21078399c2f56226b0cd5657062500cef4c4e736f85",
+											"0x0",
+											"0x1",
+											"0xfb"
+										],
+										"caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+										"calls": [],
+										"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+										"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+										"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+										"entry_point_type": "EXTERNAL",
+										"events": [],
+										"execution_resources": {
+											"memory_holes": 225,
+											"poseidon_builtin_applications": 4,
+											"range_check_builtin_applications": 38,
+											"steps": 1152
+										},
+										"messages": [],
+										"result": [
+											"0x1",
+											"0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b"
+										]
+									},
+									{
+										"call_type": "CALL",
+										"calldata": [
+											"0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
+											"0x1",
+											"0x70dd4296c8b5cbe03cf453e3ab044811bb6dbb302e09a86bc8b1ff4bceaf5e",
+											"0x1",
+											"0x8",
+											"0x2f028ca0e8edb4a8c9757ca4fdccab25fa1e0317da1188108f7d2dee14902fb",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
+											"0x0",
+											"0x1",
+											"0x20",
+											"0x5cfa5c7e504eb4ab4b5836e27a52bd193ebb7173419dc5002c302e8176c61f",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0xbd14cb6f0ee671aab46bd04cf1b9e7b6c7797739207e1e89d62db252996311",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0x2bf727c48eac2c66272456b06a885c5cc03e54d140f63b63b6fd10c1227958e",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0x2016836a56b71f0d02689e69e326f4f4c1b9057164ef592671cf0d37c8040c0",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x199d5e4e43121196cadfeaea326e46f58d9db74299decfd64bd3b700350ccd9",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
+											"0x0",
+											"0x1",
+											"0xfb"
+										],
+										"caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+										"calls": [],
+										"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+										"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+										"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+										"entry_point_type": "EXTERNAL",
+										"events": [],
+										"execution_resources": {
+											"bitwise_builtin_applications": 8,
+											"memory_holes": 1032,
+											"poseidon_builtin_applications": 32,
+											"range_check_builtin_applications": 398,
+											"steps": 7975
+										},
+										"messages": [],
+										"result": [
+											"0x8",
+											"0x0",
+											"0x0",
+											"0x0",
+											"0x0",
+											"0x0",
+											"0x0",
+											"0x0",
+											"0x0"
+										]
+									},
+									{
+										"call_type": "CALL",
+										"calldata": [
+											"0x3baaf9fe25823e8928b6fc6400e28e98d4b7618ff56faf269a11f3400a1c105",
+											"0x1",
+											"0x14dca4cec1eaae8ac8e80048da4f4e5165d3e2cb93520cdb8294c82ead422ee",
+											"0x1",
+											"0x1",
+											"0x1a666cca84378d56bd6902ed679e04a9041116d4e21064ef2faf2756cd367c1",
+											"0x0",
+											"0x1",
+											"0xfb"
+										],
+										"caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+										"calls": [],
+										"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+										"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+										"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+										"entry_point_type": "EXTERNAL",
+										"events": [],
+										"execution_resources": {
+											"memory_holes": 225,
+											"poseidon_builtin_applications": 4,
+											"range_check_builtin_applications": 38,
+											"steps": 1152
+										},
+										"messages": [],
+										"result": ["0x1", "0x14002a"]
+									},
+									{
+										"call_type": "CALL",
+										"calldata": [
+											"0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
+											"0x0",
+											"0x2",
+											"0xa",
+											"0xf",
+											"0x8",
+											"0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+											"0xff7f00ff",
+											"0x683e1bc2",
+											"0x683e1bc2",
+											"0x0",
+											"0x0",
+											"0xf09f8d87",
+											"0x636f6e666967757265",
+											"0x1",
+											"0x8",
+											"0x2f028ca0e8edb4a8c9757ca4fdccab25fa1e0317da1188108f7d2dee14902fb",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x1c2d689775609d255fc253eff456037883aa539c2155594344ccc1896935bf1",
+											"0x0",
+											"0x1",
+											"0x20",
+											"0x5cfa5c7e504eb4ab4b5836e27a52bd193ebb7173419dc5002c302e8176c61f",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0xbd14cb6f0ee671aab46bd04cf1b9e7b6c7797739207e1e89d62db252996311",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0x2bf727c48eac2c66272456b06a885c5cc03e54d140f63b63b6fd10c1227958e",
+											"0x0",
+											"0x1",
+											"0x40",
+											"0x2016836a56b71f0d02689e69e326f4f4c1b9057164ef592671cf0d37c8040c0",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x199d5e4e43121196cadfeaea326e46f58d9db74299decfd64bd3b700350ccd9",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
+											"0x0",
+											"0x1",
+											"0xfb"
+										],
+										"caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+										"calls": [],
+										"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+										"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+										"entry_point_selector": "0xd065c837ba98927ca43d2e15d8e840ca8e67646b8e00108f1b55d18a75d80f",
+										"entry_point_type": "EXTERNAL",
+										"events": [
+											{
+												"data": [
+													"0x2",
+													"0xa",
+													"0xf",
+													"0x8",
+													"0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+													"0xff7f00ff",
+													"0x683e1bc2",
+													"0x683e1bc2",
+													"0x0",
+													"0x0",
+													"0xf09f8d87",
+													"0x636f6e666967757265"
+												],
+												"keys": [
+													"0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d",
+													"0x7e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e",
+													"0x70dd4296c8b5cbe03cf453e3ab044811bb6dbb302e09a86bc8b1ff4bceaf5e"
+												],
+												"order": 2
+											}
+										],
+										"execution_resources": {
+											"bitwise_builtin_applications": 16,
+											"memory_holes": 200,
+											"pedersen_builtin_applications": 3,
+											"poseidon_builtin_applications": 34,
+											"range_check_builtin_applications": 600,
+											"steps": 9415
+										},
+										"messages": [],
+										"result": []
+									},
+									{
+										"call_type": "CALL",
+										"calldata": [
+											"0x3650456503601ce448928ac87c54e3a6e95e76d725a59c95c7201324c9b2b74",
+											"0x1",
+											"0x1bca6d53792f72d017dc8ad8b59a3babb6ed5ec22ec66d19d4597848992e8d6",
+											"0x1",
+											"0x3",
+											"0x361458367e696363fbcc70777d07ebbd2394e89fd0adcaf147faccd1d294d60",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0xfb359b10bbf4a2d200a28af8a4e722ae4421e7f9b1530443597898d2a1e9b0",
+											"0x0",
+											"0x1",
+											"0xfb",
+											"0x1eef5bfea8da92e7e8fec353cef8b538633489b095e0b71a9d2a347f67036bd",
+											"0x0",
+											"0x1",
+											"0xfb"
+										],
+										"caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+										"calls": [],
+										"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+										"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+										"entry_point_selector": "0x326593e1b7478914a9c4ff6d556d1561d942e60fae7253b1eb00c19702dbf1f",
+										"entry_point_type": "EXTERNAL",
+										"events": [],
+										"execution_resources": {
+											"memory_holes": 587,
+											"poseidon_builtin_applications": 12,
+											"range_check_builtin_applications": 102,
+											"steps": 2914
+										},
+										"messages": [],
+										"result": ["0x3", "0x706c61796572", "0xf09f9883", "0x0"]
+									},
+									{
+										"call_type": "CALL",
+										"calldata": [
+											"0xa",
+											"0xf",
+											"0x0",
+											"0xff7f00ff",
+											"0x1",
+											"0x0",
+											"0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+											"0x0",
+											"0xf09f8d87",
+											"0x1",
+											"0x0",
+											"0x636f6e666967757265",
+											"0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+											"0x706c61796572",
+											"0xf09f9883",
+											"0x0",
+											"0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718"
+										],
+										"caller_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+										"calls": [],
+										"class_hash": "0x7cfb11bb511667fd838d7eb14620f25c86ffd3141d1eee9d1427182481dcf5c",
+										"contract_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+										"entry_point_selector": "0x3484ad2e032768c324059cc216083c643765f60c00f2b9b0561bc98ceb1c92",
+										"entry_point_type": "EXTERNAL",
+										"events": [],
+										"execution_resources": {
+											"memory_holes": 16,
+											"range_check_builtin_applications": 17,
+											"steps": 317
+										},
+										"messages": [],
+										"result": []
+									}
+								],
+								"class_hash": "0x5ee1e5ccf2ba9562397a0987ddce064091a0d8bfc3e8c95720990e966821b9c",
+								"contract_address": "0x6e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b",
+								"entry_point_selector": "0x2b6cc443571e84d5278bcdf2487b89d19aca51b15ee2532950bcafceb49a3ff",
+								"entry_point_type": "EXTERNAL",
+								"events": [],
+								"execution_resources": {
+									"bitwise_builtin_applications": 40,
+									"memory_holes": 2468,
+									"pedersen_builtin_applications": 3,
+									"poseidon_builtin_applications": 113,
+									"range_check_builtin_applications": 1574,
+									"steps": 35089
+								},
+								"messages": [],
+								"result": [
+									"0x0",
+									"0xa",
+									"0xf",
+									"0x0",
+									"0xff7f00ff",
+									"0x1",
+									"0x0",
+									"0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+									"0x0",
+									"0xf09f8d87",
+									"0x1",
+									"0x0",
+									"0x636f6e666967757265"
+								]
+							},
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
+									"0x0",
+									"0x2",
+									"0xa",
+									"0xf",
+									"0x1",
+									"0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
+									"0x1",
+									"0x1",
+									"0x26d994cdb81aaccb84aa1f62bae636dc0aaf98ab22f66b0c9224f1edccd7cc9",
+									"0x0",
+									"0x1",
+									"0xfb"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [],
+								"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+								"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+								"entry_point_selector": "0xd065c837ba98927ca43d2e15d8e840ca8e67646b8e00108f1b55d18a75d80f",
+								"entry_point_type": "EXTERNAL",
+								"events": [
+									{
+										"data": [
+											"0x2",
+											"0xa",
+											"0xf",
+											"0x1",
+											"0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718"
+										],
+										"keys": [
+											"0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d",
+											"0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
+											"0x70dd4296c8b5cbe03cf453e3ab044811bb6dbb302e09a86bc8b1ff4bceaf5e"
+										],
+										"order": 3
+									}
+								],
+								"execution_resources": {
+									"bitwise_builtin_applications": 2,
+									"memory_holes": 46,
+									"pedersen_builtin_applications": 3,
+									"poseidon_builtin_applications": 6,
+									"range_check_builtin_applications": 110,
+									"steps": 2296
+								},
+								"messages": [],
+								"result": []
+							},
+							{
+								"call_type": "CALL",
+								"calldata": [
+									"0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
+									"0x0",
+									"0x2",
+									"0xa",
+									"0xe",
+									"0x1",
+									"0x0",
+									"0x1",
+									"0x1",
+									"0x26d994cdb81aaccb84aa1f62bae636dc0aaf98ab22f66b0c9224f1edccd7cc9",
+									"0x0",
+									"0x1",
+									"0xfb"
+								],
+								"caller_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+								"calls": [],
+								"class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+								"contract_address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+								"entry_point_selector": "0xd065c837ba98927ca43d2e15d8e840ca8e67646b8e00108f1b55d18a75d80f",
+								"entry_point_type": "EXTERNAL",
+								"events": [
+									{
+										"data": ["0x2", "0xa", "0xe", "0x1", "0x0"],
+										"keys": [
+											"0x1a2f334228cee715f1f0f54053bb6b5eac54fa336e0bc1aacf7516decb0471d",
+											"0x7a71117629f37cebec5ec1f4930ee80bddaa90188845ffce91d2e3b001c429c",
+											"0x117d91ddbe138c03174c42147b57e147d131c282cdd6ca683438c5ca1e4258b"
+										],
+										"order": 4
+									}
+								],
+								"execution_resources": {
+									"bitwise_builtin_applications": 2,
+									"memory_holes": 55,
+									"pedersen_builtin_applications": 3,
+									"poseidon_builtin_applications": 6,
+									"range_check_builtin_applications": 107,
+									"steps": 2284
+								},
+								"messages": [],
+								"result": []
+							}
+						],
+						"class_hash": "0x7cfb11bb511667fd838d7eb14620f25c86ffd3141d1eee9d1427182481dcf5c",
+						"contract_address": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a",
+						"entry_point_selector": "0x476d5e1b17fd9d508bd621909241c5eb4c67380f3651f54873c5c1f2b891f4",
+						"entry_point_type": "EXTERNAL",
+						"events": [],
+						"execution_resources": {
+							"bitwise_builtin_applications": 118,
+							"memory_holes": 7971,
+							"pedersen_builtin_applications": 15,
+							"poseidon_builtin_applications": 393,
+							"range_check_builtin_applications": 5388,
+							"steps": 121289
+						},
+						"messages": [],
+						"result": []
+					}
+				],
+				"class_hash": "0x743c83c41ce99ad470aa308823f417b2141e02e04571f5c0004e743556e7faf",
+				"contract_address": "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
+				"entry_point_selector": "0x15d40a3d6ca2ac30f4031e42be28da9b056fef9bb7357ac5e85627ee876e5ad",
+				"entry_point_type": "EXTERNAL",
+				"events": [
+					{
+						"data": ["0x1", "0x0"],
+						"keys": [
+							"0x1dcde06aabdbca2f80aa51392b345d7549d7757aa855f7e37f5d335ac8243b1",
+							"0x555ff13cea63632db4104c8165b387d8c709e308c63e65dedb405645196542b"
+						],
+						"order": 5
+					}
+				],
+				"execution_resources": {
+					"bitwise_builtin_applications": 118,
+					"memory_holes": 8000,
+					"pedersen_builtin_applications": 15,
+					"poseidon_builtin_applications": 393,
+					"range_check_builtin_applications": 5429,
+					"steps": 123123
+				},
+				"messages": [],
+				"result": ["0x1", "0x0"]
+			},
+			"execution_resources": {
+				"bitwise_builtin_applications": 118,
+				"data_availability": {
+					"l1_data_gas": 1024,
+					"l1_gas": 0
+				},
+				"memory_holes": 8000,
+				"pedersen_builtin_applications": 15,
+				"poseidon_builtin_applications": 393,
+				"range_check_builtin_applications": 5429,
+				"steps": 123123
+			},
+			"state_diff": {
+				"declared_classes": [],
+				"deployed_contracts": [],
+				"deprecated_declared_classes": [],
+				"nonces": [
+					{
+						"contract_address": "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718",
+						"nonce": "0x1"
+					}
+				],
+				"replaced_classes": [],
+				"storage_diffs": [
+					{
+						"address": "0x29f5f05845d3348af25b08d1415a0ea4b4df90892d734229931ba068a66e97",
+						"storage_entries": [
+							{
+								"key": "0x48b31b6fe7220d0b4e3cd71cf0842c425e842ef4ecc69f408573926bf7578a",
+								"value": "0x683e1bc2"
+							},
+							{
+								"key": "0x11e23f3abed3523870ce431acb363f4c308c2c700f775886ff7d91a8e6392c9",
+								"value": "0xf09f8d87"
+							},
+							{
+								"key": "0x1d682c54bd2de846314777529668ecda95da990852928827633ad38ea4d3d13",
+								"value": "0x60a6dd8e29890c1fa7f4164c58ee06691c37df24999253e8839fbdc2a1c106a"
+							},
+							{
+								"key": "0x204d512afce968c3cb9280f665083f38f6db83e0e1ac4f8b6c125b93919dcaf",
+								"value": "0xff7f00ff"
+							},
+							{
+								"key": "0x2b561f0f2c243f8cacda64c0ca00a5d84ab85909daa6e9394f5f254cd7ddacd",
+								"value": "0x0"
+							},
+							{
+								"key": "0x2d3b19002fd06d9736062c0f578382213e72ab1b8d64ddd16fb7de4968c58f1",
+								"value": "0x636f6e666967757265"
+							},
+							{
+								"key": "0x31752b9e0653adb3aeda41c7f067305281a5c93a9f59cac67fcce6082f14d27",
+								"value": "0x0"
+							},
+							{
+								"key": "0x3a221cdfaeaf9099c4a70fd33588d6f3243406de6245271113d0d7d9600270b",
+								"value": "0x0"
+							},
+							{
+								"key": "0x3ac5717be627cfa49af145e2a94c8050c786220412aece4b72b79fb11dbd333",
+								"value": "0x5f59e1c371465a83f4a10d040627be37967c02e8fbe5c5f0afe1068e7cd0718"
+							},
+							{
+								"key": "0x481b327acdb41aee11a9140d5979680c1a3d6db238aea01f9e3e911752537a3",
+								"value": "0x0"
+							},
+							{
+								"key": "0x6d4d892264985623e0bdb4e586639d6f31193ad7c08c8d2805b4b802c13fda4",
+								"value": "0x683e1bc2"
+							},
+							{
+								"key": "0x6e77d1b4280aac6b3abbcd410840fc0cc2e1bc1d52749c6d351f30b59351acd",
+								"value": "0x0"
+							},
+							{
+								"key": "0x789389e054ad321e62b5774449f484ca6962d95aa8756fb3b914aff9bea1a5d",
+								"value": "0xf"
+							}
+						]
+					}
+				]
+			},
+			"type": "INVOKE"
+		}
+	}
 ]

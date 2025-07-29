@@ -1,7 +1,9 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": {
-    "enabled": false
+  "$schema": "https://biomejs.dev/schemas/2.1.3/schema.json",
+  "assist": { "actions": { "source": { "organizeImports": "off" } } },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": ["packages/**", "*.json", "*.js", "*.ts", "*.tsx", "*.jsx"]
   },
   "linter": {
     "enabled": true,
@@ -16,7 +18,10 @@
       "style": {
         "noNonNullAssertion": "off",
         "useBlockStatements": "off",
-        "useShorthandArrayType": "error"
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": { "syntax": "shorthand" }
+        }
       }
     }
   },
@@ -25,9 +30,7 @@
     "indentStyle": "space",
     "indentWidth": 4,
     "lineWidth": 120,
-    "formatWithErrors": true,
-
-    "ignore": ["dist/**", "node_modules/**", ".vite/**", ".idea/**", ".run/**"]
+    "formatWithErrors": true
   },
   "javascript": {
     "formatter": {

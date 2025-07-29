@@ -1,40 +1,40 @@
 {
-  "name": "@pixelaw/react",
-  "private": false,
-  "version": "0.7.0",
-  "description": "pixelaw: React components and hooks",
-  "license": "MIT",
-  "source": "src/index.ts",
-  "main": "src/index.ts",
-  "types": "dist/index.d.ts",
-  "author": "thiscaspar",
-  "type": "module",
-  "scripts": {
-    "build:deps": "tsup --dts-resolve",
-    "build": "pnpm build:deps",
-    "dev": "tsup --watch",
-    "test": "vitest run --coverage"
-  },
-  "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "dependencies": {
-    "@pixelaw/core": "workspace:*",
-    "emoji-picker-react": "^4.12.2",
-    "unstorage": "^1.14.4"
-  },
-  "devDependencies": {
-    "@types/node": "^22.13.14",
-    "@types/react": "^18.3.9",
-    "@types/web": "^0.0.216",
-    "tsup": "^8.3.0",
-    "typescript": "^5.6.2"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public",
-    "main": "dist/index.js",
-    "typings": "dist/index.d.ts"
-  }
+	"name": "@pixelaw/react",
+	"private": false,
+	"version": "0.7.0",
+	"description": "pixelaw: React components and hooks",
+	"license": "MIT",
+	"source": "src/index.ts",
+	"main": "src/index.ts",
+	"types": "dist/index.d.ts",
+	"author": "thiscaspar",
+	"type": "module",
+	"scripts": {
+		"build:deps": "tsup --dts-resolve",
+		"build": "pnpm build:deps",
+		"dev": "tsup --watch",
+		"test": "vitest run --coverage"
+	},
+	"peerDependencies": {
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1"
+	},
+	"dependencies": {
+		"@pixelaw/core": "workspace:*",
+		"emoji-picker-react": "^4.13.2",
+		"unstorage": "^1.16.1"
+	},
+	"devDependencies": {
+		"@types/node": "^24.1.0",
+		"@types/react": "^19.1.9",
+		"@types/web": "^0.0.256",
+		"tsup": "^8.5.0",
+		"typescript": "^5.8.3"
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org/",
+		"access": "public",
+		"main": "dist/index.js",
+		"typings": "dist/index.d.ts"
+	}
 }

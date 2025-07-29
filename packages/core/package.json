@@ -1,37 +1,37 @@
 {
-  "name": "@pixelaw/core",
-  "private": false,
-  "version": "0.7.0",
-  "type": "module",
-  "author": "thiscaspar",
-  "license": "MIT",
-  "source": "src/index.ts",
-  "main": "src/index.ts",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build:deps": "tsup --dts-resolve",
-    "build": "pnpm build:deps",
-    "dev": "tsup --dts-resolve --watch",
-    "lint": "biome lint .",
-    "format": "biome format --write .",
-    "check": "biome check --apply ."
-  },
-  "dependencies": {
-    "@types/node": "^22.13.14",
-    "ably": "^2.9.0",
-    "canvas": "^3.1.0",
-    "idb-keyval": "^6.2.1",
-    "mitt": "^3.0.1",
-    "unstorage": "^1.14.4"
-  },
-  "devDependencies": {
-    "tsup": "^8.3.6",
-    "typescript": "^5.7.2"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public",
-    "main": "dist/index.js",
-    "typings": "dist/index.d.ts"
-  }
+	"name": "@pixelaw/core",
+	"private": false,
+	"version": "0.7.0",
+	"type": "module",
+	"author": "thiscaspar",
+	"license": "MIT",
+	"source": "src/index.ts",
+	"main": "src/index.ts",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build:deps": "tsup --dts-resolve",
+		"build": "pnpm build:deps",
+		"dev": "tsup --dts-resolve --watch",
+		"lint": "biome lint .",
+		"format": "biome format --write .",
+		"check": "biome check --apply ."
+	},
+	"dependencies": {
+		"@types/node": "^24.1.0",
+		"ably": "^2.10.1",
+		"canvas": "^3.1.2",
+		"idb-keyval": "^6.2.2",
+		"mitt": "^3.0.1",
+		"unstorage": "^1.16.1"
+	},
+	"devDependencies": {
+		"tsup": "^8.5.0",
+		"typescript": "^5.8.3"
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org/",
+		"access": "public",
+		"main": "dist/index.js",
+		"typings": "dist/index.d.ts"
+	}
 }
