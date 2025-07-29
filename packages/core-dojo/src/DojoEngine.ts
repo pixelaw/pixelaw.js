@@ -12,6 +12,7 @@ import {
 import { Account, type ProviderInterface } from "starknet";
 import { DojoAppStore } from "./DojoAppStore.ts";
 import { type DojoStuff, dojoInit } from "./DojoEngine.init.ts";
+import { DojoErrorStore } from "./DojoErrorStore.ts";
 import { DojoExecutor } from "./DojoExecutor.ts";
 import { DojoInteraction } from "./DojoInteraction.ts";
 import { DojoNotificationStore } from "./DojoNotificationStore.ts";
@@ -60,6 +61,8 @@ export class DojoEngine implements Engine {
 			this.core.notification = await DojoNotificationStore.getInstance(
 				this.core,
 			);
+
+			this.core.errorStore = await DojoErrorStore.getInstance(this.core);
 		} catch (error) {
 			console.error("Dojo init error:", error);
 		}
@@ -109,7 +112,14 @@ export class DojoEngine implements Engine {
 				const failureReason = match[1];
 				error = failureReason;
 			}
-			this.core.events.emit("error", { coordinate: null, error });
+			
+			const errorObj = { coordinate: null, error };
+			this.core.events.emit("error", errorObj);
+			
+			// Store error in ErrorStore for UI rendering
+			if (this.core.errorStore) {
+				this.core.errorStore.addError(errorObj);
+			}
 		});
 
 		return true;

@@ -10,6 +10,7 @@ import type {
 	CoreStatus,
 	Engine,
 	EngineConstructor,
+	ErrorStore,
 	Executor,
 	Interaction,
 	NotificationStore,
@@ -37,6 +38,7 @@ export class PixelawCore {
 	queue: QueueStore = null!;
 	executor: Executor | null = null!;
 	notification: NotificationStore | null = null!;
+	errorStore: ErrorStore | null = null;
 
 	private _worldsRegistry: WorldsRegistry;
 	private _app: string | null = null;

@@ -81,6 +81,11 @@ export type QueueStoreEvents = {
 	scheduled: QueueItem;
 };
 
+export type ErrorStoreEvents = {
+	errorAdded: SimplePixelError;
+	errorsCleared: void;
+};
+
 export interface QueueStore {
 	eventEmitter: ReturnType<typeof mitt<QueueStoreEvents>>;
 	getAll: () => QueueItem[];
@@ -91,6 +96,14 @@ export interface NotificationStore {
 	eventEmitter: ReturnType<typeof mitt<NotificationStoreEvents>>;
 	getAll: () => Notification[];
 	// getLastForPosition: (position: Position) => Notification[]
+}
+
+export interface ErrorStore {
+	eventEmitter: ReturnType<typeof mitt<ErrorStoreEvents>>;
+	addError: (error: SimplePixelError) => void;
+	getErrors: () => SimplePixelError[];
+	getErrorsForCoordinate: (coord: Coordinate) => SimplePixelError[];
+	clearErrors: () => void;
 }
 
 export interface TileStore {
