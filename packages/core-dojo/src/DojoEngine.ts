@@ -113,7 +113,7 @@ export class DojoEngine implements Engine {
 				error = failureReason;
 			}
 			
-			const errorObj = { coordinate: null, error };
+			const errorObj = { coordinate: null, error, timestamp: Date.now() };
 			this.core.events.emit("error", errorObj);
 			
 			// Store error in ErrorStore for UI rendering

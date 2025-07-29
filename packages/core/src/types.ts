@@ -69,6 +69,7 @@ export type Notification = {
 	from: string | null;
 	to: string | null;
 	text: string;
+	timestamp: number;
 };
 
 export type NotificationStoreEvents = {
@@ -172,7 +173,7 @@ export function makeString<Coordinate>(coordinate: Coordinate): string {
 	return `${coordinate[0]}_${coordinate[1]}`;
 }
 
-export type SimplePixelError = { coordinate: Coordinate | null; error: string };
+export type SimplePixelError = { coordinate: Coordinate | null; error: string; timestamp: number };
 
 export type PixelCoreEvents = {
 	cellClicked: Coordinate;

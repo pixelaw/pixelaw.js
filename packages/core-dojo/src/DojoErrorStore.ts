@@ -28,11 +28,11 @@ export class DojoErrorStore implements ErrorStore {
     }
 
     public addError(error: SimplePixelError): void {
-        // Add timestamp to error if not present
-        const timestampedError = {
+        // Ensure error has timestamp
+        const timestampedError: SimplePixelError = {
             ...error,
-            timestamp: Date.now()
-        } as SimplePixelError & { timestamp: number };
+            timestamp: error.timestamp || Date.now()
+        };
         
         this.state.push(timestampedError);
         
@@ -41,7 +41,7 @@ export class DojoErrorStore implements ErrorStore {
             this.state = this.state.slice(-100);
         }
         
-        this.eventEmitter.emit("errorAdded", error);
+        this.eventEmitter.emit("errorAdded", timestampedError);
     }
 
     public getErrors(): SimplePixelError[] {
