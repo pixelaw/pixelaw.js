@@ -91,3 +91,122 @@ The codebase follows an engine pattern where:
 ### Testing
 
 Tests are primarily located in `packages/core-dojo/src/__tests__/` and use Vitest. The main test focuses on simulation parsing and data handling.
+
+## Detailed Architecture Documentation
+
+### Core Types and Interfaces (packages/core/src/types.ts)
+
+**Core Data Types**:
+- `Pixel`: Base pixel data (x, y, action, app, color, owner, text, timestamp)
+- `App`: Application definition (system, name, icon, action, plugin)
+- `Notification`: User notifications (position, app, color, from, to, text, timestamp)
+- `QueueItem`: Transaction queue items (id, timestamp, called_system, selector, calldata)
+- `SimplePixelError`: Error representation (coordinate, error, timestamp)
+
+**Store Interfaces** - Core uses a stateful caching layer pattern:
+- `PixelStore`: Manages pixel state, queries from blockchain, caches locally
+- `AppStore`: Caches application metadata
+- `QueueStore`: Manages transaction queue
+- `NotificationStore`: Fetches and caches onchain notifications
+- `ErrorStore`: Session-based error storage (in-memory only)
+- `TileStore`: Manages tile rendering data
+
+**Engine Pattern**:
+- `Engine` interface: Abstract blockchain integration (init, prepInteraction, executeQueueItem)
+- `EngineStatus`: "ready" | "loading" | "error" | "uninitialized"
+- Implementations: `DojoEngine` (StarkNet), `MudEngine` (EVM)
+
+**Event System**:
+- `PixelCoreEvents`: Comprehensive event types for all state changes
+- Uses `mitt` for event emission throughout
+- Key events: cellClicked, boundsChanged, error, notification, statusChanged
+
+### PixelawCore Class (packages/core/src/PixelawCore.ts)
+
+Central orchestration class that:
+- Manages all stores (pixel, app, queue, notification, error, tile)
+- Handles engine initialization and switching
+- Provides viewport rendering via Canvas2DRenderer
+- Manages wallet/account state
+- Persists user preferences to storage
+- Emits events for all state changes
+
+Key properties:
+- `_engine`: Active blockchain engine
+- `events`: Event emitter for core events
+- `storage`: Persistent storage interface (localStorage in browser)
+- `viewPort`: Canvas2D renderer instance
+
+### Store Implementation Patterns
+
+All stores follow similar patterns:
+1. **Singleton Pattern**: Static `getInstance()` method
+2. **Event Emission**: Each store has `eventEmitter` for state changes
+3. **Core Reference**: Stores maintain reference to PixelawCore
+4. **State Management**: Internal state object for caching
+
+**PixelStore** (DojoSqlPixelStore):
+- Uses web worker for SQL queries to Torii
+- Subscribes to blockchain updates via SDK
+- Maintains local pixel cache
+- Handles optimistic updates
+
+**NotificationStore** (DojoNotificationStore):
+- Queries historical notifications from Torii
+- Subscribes to new notification events
+- Filters by radius around center point
+
+**ErrorStore** (DojoErrorStore):
+- Simple in-memory array storage
+- Limits to 100 errors to prevent memory leaks
+- Can filter errors by coordinate
+
+### Engine Architecture
+
+**DojoEngine** (packages/core-dojo/src/DojoEngine.ts):
+- Integrates with StarkNet via Dojo SDK
+- Initializes all Dojo-specific stores
+- Handles Cartridge Controller wallet
+- Manages contract interactions
+
+Key components:
+- `dojoInit`: Sets up SDK, provider, manifest
+- `DojoInteraction`: Handles user interactions with pixels
+- `DojoExecutor`: Manages transaction execution
+- `DojoWallet`: Cartridge Controller integration
+
+### React Integration (packages/react/)
+
+**PixelawProvider**:
+- React context provider for PixelawCore
+- Manages core lifecycle in React apps
+- Provides hooks for state access
+- Handles localStorage persistence
+
+**ChainProvider**:
+- Engine-specific wallet/chain management
+- Integrates with wallet selection UIs
+- Manages account connection state
+
+### Event Flow
+
+1. **User Interaction** → PixelawCore → Engine.prepInteraction()
+2. **Engine creates Interaction** → Gets user params → Executes
+3. **Transaction sent** → QueueStore updated → Blockchain processes
+4. **Blockchain event** → Store subscription → Local cache update → Event emission
+5. **UI components** → Listen to events → Re-render
+
+### Error Handling Philosophy
+
+- **Notifications**: Onchain data, persisted, queried from blockchain
+- **Errors**: Transient session data, stored in memory, emitted as events
+- Core provides both but lets frontends decide display/persistence
+- ErrorStore provides convenience methods but is optional
+
+### Performance Optimizations
+
+1. **Web Workers**: SQL queries run in separate thread (DojoSqlPixelStore)
+2. **Caching**: All stores maintain local cache to minimize blockchain queries
+3. **Query Buffering**: Only re-query when bounds change significantly
+4. **Event Batching**: Multiple updates can be processed together
+5. **Lazy Loading**: Stores initialized only when needed
