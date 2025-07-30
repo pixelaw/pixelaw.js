@@ -37,14 +37,14 @@ export class PixelawCore {
 	events = mitt<PixelCoreEvents>();
 	queue: QueueStore = null!;
 	executor: Executor | null = null!;
-	notification: NotificationStore | null = null!;
+	notificationStore: NotificationStore | null = null!;
 	errorStore: ErrorStore | null = null;
 
 	private _worldsRegistry: WorldsRegistry;
 	private _app: string | null = null;
 	private _color = 0;
 	private _zoom = 1;
-	private _lastNotification = 0;
+	private _lastEventAck = 0;
 	private _center: Coordinate = [0, 0];
 	private _world: string;
 
@@ -166,7 +166,7 @@ export class PixelawCore {
 			this.zoom = defaults.zoom;
 		}
 
-		// TODO load lastNotification?
+		// TODO load lastEventAck?
 
 		this.viewPort = new Canvas2DRenderer(this);
 
@@ -252,16 +252,16 @@ export class PixelawCore {
 			.catch(console.error);
 	}
 
-	public set lastNotification(newLastNotification: number) {
-		if (this._lastNotification === newLastNotification) return;
-		this._lastNotification = newLastNotification;
+	public set lastEventAck(newLastEventAck: number) {
+		if (this._lastEventAck === newLastEventAck) return;
+		this._lastEventAck = newLastEventAck;
 		this.storage
-			.setItem(this.getStorageKey("lastNotification"), newLastNotification)
+			.setItem(this.getStorageKey("lastEventAck"), newLastEventAck)
 			.catch(console.error);
 	}
 
-	public get lastNotification(): number {
-		return this._lastNotification;
+	public get lastEventAck(): number {
+		return this._lastEventAck;
 	}
 
 	public get center(): Coordinate {

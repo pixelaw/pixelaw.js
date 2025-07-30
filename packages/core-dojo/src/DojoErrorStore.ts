@@ -45,7 +45,8 @@ export class DojoErrorStore implements ErrorStore {
     }
 
     public getErrors(): SimplePixelError[] {
-        return [...this.state];
+        const lastEventAck = this.core.lastEventAck;
+        return this.state.filter(error => error.timestamp > lastEventAck);
     }
 
     public getErrorsForCoordinate(coord: Coordinate): SimplePixelError[] {

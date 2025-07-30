@@ -61,7 +61,7 @@ export class DojoNotificationStore implements NotificationStore {
 				createSqlQueryByRadius(
 					this.core.center,
 					QUERY_RADIUS,
-					this.core.lastNotification /*,  wallet.getAccount()*/,
+					this.core.lastEventAck /*,  wallet.getAccount()*/,
 				),
 				(rows: any[]) => {
 					return rows.map((item) => {
@@ -81,7 +81,8 @@ export class DojoNotificationStore implements NotificationStore {
 				},
 			);
 			for (const item of items) {
-				// this.setNotification(item.id, item)
+				const key = `${item.position.x},${item.position.y}-${item.timestamp}`;
+				this.setNotification(key, item);
 				this.eventEmitter.emit("added", item);
 			}
 		} catch (e) {
@@ -102,15 +103,18 @@ export class DojoNotificationStore implements NotificationStore {
 					try {
 						console.log("notification from sub", data);
 						const p = data.models["pixelaw-Notification"];
-						
+
 						if (Object.keys(data).length === 0) {
 							// Notification got deleted
 							return;
 						}
 
 						const notification = {
-							from: p.from.value.option === "None" ? null : p.from.value.value.value,
-							to: p.to.value.option === "None" ? null : p.to.value.value.value,  
+							from:
+								p.from.value.option === "None"
+									? null
+									: p.from.value.value.value,
+							to: p.to.value.option === "None" ? null : p.to.value.value.value,
 							color: p.color.value,
 							app: p.app.value,
 							position: {
@@ -121,6 +125,9 @@ export class DojoNotificationStore implements NotificationStore {
 							timestamp: Date.now(),
 						};
 
+						const key = `${notification.position.x},${notification.position.y}-${notification.timestamp}`;
+						this.setNotification(key, notification);
+						this.eventEmitter.emit("added", notification);
 						this.core.events.emit("notification", notification);
 					} catch (e) {
 						console.error(e);
@@ -145,8 +152,11 @@ export class DojoNotificationStore implements NotificationStore {
 		this.state[key] = Notification;
 	}
 
-	getAll(): Notification[] {
-		return this.dojoStuff?.apps;
+	public getAll(): Notification[] {
+		const lastEventAck = this.core.lastEventAck;
+		return Object.values(this.state)
+			.filter((n): n is Notification => n !== undefined)
+			.filter((n) => n.timestamp > lastEventAck);
 	}
 
 	public setBounds(newBounds: Bounds): void {
@@ -167,7 +177,7 @@ export class DojoNotificationStore implements NotificationStore {
 export function createSqlQueryByRadius(
 	center: Coordinate,
 	radius: number,
-	_lastNotification: number,
+	_lastEventAck: number,
 	address: string,
 ) {
 	console.log("add", address);

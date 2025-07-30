@@ -58,7 +58,7 @@ export class DojoEngine implements Engine {
 				this.dojoSetup,
 			);
 
-			this.core.notification = await DojoNotificationStore.getInstance(
+			this.core.notificationStore = await DojoNotificationStore.getInstance(
 				this.core,
 			);
 

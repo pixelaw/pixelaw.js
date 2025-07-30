@@ -64,7 +64,7 @@ export type QueueItem = {
 
 export type Notification = {
 	position: Position;
-	app: App;
+	app: string;
 	color: number;
 	from: string | null;
 	to: string | null;
