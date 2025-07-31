@@ -7,6 +7,14 @@ import type { SchemaType } from "./generated/models.gen.ts";
 
 type State = { [key: string]: QueueItem | undefined };
 
+interface QueueRowData {
+	id: string;
+	timestamp: number;
+	called_system: string;
+	selector: string;
+	calldata: string;
+}
+
 export class DojoQueueStore implements QueueStore {
 	public readonly eventEmitter = mitt<QueueStoreEvents>();
 	private dojoStuff;
@@ -45,7 +53,7 @@ export class DojoQueueStore implements QueueStore {
                 INNER JOIN "pixelaw-QueueItem" qi
                 ON qi.id = qs.id;
                 `,
-				(rows: any[]) => {
+				(rows: QueueRowData[]) => {
 					return rows.map((item) => {
 						return {
 							...item,

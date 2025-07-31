@@ -109,41 +109,6 @@ export type AbiType = (
 	| EventEnumType
 )[];
 
-type ComputedValueEntryPoint = {
-	contract: string;
-	entrypoint: string;
-	model?: string;
-};
-
-type Contract = {
-	name: string;
-	address?: string;
-	class_hash: string;
-	abi: AbiType;
-	reads: string[];
-	writes: string[];
-	computed: ComputedValueEntryPoint[];
-};
-
-type Class = {
-	name: string;
-	class_hash: string;
-	abi: AbiType;
-};
-
-type Member = {
-	name: string;
-	type: string;
-	key: boolean;
-};
-
-type Model = {
-	name: string;
-	members: Member[];
-	class_hash: string;
-	abi: AbiType;
-};
-
 // export type Manifest = {
 //     world: Contract
 //     executor: Contract

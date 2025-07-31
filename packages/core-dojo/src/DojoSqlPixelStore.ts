@@ -26,7 +26,7 @@ class DojoSqlPixelStore implements PixelStore {
 	private cacheUpdated: number = Date.now();
 	private isSubscribed = false;
 	private sdk: SDK<SchemaType>;
-	private worker: any;
+	private worker: Worker | null = null;
 	private toriiUrl: string;
 	private core: PixelawCore;
 

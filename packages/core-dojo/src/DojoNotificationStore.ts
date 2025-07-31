@@ -18,6 +18,17 @@ import { convertFullHexString } from "./utils/utils.ts";
 
 type State = { [key: string]: Notification | undefined };
 
+interface NotificationRowData {
+	from: string;
+	to: string;
+	color: number;
+	app: string;
+	"position.x": number;
+	"position.y": number;
+	text: string;
+	timestamp: number;
+}
+
 const QUERY_RADIUS = 20;
 
 export class DojoNotificationStore implements NotificationStore {
@@ -62,7 +73,7 @@ export class DojoNotificationStore implements NotificationStore {
 					QUERY_RADIUS,
 					this.core.lastEventAck /*,  wallet.getAccount()*/,
 				),
-				(rows: any[]) => {
+				(rows: NotificationRowData[]) => {
 					return rows.map((item) => {
 						return {
 							from: item.from,

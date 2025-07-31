@@ -17,7 +17,7 @@ const ENGINE_ID = "mud";
 export class MudEngine implements Engine {
 	id: Engines = ENGINE_ID;
 	status: EngineStatus = "uninitialized";
-	config: MudConfig = null!;
+	config!: MudConfig;
 	core: PixelawCore;
 
 	constructor(core: PixelawCore) {

@@ -102,7 +102,11 @@ export class DojoExecutor implements Executor {
 		}
 
 		this.executing = true;
-		const task = this.queue.shift()!;
+		const task = this.queue.shift();
+		if (!task) {
+			this.executing = false;
+			return;
+		}
 		try {
 			// Get the current nonce from the account instead of using cached nonce
 			const currentNonce = await account.getNonce();

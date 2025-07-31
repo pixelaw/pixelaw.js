@@ -24,7 +24,7 @@ import { type DojoConfig, ENGINE_ID } from "./types.ts";
 export class DojoEngine implements Engine {
 	id: Engines = ENGINE_ID;
 	status: EngineStatus = "uninitialized";
-	config: DojoConfig = null!;
+	config!: DojoConfig;
 	dojoSetup: DojoStuff | null = null;
 	core: PixelawCore;
 

@@ -181,11 +181,11 @@ function setupControllerConnector(
 		return controllerConnectorCache.get(cacheKey) || null;
 	}
 
-	const connector = worldConfig.wallets.controller
+	const connector = worldConfig.wallets.controller?.rpcUrl
 		? getControllerConnector({
 				feeTokenAddress: worldConfig.feeTokenAddress,
 				manifest,
-				rpcUrl: worldConfig.wallets.controller.rpcUrl!,
+				rpcUrl: worldConfig.wallets.controller.rpcUrl,
 			})
 		: null;
 	// console.log("c", worldConfig)
@@ -226,14 +226,20 @@ async function setupBurnerConnector(
 		if (worldConfig.wallets?.burner) {
 			const burnerConfig = worldConfig.wallets.burner;
 
+			if (!burnerConfig.masterAddress || !burnerConfig.masterPrivateKey) {
+				throw new Error(
+					"Burner config requires masterAddress and masterPrivateKey",
+				);
+			}
+
 			const manager = new BurnerManager({
 				...burnerConfig,
 				feeTokenAddress: worldConfig.feeTokenAddress,
 				rpcProvider: rpcProvider.provider,
 				masterAccount: new Account(
 					rpcProvider.provider as never as ProviderInterface,
-					burnerConfig.masterAddress!,
-					burnerConfig.masterPrivateKey!,
+					burnerConfig.masterAddress,
+					burnerConfig.masterPrivateKey,
 				),
 			} as unknown as BurnerManagerOptions);
 
@@ -247,12 +253,17 @@ async function setupBurnerConnector(
 				}
 			}
 			console.log("burn");
+
+			if (!manager.account) {
+				throw new Error("Burner manager account not initialized");
+			}
+
 			return new BurnerConnector(
 				{
 					id: "burner",
-					name: `burner_${formatAddress(manager.account?.address)}`,
+					name: `burner_${formatAddress(manager.account.address)}`,
 				},
-				manager.account!,
+				manager.account,
 			);
 		}
 		return null;

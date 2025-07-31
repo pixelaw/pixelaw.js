@@ -27,17 +27,17 @@ import type {
 
 export class PixelawCore {
 	_status: CoreStatus = "uninitialized";
-	worldConfig: WorldConfig = null!;
-	_engine: Engine = null!;
-	pixelStore: PixelStore = null!;
-	tileStore: TileStore = null!;
-	appStore: AppStore = null!;
-	updateService: UpdateService = null!;
-	viewPort: Canvas2DRenderer = null!;
+	worldConfig!: WorldConfig;
+	_engine!: Engine;
+	pixelStore!: PixelStore;
+	tileStore!: TileStore;
+	appStore!: AppStore;
+	updateService!: UpdateService;
+	viewPort!: Canvas2DRenderer;
 	events = mitt<PixelCoreEvents>();
-	queue: QueueStore = null!;
-	executor: Executor | null = null!;
-	notificationStore: NotificationStore | null = null!;
+	queue!: QueueStore;
+	executor: Executor | null = null;
+	notificationStore: NotificationStore | null = null;
 	errorStore: ErrorStore | null = null;
 
 	private _worldsRegistry: WorldsRegistry;
