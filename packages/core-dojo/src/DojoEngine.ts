@@ -123,17 +123,28 @@ export class DojoEngine implements Engine {
 	
 		const errorMessage = typeof error === "string" ? error : error.message;
 
-		// Try coordinate-specific parsing (works for both types)
-		const coordinateMatch = errorMessage.match(/"\\s*(\\d+_\\d+\\s[^"]+)\\s*"/);
-		if (coordinateMatch) {
-			const pixelError = parsePixelError(coordinateMatch[1]);
-			if (pixelError) {
-				return {
-					coordinate: pixelError.coordinate,
-					error: pixelError.error,
-					timestamp: Date.now(),
-					queueId: context?.queueId,
-				};
+		// Try multiple coordinate-specific parsing patterns
+		const coordinatePatterns = [
+			// Pattern 1: Direct coordinate error (e.g., "23_17 NotAllowed")
+			/(\d+_\d+\s+[^"\\]+)/,
+			// Pattern 2: Escaped coordinate error (e.g., \"23_17 NotAllowed\")
+			/\\?"(\d+_\d+\s+[^"\\]+)\\?"/,
+			// Pattern 3: Deep nested coordinate error (e.g., \\\"23_17 NotAllowed\\\")
+			/\\{1,3}"(\d+_\d+\s+[^"\\]+)\\{1,3}"/,
+		];
+
+		for (const pattern of coordinatePatterns) {
+			const match = errorMessage.match(pattern);
+			if (match) {
+				const pixelError = parsePixelError(match[1]);
+				if (pixelError) {
+					return {
+						coordinate: pixelError.coordinate,
+						error: pixelError.error,
+						timestamp: Date.now(),
+						queueId: context?.queueId,
+					};
+				}
 			}
 		}
 
@@ -148,11 +159,32 @@ export class DojoEngine implements Engine {
 			};
 		}
 
+		// Extract meaningful error from RPC/execution errors
+		let cleanError = errorMessage;
+		
+		// Try to extract transaction execution error
+		const executionErrorMatch = errorMessage.match(/"execution_error":"([^"]+)"/);
+		if (executionErrorMatch) {
+			cleanError = executionErrorMatch[1].replace(/\\n/g, ' ').trim();
+		}
+		
+		// If still too long, extract just the core error
+		if (cleanError.length > 200) {
+			const coreErrorMatch = cleanError.match(/Error in contract[^:]*:\s*(.+?)(?:\\n|$)/);
+			if (coreErrorMatch) {
+				cleanError = coreErrorMatch[1].trim();
+			} else {
+				// Last resort: truncate
+				cleanError = cleanError.substring(0, 200) + "...";
+			}
+		}
+
 		// Default format
 		return {
 			coordinate: context?.coordinate || null,
-			error: errorMessage,
+			error: cleanError,
 			timestamp: Date.now(),
+			queueId: context?.queueId,
 		};
 	}
 
