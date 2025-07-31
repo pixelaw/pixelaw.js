@@ -1,12 +1,11 @@
 import type { Manifest } from "@dojoengine/core";
-import {
-	type App,
-	type Interaction,
-	type InteractParam,
-	type InteractParams,
-	type Pixel,
-	type Position,
-	parsePixelError,
+import type {
+	App,
+	Interaction,
+	InteractParam,
+	InteractParams,
+	Pixel,
+	Position,
 } from "@pixelaw/core";
 import type { DojoEngine } from "./DojoEngine.ts";
 import generateDojoCall from "./interaction/generateDojoCall.ts";
@@ -116,27 +115,11 @@ export class DojoInteraction implements Interaction {
 				this.color,
 			);
 
-			this.engine.core.executor.enqueue(
+			// Use unified execution method
+			await this.engine.executeCall({
 				dojoCall,
-				console.log,
-				(e: Error | string) => {
-					const error = typeof e === "string" ? e : e.message;
-
-					// console.error("Error executing DojoCall:", error)
-
-					const regex = /"\s*(\d+_\d+\s[^"]+)\s*"/;
-					const match = error.match(regex);
-
-					if (!match) {
-						this.engine.core.events.emit("error", { coordinate: null, error });
-						return;
-					}
-
-					const failureReason = match[1];
-					const pixelError = parsePixelError(failureReason);
-					this.engine.core.events.emit("error", pixelError);
-				},
-			);
+				context: { coordinate: [this.position.x, this.position.y] },
+			});
 		};
 	}
 }

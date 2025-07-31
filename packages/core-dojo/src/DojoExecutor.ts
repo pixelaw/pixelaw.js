@@ -201,7 +201,7 @@ export class DojoExecutor implements Executor {
 				task.onSuccess(sim[0]);
 			}
 		} catch (error) {
-			console.log(error);
+			// console.log(error);
 			task.onFail(error);
 		} finally {
 			console.log("done!");

@@ -7,9 +7,10 @@ import {
 	type Interaction,
 	type Pixel,
 	type PixelawCore,
+	parsePixelError,
 	type QueueItem,
 } from "@pixelaw/core";
-import { Account, type ProviderInterface } from "starknet";
+import { Account, type Call, type ProviderInterface } from "starknet";
 import { DojoAppStore } from "./DojoAppStore.ts";
 import { type DojoStuff, dojoInit } from "./DojoEngine.init.ts";
 import { DojoErrorStore } from "./DojoErrorStore.ts";
@@ -85,11 +86,79 @@ export class DojoEngine implements Engine {
 		return interaction;
 	}
 
+	async executeCall(callConfig: {
+		dojoCall: Call;
+		context?: { coordinate?: Coordinate; queueId?: string };
+	}): Promise<void> {
+		const { dojoCall, context } = callConfig;
+
+		this.core.executor.enqueue(
+			dojoCall,
+			(result) => {
+				console.log("execution successful:", result);
+			},
+			(error: Error | string) => {
+				const parsedError = this.parseExecutionError(error, context);
+				console.log("errror", parsedError);
+				// Store in ErrorStore
+				if (this.core.errorStore) {
+					this.core.errorStore.addError(parsedError);
+				}
+
+				// Emit error event
+				this.core.events.emit("error", parsedError);
+			},
+		);
+	}
+
+	private parseExecutionError(
+		error: Error | string,
+		context?: { coordinate?: Coordinate; queueId?: string },
+	): {
+		coordinate: Coordinate | null;
+		error: string;
+		timestamp: number;
+		queueId?: string;
+	} {
+	
+		const errorMessage = typeof error === "string" ? error : error.message;
+
+		// Try coordinate-specific parsing (works for both types)
+		const coordinateMatch = errorMessage.match(/"\\s*(\\d+_\\d+\\s[^"]+)\\s*"/);
+		if (coordinateMatch) {
+			const pixelError = parsePixelError(coordinateMatch[1]);
+			if (pixelError) {
+				return {
+					coordinate: pixelError.coordinate,
+					error: pixelError.error,
+					timestamp: Date.now(),
+					queueId: context?.queueId,
+				};
+			}
+		}
+
+		// Try failure reason parsing
+		const failureMatch = errorMessage.match(/Failure reason:\\s*"([^"]+)"/);
+		if (failureMatch) {
+			return {
+				coordinate: context?.coordinate || null,
+				error: failureMatch[1],
+				timestamp: Date.now(),
+				queueId: context?.queueId,
+			};
+		}
+
+		// Default format
+		return {
+			coordinate: context?.coordinate || null,
+			error: errorMessage,
+			timestamp: Date.now(),
+		};
+	}
+
 	async executeQueueItem(item: QueueItem): Promise<boolean> {
-		// const core_actions_address = this.dojoSetup.manifest.contracts.find((item) => item.tag === "pixelaw-actions")
-		console.log("RERR", this.dojoSetup.manifest.contracts);
 		const dojoCall = {
-			contractAddress: this.dojoSetup.coreAddress, //"0x06e82adcb82e399385f7a2fb6a208dea94715351f0eea2978cd5fe0410d92e5b", // TODO properly configure pixelaw_actions contract,
+			contractAddress: this.dojoSetup.coreAddress,
 			entrypoint: "process_queue",
 			calldata: [
 				item.id,
@@ -101,25 +170,10 @@ export class DojoEngine implements Engine {
 			],
 		};
 
-		this.core.executor.enqueue(dojoCall, console.log, (e: Error) => {
-			let error = e.message;
-			// console.error("Error executing DojoCall:", error)
-
-			const regex = /Failure reason:\s*"([^"]+)"/;
-			const match = error.match(regex);
-
-			if (match) {
-				const failureReason = match[1];
-				error = failureReason;
-			}
-
-			const errorObj = { coordinate: null, error, timestamp: Date.now() };
-			this.core.events.emit("error", errorObj);
-
-			// Store error in ErrorStore for UI rendering
-			if (this.core.errorStore) {
-				this.core.errorStore.addError(errorObj);
-			}
+		// Use unified execution method
+		await this.executeCall({
+			dojoCall,
+			context: { queueId: item.id.toString() },
 		});
 
 		return true;
