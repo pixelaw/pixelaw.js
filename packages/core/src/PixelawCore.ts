@@ -167,9 +167,11 @@ export class PixelawCore {
 		}
 
 		// Load lastEventAck from storage
-		const storedLastEventAck = await this.storage.getItem(this.getStorageKey("lastEventAck"));
+		const storedLastEventAck = await this.storage.getItem(
+			this.getStorageKey("lastEventAck"),
+		);
 		if (storedLastEventAck) {
-			this._lastEventAck = parseInt(storedLastEventAck, 10) || 0;
+			this._lastEventAck = parseInt(String(storedLastEventAck), 10) || 0;
 		}
 
 		this.viewPort = new Canvas2DRenderer(this);
@@ -259,7 +261,12 @@ export class PixelawCore {
 	public set lastEventAck(newLastEventAck: number) {
 		if (this._lastEventAck === newLastEventAck) return;
 		// Validate timestamp: must be a valid Unix timestamp (between Jan 1, 2020 and year 2100)
-		if (!Number.isFinite(newLastEventAck) || newLastEventAck < 1577836800000 || newLastEventAck > 4102444800000) return;
+		if (
+			!Number.isFinite(newLastEventAck) ||
+			newLastEventAck < 1577836800000 ||
+			newLastEventAck > 4102444800000
+		)
+			return;
 		// Only accept later timestamps to prevent going backwards
 		if (newLastEventAck <= this._lastEventAck) return;
 		this._lastEventAck = newLastEventAck;

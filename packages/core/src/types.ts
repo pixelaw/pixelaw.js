@@ -84,7 +84,7 @@ export type QueueStoreEvents = {
 
 export type ErrorStoreEvents = {
 	errorAdded: SimplePixelError;
-	errorsCleared: void;
+	errorsCleared: undefined;
 };
 
 export interface QueueStore {
@@ -173,7 +173,11 @@ export function makeString<Coordinate>(coordinate: Coordinate): string {
 	return `${coordinate[0]}_${coordinate[1]}`;
 }
 
-export type SimplePixelError = { coordinate: Coordinate | null; error: string; timestamp: number };
+export type SimplePixelError = {
+	coordinate: Coordinate | null;
+	error: string;
+	timestamp: number;
+};
 
 export type PixelCoreEvents = {
 	cellClicked: Coordinate;

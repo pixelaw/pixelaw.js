@@ -130,7 +130,7 @@ async function fetchAppsAndManifest(
 			`SELECT *
                 FROM "pixelaw-CoreActionsAddress"
                 LIMIT 1;`,
-			(rows: any[]) => {
+			(rows: { value: string }[]) => {
 				return rows[0].value;
 			},
 		);

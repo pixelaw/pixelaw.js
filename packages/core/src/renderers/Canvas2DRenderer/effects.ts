@@ -58,8 +58,8 @@ export class EffectsManager {
 				}
 			}
 
-			if (this.renderer.glowingCells.size === 0) {
-				clearInterval(this.renderer.glowInterval!);
+			if (this.renderer.glowingCells.size === 0 && this.renderer.glowInterval) {
+				clearInterval(this.renderer.glowInterval);
 				this.renderer.glowInterval = null;
 			}
 

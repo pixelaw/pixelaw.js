@@ -22,7 +22,6 @@ const QUERY_RADIUS = 20;
 
 export class DojoNotificationStore implements NotificationStore {
 	public readonly eventEmitter = mitt<NotificationStoreEvents>();
-	private dojoStuff;
 	private sdk: SDK<SchemaType>;
 	private static instance: DojoNotificationStore;
 	private isSubscribed = false;

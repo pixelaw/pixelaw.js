@@ -20,12 +20,6 @@ export interface GlowingCell {
 	size: number;
 }
 
-interface Notification {
-	startTime: number;
-	duration: number;
-	message: string;
-}
-
 /**
  * Configuration options for the grid renderer
  */

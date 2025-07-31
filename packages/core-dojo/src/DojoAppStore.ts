@@ -5,6 +5,17 @@ import { convertFullHexString } from "./utils/utils.ts";
 
 type State = { [key: string]: App | undefined };
 
+interface AppRowData {
+	action: string;
+	icon: string;
+	name: string;
+	plugin: string;
+	system: string;
+	entity: {
+		id: string;
+	};
+}
+
 export class DojoAppStore implements AppStore {
 	private dojoStuff;
 	private state: State = {};
@@ -27,7 +38,7 @@ export class DojoAppStore implements AppStore {
 				this.dojoStuff.toriiUrl,
 				`SELECT * 
                 FROM "pixelaw-App";`,
-				(rows: any[]) => {
+				(rows: AppRowData[]) => {
 					return rows;
 				},
 			);
