@@ -4,6 +4,7 @@ import type { DojoStuff } from "./DojoEngine.init.ts";
 import { convertFullHexString } from "./utils/utils.ts";
 
 type State = { [key: string]: App | undefined };
+type SystemIndex = { [system: string]: App | undefined };
 
 interface AppRowData {
 	action: string;
@@ -19,6 +20,7 @@ interface AppRowData {
 export class DojoAppStore implements AppStore {
 	private dojoStuff;
 	private state: State = {};
+	private systemIndex: SystemIndex = {};
 
 	constructor(dojoStuff: DojoStuff) {
 		this.dojoStuff = dojoStuff;
@@ -36,7 +38,7 @@ export class DojoAppStore implements AppStore {
 		try {
 			const items = await queryTorii(
 				this.dojoStuff.toriiUrl,
-				`SELECT * 
+				`SELECT *
                 FROM "pixelaw-App";`,
 				(rows: AppRowData[]) => {
 					return rows;
@@ -52,7 +54,8 @@ export class DojoAppStore implements AppStore {
 					entity: { id: "" }, // TODO
 				};
 				this.state[app.name] = app;
-				console.log("APP", app);
+				this.systemIndex[app.system] = app;
+				console.log("APP", app, item);
 			}
 			// console.log({ items })
 		} catch (e) {
@@ -69,6 +72,6 @@ export class DojoAppStore implements AppStore {
 	}
 
 	getBySystem(system: string): App | undefined {
-		return Object.values(this.state).find((app) => app?.system === system);
+		return this.systemIndex[system];
 	}
 }
