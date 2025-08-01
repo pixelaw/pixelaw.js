@@ -75,11 +75,12 @@ export class DojoNotificationStore implements NotificationStore {
 				),
 				(rows: NotificationRowData[]) => {
 					return rows.map((item) => {
+						const app = this.core.appStore.getBySystem(item.app);
 						return {
 							from: item.from,
 							to: item.to,
 							color: item.color,
-							app: item.app,
+							app: app?.name || item.app,
 							position: {
 								x: item["position.x"],
 								y: item["position.y"],
@@ -119,6 +120,7 @@ export class DojoNotificationStore implements NotificationStore {
 							return;
 						}
 
+						const app = this.core.appStore.getBySystem(p.app.value);
 						const notification = {
 							from:
 								p.from.value.option === "None"
@@ -126,7 +128,7 @@ export class DojoNotificationStore implements NotificationStore {
 									: p.from.value.value.value,
 							to: p.to.value.option === "None" ? null : p.to.value.value.value,
 							color: p.color.value,
-							app: p.app.value,
+							app: app?.name || p.app.value,
 							position: {
 								x: p.position.value.x.value,
 								y: p.position.value.y.value,
