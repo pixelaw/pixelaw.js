@@ -1,5 +1,17 @@
 # @pixelaw/react-dojo
 
+## 0.8.0
+
+### Minor Changes
+
+- new stuff
+
+### Patch Changes
+
+- Updated dependencies
+  - @pixelaw/core-dojo@0.8.0
+  - @pixelaw/react@0.8.0
+
 ## 0.7.0
 
 ### Minor Changes

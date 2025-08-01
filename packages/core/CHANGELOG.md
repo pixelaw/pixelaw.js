@@ -1,5 +1,11 @@
 # @pixelaw/core
 
+## 0.8.0
+
+### Minor Changes
+
+- new stuff
+
 ## 0.7.0
 
 ### Minor Changes

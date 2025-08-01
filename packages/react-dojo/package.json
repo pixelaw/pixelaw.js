@@ -1,7 +1,7 @@
 {
 	"name": "@pixelaw/react-dojo",
 	"private": false,
-	"version": "0.7.0",
+	"version": "0.8.0",
 	"description": "pixelaw: React components and hooks for use with dojo",
 	"author": "thiscaspar",
 	"license": "MIT",
