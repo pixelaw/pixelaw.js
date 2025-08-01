@@ -86,7 +86,7 @@ export class DojoNotificationStore implements NotificationStore {
 								y: item["position.y"],
 							},
 							text: convertFullHexString(item.text),
-							timestamp: Date.now(),
+							timestamp: item.timestamp,
 						};
 					});
 				},
@@ -189,14 +189,15 @@ export class DojoNotificationStore implements NotificationStore {
 export function createSqlQueryByRadius(
 	center: Coordinate,
 	radius: number,
-	_lastEventAck: number,
+	lastEventAck: number,
 	address: string,
 ) {
 	console.log("add", address);
 	let result = `SELECT
-                      "from", "to", "text", "position.x" , "position.y", "color"
+                      "from", "to", "text", "position.x" , "position.y", "color", "app", "timestamp"
                   FROM "pixelaw-Notification"
                   WHERE (("position.x" - ${center[0]}) * ("position.x" - ${center[0]}) + ("position.y" -  ${center[1]}) * ("position.y" -  ${center[1]})) <= (${radius} * ${radius})
+                  AND "timestamp" > ${lastEventAck}
     `;
 
 	result += ";";
