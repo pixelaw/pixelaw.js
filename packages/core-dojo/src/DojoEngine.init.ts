@@ -236,11 +236,11 @@ async function setupBurnerConnector(
 				...burnerConfig,
 				feeTokenAddress: worldConfig.feeTokenAddress,
 				rpcProvider: rpcProvider.provider,
-				masterAccount: new Account(
-					rpcProvider.provider as never as ProviderInterface,
-					burnerConfig.masterAddress,
-					burnerConfig.masterPrivateKey,
-				),
+				masterAccount: new Account({
+					provider: rpcProvider.provider,
+					address: burnerConfig.masterAddress,
+					signer: burnerConfig.masterPrivateKey,
+				}),
 			} as unknown as BurnerManagerOptions);
 
 			await manager.init();

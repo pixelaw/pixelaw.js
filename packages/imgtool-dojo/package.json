@@ -20,7 +20,7 @@
 	},
 	"dependencies": {
 		"pngjs": "^7.0.0",
-		"starknet": "7.6.4"
+		"starknet": "^8.1.2"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.1.3",

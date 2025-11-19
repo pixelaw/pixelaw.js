@@ -117,11 +117,11 @@ export class DojoImageTool {
 
 		const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050" });
 
-		const account0 = new Account(
+		const account0 = new Account({
 			provider,
-			"0x003c4dd268780ef738920c801edc3a75b6337bc17558c74795b530c0ff502486",
-			"0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a",
-		);
+			address: "0x003c4dd268780ef738920c801edc3a75b6337bc17558c74795b530c0ff502486",
+			signer: "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a",
+		});
 
 		const contractAddress =
 			"0x1f04b61e71f2afa9610c422db007807f73ebad6b4c069e72bb6e22ff032a93c";
@@ -129,7 +129,11 @@ export class DojoImageTool {
 		if (abi === undefined) {
 			throw new Error("no abi.");
 		}
-		const myTestContract = new Contract(abi, contractAddress, provider);
+		const myTestContract = new Contract({
+			abi,
+			address: contractAddress,
+			providerOrAccount: provider,
+		});
 		myTestContract.connect(account0);
 
 		for (const { position, image_data } of pixelRows) {

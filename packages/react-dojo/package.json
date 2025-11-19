@@ -30,8 +30,7 @@
     "@starknet-react/chains": "^4.0.3",
     "@starknet-react/core": "^4.0.3",
     "postcss": "^8.5.6",
-    "starknet": "^7.6.2",
-    "starknetkit": "^2.12.1"
+    "starknet": "^8.1.2"
   },
   "devDependencies": {
     "@types/node": "^24.1.0",

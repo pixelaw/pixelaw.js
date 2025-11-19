@@ -226,13 +226,11 @@ export class DojoEngine implements Engine {
 		// TODO for now just hardcoding the 2nd predeployed from dev katana
 		const address =
 			"0x13d9ee239f33fea4f8785b9e3870ade909e20a9599ae7cd62c1c292b73af1b7";
-		const account = new Account(
-			this.dojoSetup.provider.provider as never as ProviderInterface,
+		const account = new Account({
+			provider: this.dojoSetup.provider.provider,
 			address,
-			privateKey,
-			"1",
-			"0x3",
-		);
+			signer: privateKey,
+		});
 		const chainId = await this.dojoSetup.provider.provider.getChainId();
 		return new DojoWallet("predeployed", chainId, account);
 	}

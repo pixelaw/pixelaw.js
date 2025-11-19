@@ -112,10 +112,10 @@ export class DojoExecutor implements Executor {
 			const currentNonce = await account.getNonce();
 			// Update our cached nonce
 			this._nonce = currentNonce;
-
+			
 			const options: UniversalDetails = {
 				version: 3,
-				blockIdentifier: "pending",
+				blockIdentifier: "latest",
 				nonce: currentNonce,
 			};
 
